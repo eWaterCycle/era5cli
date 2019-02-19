@@ -1,0 +1,19 @@
+# YAML 1.2
+--- 
+authors: 
+  - 
+    affiliation: "Netherlands eScience Center", " TU Delft"
+    family-names: 
+    given-names: 
+    name-particle: 
+cff-version: "1.0.3"
+commit: 
+date-released:
+doi:
+keywords: 
+  - "ERA5"
+license: Apache-2.0
+message: "If you use this software, please cite it using these metadata."
+repository-code: "https://github.com/ewatercycle/pyERA5"
+title: pyERA5
+version:
