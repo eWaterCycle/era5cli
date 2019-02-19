@@ -1,27 +1,19 @@
-#!/usr/bin/env python
-
-'''
-description:    Download ERA5 from copernicus 
-license:        APACHE 2.0Climate Data Store
-author:         Jerom Aerts
-'''
-
 import cdsapi
 import sys
 
-#For slurm job arrays
+
 taskid = int(sys.argv[1])
 if taskid < 10:
   year = '200'+sys.argv[1]
 else:
   year = '20'+sys.argv[1]
+variable = sys.argv[2]
 
-
-c = cdsapi.Client(key= "xxxx", url= "https://cds.climate.copernicus.eu/api/v2")
+c = cdsapi.Client(key= "8140:71c1abe0-8345-4b71-ab4d-71ea1a249298", url= "https://cds.climate.copernicus.eu/api/v2")
 c.retrieve(
     'reanalysis-era5-single-levels',
     {
-        'variable':'total_precipitation',
+        'variable':[variable],
         'product_type':'reanalysis',
         'year':[year],
         'month':[
@@ -55,4 +47,4 @@ c.retrieve(
         ],
         'format':'netcdf'
     },
-    '/projects/0/wtrcycle/users/jaerts/era5_api_download/era5/total_precipitation/era5_total_precipitation_'+year+'.nc')
+    '/projects/0/wtrcycle/users/jaerts/era5_api_download/era5/era5_'+variable+'_'+year+'.nc')
