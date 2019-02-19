@@ -18,7 +18,7 @@ setup(
     url="https://github.com/ewatercycle/pyERA5",
     packages=['pyERA5'],
     include_package_data=False,    # include everything in source control
-    scripts=['pyERA5/scripts/pyEAR5'],
+    scripts=['pyera5/scripts/pyera5'],
     long_description=read('README.rst'),
     classifiers=[
         "Development Status :: 4 - Beta",
