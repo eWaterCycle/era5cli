@@ -3,6 +3,8 @@
 Library to download ERA5 hydrological (sub)set.
 Currently the goal is to have a copy of ERA5 available for eWaterCycle users.
 
+This library is in a preliminary phase of development. 
+
 ## Hydrological Variables:
   
   * Total precipitation
@@ -20,6 +22,15 @@ Currently the goal is to have a copy of ERA5 available for eWaterCycle users.
   * snowfall
   * runoff
 
-## Disclaimer:
 
-This library is in preliminary phase of development. Downloading ERA5 all over again is not recommended.    
+## instructions:
+
+Downloading ERA5 all over again is not recommended as it will be accessible via our platform.
+
+### Copernicus Climate Data Store registration
+
+* To download you will have to have an account at Copernicus Climate Data Store.
+Register at: [copernicus](https://cds.climate.copernicus.eu/user/register?destination=%2F%23!%2Fhome).
+
+* Copy your CDS API key.
+
