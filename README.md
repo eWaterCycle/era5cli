@@ -1,6 +1,7 @@
 # pyERA5
 
-Library to download ERA5 hydrological (sub)set 
+Library to download ERA5 hydrological (sub)set.
+Currently the goal is to have a copy of ERA5 available for eWaterCycle users.
 
 ## Hydrological Variables:
   
@@ -21,4 +22,4 @@ Library to download ERA5 hydrological (sub)set
 
 ## Disclaimer:
 
-This library is in preliminary phase of development. However, downloading ERA5 all over again is not recommended.    
+This library is in preliminary phase of development. Downloading ERA5 all over again is not recommended.    
