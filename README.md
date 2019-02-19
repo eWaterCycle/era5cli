@@ -1,7 +1,8 @@
 # pyERA5
+
 Library to download ERA5 hydrological (sub)set 
 
-## Variables:
+## Hydrological Variables:
   
   * Total precipitation
   * Precipitation type
@@ -17,3 +18,7 @@ Library to download ERA5 hydrological (sub)set
   * temperature of snowfall
   * snowfall
   * runoff
+
+## Disclaimer:
+
+This library is in preliminary phase of development. However, downloading ERA5 all over again is not recommended.    
