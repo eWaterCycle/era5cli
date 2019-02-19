@@ -25,5 +25,5 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "License :: OSI Approved :: Apache Software License",
     ],
-    install_requires=['requests', 'configargparse'],
+    install_requires=[],
 )
