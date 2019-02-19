@@ -1,4 +1,4 @@
-# ERA5
+# pyERA5
 Library to download ERA5 hydrological (sub)set 
 
 ## Variables:
