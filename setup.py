@@ -9,8 +9,8 @@ def read(fname):
 setup(
     name="pyERA5",
     version="0.0.1",
-    author="Jerom Aerts",
-    author_email="J.P.M.Aerts@tudelft.nl",
+    author="Jerom Aerts", "Yifat Dzigan" 
+    author_email="J.P.M.Aerts@tudelft.nl", "y.dzigan@esciencecenter.nl"
     description=("A python library to download ERA5 "
                  "from the Copernicus Climate Data Store https://climate.copernicus.eu/."),
     license="Apache 2.0",
