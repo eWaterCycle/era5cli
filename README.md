@@ -30,9 +30,9 @@ The following variables will be included in the eWatercycle data catalog.
 Comment: downloading ERA5 all over again is not recommended as it will be accessible via our platform.
 However, if you do want to download the data yourself (or use other vaiabiles than the ones we used) follow these steps:
 
-### Register at Copernicus Climate Data Store
+### Register at Copernicus Climate Data Service
 
-* You first have to register at Copernicus Climate Data Store: [copernicus](https://cds.climate.copernicus.eu/user/register?destination=%2F%23!%2Fhome). After activating your account use your new account to log in. In you profile page you can find your user ID and your API key.
+* You first have to register at Copernicus Climate Data Service: [copernicus](https://cds.climate.copernicus.eu/user/register?destination=%2F%23!%2Fhome). After activating your account use your new account to log in. In you profile page you can find your user ID and your API key.
 
 * Copy your user ID and API key.
 
@@ -61,7 +61,8 @@ pip install cdsapi
 python3 pyera5_download.py Variable
 ```
 
-Where Variable is one or more of the Hydrological variable(s): 'total_precipitation','precipitation_type','10m_u_component_of_wind','10m_v_component_of_wind', '2m_temperature', 'skin_temperature', '2m_dewpoint_temperature', 'volumetric_soil_water_layer_1','potential_evaporation','evaporation','top_net_solar_radiation_clear_sky','temperature_of_snow_layer', 'snowfall','runoff' 
+Where:
+Variable is one or more of the Hydrological variable(s) listed in [ERA5 hourly data on single levels from 1979 to present](https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels?tab=form) (e.g., 'total_precipitation','precipitation_type','snowfall','runoff') 
 
 
 
