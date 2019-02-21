@@ -63,7 +63,7 @@ python3 pyera5_download.py --years 2017,2018 --variable runoff
 
 Where you can choose the variable you would like to download and the years (can be a single year or a comma separated list):
 
-Avilable variables are listed in [ERA5 hourly data on single levels from 1979 to present](https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels?tab=form) (e.g., 'total_precipitation','precipitation_type','snowfall','runoff') 
+Avilable variables are listed in [ERA5 hourly data on single levels from 1979 to present](https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels?tab=form) (e.g., 'total_precipitation', 'precipitation_type', 'snowfall', 'runoff') 
 
 
 
