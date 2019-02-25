@@ -9,7 +9,7 @@ else:
   year = '20'+sys.argv[1]
 variable = sys.argv[2]
 
-c = cdsapi.Client(key= "8140:71c1abe0-8345-4b71-ab4d-71ea1a249298", url= "https://cds.climate.copernicus.eu/api/v2")
+c = cdsapi.Client(key= "xxxxx", url= "https://cds.climate.copernicus.eu/api/v2")
 c.retrieve(
     'reanalysis-era5-single-levels',
     {
