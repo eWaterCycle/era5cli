@@ -65,5 +65,7 @@ Where you can choose the variable you would like to download and the years (can 
 
 Avilable variables are listed in [ERA5 hourly data on single levels from 1979 to present](https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels?tab=form) (e.g., 'total_precipitation', 'precipitation_type', 'snowfall', 'runoff') 
 
+Currently downloads only day 1 of the month.
+
 
 
