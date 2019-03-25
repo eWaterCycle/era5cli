@@ -1,0 +1,142 @@
+#!/usr/bin/env python
+"""
+Download ERA5 variables.
+
+description:    Download from ERA5 dataset
+license:        APACHE 2.0
+authors:        Ronald van Haren, NLeSC (r.vanharen@esciencecenter.nl)
+                Yifat Dzigan, NLeSC (y.dzigan@esciencecenter.nl)
+                Jerom A
+"""
+
+import argparse
+import textwrap
+import cdsapi
+import sys
+
+usage = """Usage:
+
+    --years <years> --variable <variable>
+
+    Examples:
+
+    runoff for the year 2018
+    >>> pyera5 --years 2018 --variable runoff
+
+    runoff for 2017 and 2018
+    >>> pyera5 --years 2017,2018 --variable runoff
+
+
+""".format(__file__)
+
+
+def fetch(years, months, days, hours, variables, outputformat, outputfile):
+    """Fetch variables using cds api call."""
+    c = cdsapi.Client()
+    c.retrieve('reanalysis-era5-single-levels',
+               {'variable': variables,
+                'product_type': 'reanalysis',
+                'year': years,
+                'month': months,
+                'day': days,
+                'time': hours,
+                'format': outputformat},
+               outputfile)
+
+
+def zpadlist(intstr, type, minval, maxval):
+    """Return zero padded string and perform input checks."""
+    try:
+        if (int(intstr) >= minval and int(intstr) <= maxval):
+            pass
+        else:
+            print("Invalid {} argument: {}".format(type, intstr))
+            sys.exit()
+    except TypeError:
+        print("Invalid {} argument: {}".format(type, intstr))
+        sys.exit()
+    return str(intstr.zfill(2))
+
+
+def zpad_days(intstr):
+    """Return zero padded string."""
+    return zpadlist(intstr, 'days', 1, 31)
+
+
+def zpad_months(intstr):
+    """Return zero padded string."""
+    return zpadlist(intstr, 'months', 1, 12)
+
+
+def format_hours(intstr):
+    """Return xx:00 formated time string."""
+    try:
+        if (int(intstr) >= 0 and int(intstr) <= 23):
+            pass
+        else:
+            print("Invalid hours argument: {}".format(intstr))
+            sys.exit()
+    except TypeError:
+        print("Invalid hours argument: {}".format(intstr))
+        sys.exit()
+    return "{}:00".format(str(intstr).zfill(2))
+
+
+def main():
+    """Parse command line arguments."""
+    parser = argparse.ArgumentParser(
+        usage='use "%(prog)s --help" for more information',
+        formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument("-y", "--years", type=int, nargs="+",
+                        required=True,
+                        help="""Year(s) for which the data should be
+                             downloaded.
+                             """)
+    parser.add_argument("-m", "--months", nargs="+",
+                        required=False, type=zpad_months,
+                        default=[str(m).zfill(2) for m in list(range(1, 13))],
+                        help=textwrap.dedent('''
+                             Months to download data for. Defaults to all
+                             months.
+                             '''))
+    parser.add_argument("-d", "--days", nargs="+",
+                        required=False, type=zpad_days,
+                        default=[str(d).zfill(2) for d in list(range(1, 32))],
+                        help=textwrap.dedent('''
+                             Days to download data for. Default to all days.
+                             '''))
+    parser.add_argument("-t", "--hours", nargs="+",
+                        required=False, type=format_hours,
+                        default=["{}:00".format(str(h).zfill(2)) for
+                                 h in list(range(0, 24))],
+                        help=textwrap.dedent('''
+                             Time of day in hours to download data for.
+                             Default to all hours.
+                             '''))
+    parser.add_argument("-p", "--variables", type=str, nargs="+",
+                        required=True,
+                        help=textwrap.dedent('''
+                             The variable to be downloaded. See the cds
+                             website for availabe variables.
+                             '''))
+    parser.add_argument("-o", "--output", type=str, default="output.nc",
+                        help="Name of output file.")
+    parser.add_argument("-f", "--format", type=str,
+                        default="netcdf",
+                        help="Output file type.")
+    # (options,args) = parser.parse_args()
+    args = parser.parse_args()
+
+    variables = args.variables
+    years = args.years
+    months = args.months
+    days = args.days
+    hours = args.hours
+    outputfile = args.output
+    outputformat = args.format
+
+    fetch(years, months, days, hours, variables, outputformat, outputfile)
+
+
+if __name__ == "__main__":
+    main()
