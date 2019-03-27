@@ -1,13 +1,5 @@
 #!/usr/bin/env python
-"""
-Download ERA5 variables.
-
-description:    Download from ERA5 dataset
-license:        APACHE 2.0
-authors:        Ronald van Haren, NLeSC (r.vanharen@esciencecenter.nl)
-                Yifat Dzigan, NLeSC (y.dzigan@esciencecenter.nl)
-                Jerom A
-"""
+"""Download ERA5 variables."""
 
 import argparse
 import textwrap
