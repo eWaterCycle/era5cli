@@ -78,11 +78,12 @@ Clone this repository
 Run the python script from the command line
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can choose which variable(s) to download and the time (year(s), month(s), day(s), hour(s)), following this syntax:
+You can choose which variable(s) to download and the time (year(s), month(s), day(s), hour(s)).
+You can also specify the outputfile name and format (defult is output.nc in a netcdf format)
 
 ::
 
-   python pyera5 --years <years> --months <months> --days <days> --variable <variable>
+   python pyera5 --years <years> --months <months> --days <days> --variable <variable> --o out.nc --format netcdf
 
 Available variables are listed in `ERA5 hourly data on single levels from
 1979 to
