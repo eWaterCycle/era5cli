@@ -34,7 +34,7 @@ Instructions:
 
 Comment: downloading ERA5 all over again is not recommended as it will
 be accessible via our platform. However, if you do want to download the
-data yourself (or use other vaiabiles than the ones we used) follow
+data yourself (or use other variables than the ones we used) follow
 these steps:
 
 Register at Copernicus Climate Data Service
