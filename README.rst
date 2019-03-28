@@ -1,18 +1,21 @@
 era5cli
 =======
 
-A command line interface to download ERA5 hydrological (sub)set. Currently the goal is to
-have a copy of ERA5 available for eWaterCycle users.
+A command line interface to download ERA5 data through CDS. Currently only hourly single level data is supported.  
 
-**Comment:** downloading ERA5 all over again is not recommended as it will
-be accessible via our platform. 
+Available variables are listed in `ERA5 hourly data on single levels from
+1979 to
+present <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels?tab=form>`__
+(e.g., ‘total_precipitation’, ‘precipitation_type’, ‘snowfall’,
+‘runoff’)
+
 
 Installation:
 -------------
 era5cli is intallable via pip:
 ::
 
-   pip3 install -U  git+https://github.com/eWaterCycle/era5cli.git
+   pip install -U  git+https://github.com/eWaterCycle/era5cli.git
 
 
 Instructions:
@@ -48,7 +51,7 @@ Run the python script from the command line
 
 ::
 
-   era5cli --years <years> --months <months> --days <days> --hours <hours> --variables <variable> --o <out.nc> --format <netcdf>
+   era5cli --years <years> --months <months> --days <days> --hours <hours> --variables <variables> --output <filename> --format <fileformat>
 
 
 Optional arguments:
@@ -69,11 +72,3 @@ Optional arguments:
                         Name of output file. Defaults to 'output.nc'.
   -f, --format FORMAT [FORMAT]
                         Output file type. Defaults to 'netcdf'.
-
-
-
-Available VARIABLES are listed in `ERA5 hourly data on single levels from
-1979 to
-present <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels?tab=form>`__
-(e.g., ‘total_precipitation’, ‘precipitation_type’, ‘snowfall’,
-‘runoff’)
