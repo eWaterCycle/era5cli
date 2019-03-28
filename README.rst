@@ -32,7 +32,7 @@ catalog.
 Instructions:
 -------------
 
-Comment: downloading ERA5 all over again is not recommended as it will
+**Comment:** downloading ERA5 all over again is not recommended as it will
 be accessible via our platform. However, if you do want to download the
 data yourself (or use other variables than the ones we used) follow
 these steps:
@@ -68,15 +68,21 @@ Install cdsapi
 
    pip install cdsapi
 
+Clone this repository 
+~~~~~~~~~~~~~~~~~~~~~
+
+::
+   
+   git clone https://github.com/eWaterCycle/Hydrological-ERA5-download.git
+   cd Hydrological-ERA5-download
 Run the python script from the command line
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+You can choose which variable(s) to download and the time (year(s), month(s), day(s), hour(s)), following this syntax:
+
 ::
 
-   python3 pyera5_download.py --years 2017,2018 --variable runoff
-
-Where you can choose the variable you would like to download and the
-years (can be a single year or a comma separated list):
+   python pyera5 --years 2017 --months 10 --days 20 --variable runoff
 
 Available variables are listed in `ERA5 hourly data on single levels from
 1979 to
