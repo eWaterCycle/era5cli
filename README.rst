@@ -4,8 +4,6 @@ Hydrological-ERA5-download
 Library to download ERA5 hydrological (sub)set. Currently the goal is to
 have a copy of ERA5 available for eWaterCycle users.
 
-This library is in a preliminary phase of development.
-
 Hydrological Variables:
 -----------------------
 
@@ -26,6 +24,10 @@ catalog.
 -  temperature of snowfall
 -  snowfall
 -  runoff
+-  surface solar radiation downwards
+-  toa incident solar radiation
+-  mean sea level pressure
+-  orography
 
 Instructions:
 -------------
@@ -76,10 +78,8 @@ Run the python script from the command line
 Where you can choose the variable you would like to download and the
 years (can be a single year or a comma separated list):
 
-Avilable variables are listed in `ERA5 hourly data on single levels from
+Available variables are listed in `ERA5 hourly data on single levels from
 1979 to
 present <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels?tab=form>`__
 (e.g., ‘total_precipitation’, ‘precipitation_type’, ‘snowfall’,
 ‘runoff’)
-
-Currently downloads only day 1 of the month.
