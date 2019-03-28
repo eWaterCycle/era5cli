@@ -82,7 +82,7 @@ You can choose which variable(s) to download and the time (year(s), month(s), da
 
 ::
 
-   python pyera5 --years 2017 --months 10 --days 20 --variable runoff
+   python pyera5 --years <years> --months <months> --days <days> --variable <variable>
 
 Available variables are listed in `ERA5 hourly data on single levels from
 1979 to
