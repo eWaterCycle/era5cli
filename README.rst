@@ -1,7 +1,7 @@
-Hydrological-ERA5-download
-==========================
+era5cli
+=======
 
-Library to download ERA5 hydrological (sub)set. Currently the goal is to
+A command line interface to download ERA5 hydrological (sub)set. Currently the goal is to
 have a copy of ERA5 available for eWaterCycle users.
 
 Hydrological Variables:
@@ -83,7 +83,7 @@ You can also specify the outputfile name and format (defult is output.nc in a ne
 
 ::
 
-   python pyera5 --years <years> --months <months> --days <days> --variable <variable> --o out.nc --format netcdf
+   era5cli --years <years> --months <months> --days <days> --variable <variable> --o out.nc --format netcdf
 
 Available variables are listed in `ERA5 hourly data on single levels from
 1979 to
