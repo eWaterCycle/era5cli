@@ -5,7 +5,7 @@ with open('README.rst') as file:
     README = file.read()
 
 setup(
-    name="pyERA5",
+    name="era5cli",
     version="0.0.1",
     author="Jerom Aerts, Yifat Dzigan, Ronald van Haren",
     author_email=("J.P.M.Aerts@tudelft.nl, y.dzigan@esciencecenter.nl, "
@@ -15,11 +15,11 @@ setup(
                  "https://climate.copernicus.eu/."),
     license="Apache 2.0",
     keywords="ERA5",
-    url="https://github.com/ewatercycle/pyERA5",
-    packages=['pyera5'],
+    url="https://github.com/ewatercycle/era5cli",
+    packages=['era5cli'],
     include_package_data=True,    # include everything in source control
-    package_data={'pyera5': ['cartesius/*']},
-    scripts=['pyera5/scripts/pyera5'],
+    package_data={'era5cli': ['cartesius/*']},
+    scripts=['era5cli/scripts/era5cli'],
     long_description=README,
     classifiers=[
         "Development Status :: 4 - Beta",
