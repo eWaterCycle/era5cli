@@ -13,10 +13,10 @@ usage = """Usage:
     Examples:
 
     runoff for the year 2018
-    >>> pyera5 --years 2018 --variable runoff
+    >>> era5cli --years 2018 --variable runoff
 
     runoff for 2017 and 2018
-    >>> pyera5 --years 2017,2018 --variable runoff
+    >>> era5cli --years 2017,2018 --variable runoff
 
 
 """.format(__file__)
