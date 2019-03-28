@@ -81,9 +81,9 @@ def main():
         formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("-y", "--years", type=int, nargs="+",
                         required=True,
-                        help="""Year(s) for which the data should be
-                             downloaded.
-                             """)
+                        help=textwrap.dedent('''
+                             Year(s) for which the data should be downloaded.
+                             '''))
     parser.add_argument("-m", "--months", nargs="+",
                         required=False, type=zpad_months,
                         default=[str(m).zfill(2) for m in list(range(1, 13))],
@@ -95,7 +95,7 @@ def main():
                         required=False, type=zpad_days,
                         default=[str(d).zfill(2) for d in list(range(1, 32))],
                         help=textwrap.dedent('''
-                             Days to download data for. Default to all days.
+                             Days to download data for. Defaults to all days.
                              '''))
     parser.add_argument("-t", "--hours", nargs="+",
                         required=False, type=format_hours,
@@ -103,7 +103,7 @@ def main():
                                  h in list(range(0, 24))],
                         help=textwrap.dedent('''
                              Time of day in hours to download data for.
-                             Default to all hours.
+                             Defaults to all hours.
                              '''))
     parser.add_argument("-p", "--variables", type=str, nargs="+",
                         required=True,
@@ -112,10 +112,10 @@ def main():
                              website for availabe variables.
                              '''))
     parser.add_argument("-o", "--output", type=str, default="output.nc",
-                        help="Name of output file.")
+                        help="Name of output file. Defaults to 'output.nc'.")
     parser.add_argument("-f", "--format", type=str,
                         default="netcdf",
-                        help="Output file type.")
+                        help="Output file type. Defaults to 'netcdf'.")
     # (options,args) = parser.parse_args()
     args = parser.parse_args()
 
