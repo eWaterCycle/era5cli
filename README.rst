@@ -4,43 +4,24 @@ era5cli
 A command line interface to download ERA5 hydrological (sub)set. Currently the goal is to
 have a copy of ERA5 available for eWaterCycle users.
 
-Hydrological Variables:
------------------------
+**Comment:** downloading ERA5 all over again is not recommended as it will
+be accessible via our platform. 
 
-The following variables will be included in the eWatercycle data
-catalog.
+Installation:
+-------------
+era5cli is intallable via pip:
+::
 
--  Total precipitation
--  Precipitation type
--  10m u-component of wind
--  10m v-component of wind
--  2m temperature
--  Skin temperature
--  2m dewpoint temperature
--  Volumetric soil water layer 1
--  Potential evaporation
--  Evaporation
--  Surface net solar radiation
--  temperature of snowfall
--  snowfall
--  runoff
--  surface solar radiation downwards
--  toa incident solar radiation
--  mean sea level pressure
--  orography
+   pip3 install -U  git+https://github.com/eWaterCycle/era5cli.git
+
 
 Instructions:
 -------------
 
-**Comment:** downloading ERA5 all over again is not recommended as it will
-be accessible via our platform. However, if you do want to download the
-data yourself (or use other variables than the ones we used) follow
-these steps:
-
 Register at Copernicus Climate Data Service
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  You first have to register at Copernicus Climate Data Service:
+-  You have to register at Copernicus Climate Data Service:
    `copernicus <https://cds.climate.copernicus.eu/user/register?destination=%2F%23!%2Fhome>`__.
    After activating your account use your new account to log in. In you
    profile page you can find your user ID and your API key.
@@ -61,31 +42,37 @@ the following two lines:
 
 Replace UID with your user ID and KEY with your API key
 
-Install cdsapi
-~~~~~~~~~~~~~~
 
-::
-
-   pip install cdsapi
-
-Clone this repository 
-~~~~~~~~~~~~~~~~~~~~~
-
-::
-   
-   git clone https://github.com/eWaterCycle/Hydrological-ERA5-download.git
-   cd Hydrological-ERA5-download
 Run the python script from the command line
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can choose which variable(s) to download and the time (year(s), month(s), day(s), hour(s)).
-You can also specify the outputfile name and format (defult is output.nc in a netcdf format)
-
 ::
 
-   era5cli --years <years> --months <months> --days <days> --variable <variable> --o out.nc --format netcdf
+   era5cli --years <years> --months <months> --days <days> --hours <hours> --variables <variable> --o <out.nc> --format <netcdf>
 
-Available variables are listed in `ERA5 hourly data on single levels from
+
+Optional arguments:
+  -y, --years YEARS [YEARS ...]
+                        Year(s) for which the data should be downloaded.
+  -m, --months MONTHS [MONTHS ...]
+                        Months to download data for. Defaults to all
+                        months.
+  -d, --days DAYS [DAYS ...] 
+                        Days to download data for. Defaults to all days.
+  -t, --hours HOURS [HOURS ...]
+                        Time of day in hours to download data for.
+                        Defaults to all hours.
+  -p, --variables VARIABLES [VARIABLES ...]
+                        The variable to be downloaded. See the cds
+                        website for availabe variables.
+  -o, --output OUTPUT [OUTPUT]
+                        Name of output file. Defaults to 'output.nc'.
+  -f, --format FORMAT [FORMAT]
+                        Output file type. Defaults to 'netcdf'.
+
+
+
+Available VARIABLES are listed in `ERA5 hourly data on single levels from
 1979 to
 present <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels?tab=form>`__
 (e.g., ‘total_precipitation’, ‘precipitation_type’, ‘snowfall’,
