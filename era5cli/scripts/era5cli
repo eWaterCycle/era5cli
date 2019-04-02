@@ -65,7 +65,7 @@ def format_split(splitstr):
     """Validate split argument and return argument."""
     if splitstr:
         try:
-            if not splitstr.lower() in ['year']:
+            if not splitstr.lower() in ['variable', 'year']:
                 print("Invalid split argument: {}".format(splitstr))
                 sys.exit()
         except TypeError:
@@ -127,12 +127,16 @@ def main():
                              The variable to be downloaded. See the cds
                              website for availabe variables.
                              '''))
-    parser.add_argument("-o", "--output", type=str, default="output.nc",
-                        help="Name of output file. Defaults to 'output.nc'.")
+    parser.add_argument("-o", "--outputprefix", type=str, default='era5',
+                        help=textwrap.dedent('''
+                             Prefix of output filename. Default prefix is
+                             era5.
+                             '''))
     parser.add_argument("-f", "--format", type=str,
                         default="netcdf",
                         help="Output file type. Defaults to 'netcdf'.")
-    parser.add_argument("-s", "--split", type=format_split, default=None,
+    parser.add_argument("-s", "--split", type=format_split, nargs="+",
+                        default=None,
                         required=False, help="Split output by...")
     parser.add_argument("--threads", type=int,
                         required=False, default=None,
@@ -148,16 +152,17 @@ def main():
     days = args.days
     hours = args.hours
     split = args.split
-    outputfile = args.output
     outputformat = args.format
     threads = args.threads
     # flatten years list
     yrset = set([item for sublist in args.years for item in sublist])
     years = list(yrset)
+    outputprefix = args.outputprefix
 
     # Fetch the data
-    Fetch(years, months, days, hours, variables, outputformat, outputfile,
-          split, threads)
+    era5 = Fetch(years, months, days, hours, variables, outputformat,
+                 outputprefix, split, threads)
+    era5.fetch()
 
 
 if __name__ == "__main__":
