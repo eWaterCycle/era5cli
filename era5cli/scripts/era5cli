@@ -3,8 +3,9 @@
 
 import argparse
 import textwrap
-import cdsapi
 import sys
+from era5cli.fetch import Fetch
+
 
 usage = """Usage:
 
@@ -20,20 +21,6 @@ usage = """Usage:
 
 
 """.format(__file__)
-
-
-def fetch(years, months, days, hours, variables, outputformat, outputfile):
-    """Fetch variables using cds api call."""
-    c = cdsapi.Client()
-    c.retrieve('reanalysis-era5-single-levels',
-               {'variable': variables,
-                'product_type': 'reanalysis',
-                'year': years,
-                'month': months,
-                'day': days,
-                'time': hours,
-                'format': outputformat},
-               outputfile)
 
 
 def zpadlist(intstr, type, minval, maxval):
@@ -74,12 +61,41 @@ def format_hours(intstr):
     return "{}:00".format(str(intstr).zfill(2))
 
 
+def format_split(splitstr):
+    """Validate split argument and return argument."""
+    if splitstr:
+        try:
+            if not splitstr.lower() in ['year']:
+                print("Invalid split argument: {}".format(splitstr))
+                sys.exit()
+        except TypeError:
+            print("Invalid split argument: {}".format(splitstr))
+            sys.exit()
+        return splitstr.lower()
+    else:
+        return None
+
+
+def str_seq(intseq):
+    """Validate input argument and return a list of ints."""
+    try:
+        return [int(intseq)]
+    except ValueError:
+        return seq_to_list(intseq)
+
+
+def seq_to_list(sequence):
+    """Return a list from a sequence."""
+    (first, last) = sequence.split('/')
+    return list(range(int(first), int(last) + 1))
+
+
 def main():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
         usage='use "%(prog)s --help" for more information',
         formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument("-y", "--years", type=int, nargs="+",
+    parser.add_argument("-y", "--years", type=str_seq, nargs="+",
                         required=True,
                         help=textwrap.dedent('''
                              Year(s) for which the data should be downloaded.
@@ -116,18 +132,32 @@ def main():
     parser.add_argument("-f", "--format", type=str,
                         default="netcdf",
                         help="Output file type. Defaults to 'netcdf'.")
-    # (options,args) = parser.parse_args()
+    parser.add_argument("-s", "--split", type=format_split, default=None,
+                        required=False, help="Split output by...")
+    parser.add_argument("--threads", type=int,
+                        required=False, default=None,
+                        help=textwrap.dedent('''
+                             Number of parallel threads to use when downloading
+                             using split.
+                             '''))
     args = parser.parse_args()
 
+    # input arguments
     variables = args.variables
-    years = args.years
     months = args.months
     days = args.days
     hours = args.hours
+    split = args.split
     outputfile = args.output
     outputformat = args.format
+    threads = args.threads
+    # flatten years list
+    yrset = set([item for sublist in args.years for item in sublist])
+    years = list(yrset)
 
-    fetch(years, months, days, hours, variables, outputformat, outputfile)
+    # Fetch the data
+    Fetch(years, months, days, hours, variables, outputformat, outputfile,
+          split, threads)
 
 
 if __name__ == "__main__":

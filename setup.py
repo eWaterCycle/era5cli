@@ -26,5 +26,5 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "License :: OSI Approved :: Apache Software License",
     ],
-    install_requires=['cdsapi'],
+    install_requires=['cdsapi', 'pathos'],
 )
