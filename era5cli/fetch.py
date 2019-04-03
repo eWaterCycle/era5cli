@@ -60,7 +60,7 @@ class Fetch:
         if not self.threads:
             pool = Pool()
         else:
-            pool = Pool(nodes=max(self.threads, len(outputfiles)))
+            pool = Pool(nodes=self.threads)
         pool.map(self.getdata, self.variables, years, outputfiles)
 
     def split_yr(self):
@@ -72,7 +72,7 @@ class Fetch:
         if not self.threads:
             pool = Pool()
         else:
-            pool = Pool(nodes=max(self.threads, len(outputfiles)))
+            pool = Pool(nodes=self.threads)
         pool.map(self.getdata, variables, self.years, outputfiles)
 
     def split_variable_yr(self):
@@ -89,7 +89,7 @@ class Fetch:
         if not self.threads:
             pool = Pool()
         else:
-            pool = Pool(nodes=max(self.threads, len(outputfiles)))
+            pool = Pool(nodes=self.threads)
         pool.map(self.getdata, variables, years, outputfiles)
 
     def getdata(self, variables, years, outputfile):
