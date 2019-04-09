@@ -27,18 +27,18 @@ class Fetch:
     def fetch(self):
         """Split calls and fetch results."""
         # fetch files
-        if all([x in self.split for x in ['variable', 'year']]):
-            # split by variable
-            self.split_variable_yr()
+        try:
+            if all([x in self.split for x in ['variable', 'year']]):
+                # split by variable
+                self.split_variable_yr()
 
-        elif 'year' in self.split:
-            # split by year
-            self.split_yr()
+            elif 'year' in self.split:
+                # split by year
+                self.split_yr()
 
-        elif 'variable' in self.split:
-            self.split_variable()
-
-        elif not self.split:
+            elif 'variable' in self.split:
+                self.split_variable()
+        except TypeError:
             self.outputfile = '{}.{}'.format(self.outputprefix, self.ext)
             self.getdata(self.variables, self.years, self.outputfile)
 
