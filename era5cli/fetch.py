@@ -66,7 +66,9 @@ class Fetch:
     def split_yr(self):
         """Fetch variable split by year."""
         # generate output filenames
-        outputfiles = ["{}_{}.{}".format(self.outputprefix, yr, self.ext)
+        outputfiles = ["{}_{}_{}.{}".format(self.outputprefix,
+                                            "-".join(self.variables),
+                                            yr, self.ext)
                        for yr in self.years]
         variables = len(outputfiles) * [self.variables]
         if not self.threads:
