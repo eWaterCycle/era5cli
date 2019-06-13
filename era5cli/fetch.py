@@ -46,7 +46,7 @@ class Fetch:
         """Set filename extension."""
         if (self.outputformat.lower() == 'netcdf'):
             self.ext = "nc"
-        elif (self.outputformat.ower() == 'grib'):
+        elif (self.outputformat.lower() == 'grib'):
             self.ext = 'grb'
         else:
             raise Exception('Unknown outputformat: {}'.format(
