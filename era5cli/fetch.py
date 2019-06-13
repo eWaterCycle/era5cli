@@ -117,7 +117,7 @@ class Fetch:
         # split variables into 2D and 3D vars
         self.split_var_list(variables)
 
-        if 
+        if len(self.single_level_vars) >= 1:
             c.retrieve('reanalysis-era5-single-levels',
                        {'variable': self.single_level_vars,
                         'product_type': 'reanalysis',
@@ -128,9 +128,10 @@ class Fetch:
                         'format': self.outputformat},
                        outputfile)
 
+        if len(self.pressure_level_vars) >= 1:
             c.retrieve('reanalysis-era5-pressure-levels',
-                       {'variable': plvariables,
-                        'pressure_level': self.pressure_level_vars,
+                       {'variable': self.pressure_level_vars,
+                        'pressure_level': self.pressure_levels,
                         'product_type': 'reanalysis',
                         'year': years,
                         'month': self.months,
