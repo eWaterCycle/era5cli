@@ -9,7 +9,7 @@ import era5cli.inputref as ref
 class Fetch:
     """Fetch ERA5 data using cdsapi."""
 
-    def __init__(self,  years, months, days, hours, variables, outputformat,
+    def __init__(self, years, months, days, hours, variables, outputformat,
                  outputprefix, pressurelevels=ref.plevels, split=True,
                  threads=None):
         """Initialization of Fetch class."""
