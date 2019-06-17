@@ -135,9 +135,9 @@ def main():
     parser.add_argument("-f", "--format", type=str,
                         default="netcdf",
                         help="Output file type. Defaults to 'netcdf'.")
-    parser.add_argument("-s", "--split", type=format_split, nargs="+",
-                        default=None,
-                        required=False, help="Split output by...")
+    parser.add_argument("-s", "--split", type=str2bool,
+                        default=True,
+                        required=False, help="Split output by years. Default splits by variables and years.")
     parser.add_argument("--threads", type=int,
                         required=False, default=None,
                         help=textwrap.dedent('''
