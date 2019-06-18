@@ -150,16 +150,8 @@ def main():
     fetch.add_argument("-f", "--format", type=str,
                         default="netcdf", choices = ["netcdf", "grib"],
                         help="Output file type. Defaults to 'netcdf'.")
-<<<<<<< HEAD:era5cli/scripts/era5cli
     fetch.add_argument("-s", "--split", type=bool,
                         default=True, required=False,
-=======
-    parser.add_argument("-s", "--split", type=str2bool,
-                        default=True,
-                        required=False, help="Split output by years. Default splits by variables and years.")
-    parser.add_argument("--threads", type=int,
-                        required=False, default=None,
->>>>>>> a33c3fa7eedb1ec821dc9b33178652e167dec17f:era5cli/cli.py
                         help=textwrap.dedent('''
                              Split output by years. Default is True.
                              '''))
@@ -176,10 +168,15 @@ def main():
 
     args = parser.parse_args()
 
-    # input arguments
-    infotype = args.type
+  # input arguments
+    try:
+        infotype = args.type
+        try:
+            print(ref.refdict[infotype])
+        except KeyError:
+            raise Exception('Unknown value for reference argument.')
 
-    if infotype is None:
+    except AttributeError:
         variables = args.variables
         months = args.months
         days = args.days
@@ -194,13 +191,6 @@ def main():
         era5 = Fetch(years, months, days, hours, variables, outputformat,
                  outputprefix, split, threads)
         era5.fetch()
-    else:
-        try:
-            print(ref.refdict[infotype])
-        except KeyError:
-            raise Exception('Unknown value for reference argument.')
-
-
 
 if __name__ == "__main__":
     main()

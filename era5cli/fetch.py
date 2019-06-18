@@ -5,19 +5,12 @@ import cdsapi
 from pathos.threading import ThreadPool as Pool
 import era5cli.inputref as ref
 
-from variables import slvars, plvars
-
 class Fetch:
     """Fetch ERA5 data using cdsapi."""
 
-<<<<<<< HEAD
     def __init__(self,  years, months, days, hours, variables, outputformat,
                  outputprefix, pressurelevels=ref.plevels, split=True,
                  threads=None):
-=======
-    def __init__(self, pressurelevels=None, years, months, days, hours, variables, outputformat,
-                 outputprefix, split=True, threads=None):
->>>>>>> a33c3fa7eedb1ec821dc9b33178652e167dec17f
         """Initialization of Fetch class."""
         self.months = months
         self.days = days
@@ -35,19 +28,11 @@ class Fetch:
 
     def fetch(self):
         """Split calls and fetch results."""
-<<<<<<< HEAD
         if self.split:
             # split by variable and year
             self.split_variable_yr()
         else:
             # split by variable
-=======
-        if split:
-            # split by variable and year
-            self.split_variable_yr()
-        else:
-            #split by variable
->>>>>>> a33c3fa7eedb1ec821dc9b33178652e167dec17f
             self.split_variable()
 
     def extension(self):
