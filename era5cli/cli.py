@@ -184,9 +184,14 @@ def main():
     args = parser.parse_args()
 
     # input arguments
-    infotype = args.type
+    try:
+        infotype = args.type
+        try:
+            print(ref.refdict[infotype])
+        except KeyError:
+            raise Exception('Unknown value for reference argument.')
 
-    if infotype is None:
+    except AttributeError:
         variables = args.variables
         months = args.months
         days = args.days
@@ -201,11 +206,6 @@ def main():
         era5 = Fetch(years, months, days, hours, variables, outputformat,
                      outputprefix, split, threads)
         era5.fetch()
-    else:
-        try:
-            print(ref.refdict[infotype])
-        except KeyError:
-            raise Exception('Unknown value for reference argument.')
 
 
 if __name__ == "__main__":
