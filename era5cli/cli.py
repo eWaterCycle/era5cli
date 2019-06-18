@@ -8,22 +8,6 @@ from era5cli.fetch import Fetch
 import era5cli.inputref as ref
 
 
-usage = """Usage:
-
-    --years <years> --variable <variable>
-
-    Examples:
-
-    runoff for the year 2018
-    >>> era5cli --years 2018 --variable runoff
-
-    runoff for 2017 and 2018
-    >>> era5cli --years 2017,2018 --variable runoff
-
-
-""".format(__file__)
-
-
 def zpadlist(intstr, type, minval, maxval):
     """Return zero padded string and perform input checks."""
     try:
@@ -157,7 +141,6 @@ def main():
                              Prefix of output filename. Default prefix is
                              era5.
                              '''))
-<<<<<<< HEAD
     fetch.add_argument(
         "-f", "--format", type=str,
         default="netcdf", choices=["netcdf", "grib"],
@@ -166,14 +149,6 @@ def main():
         "-s", "--split", type=bool,
         default=True, required=False,
         help=textwrap.dedent('''
-=======
-    fetch.add_argument("-f", "--format", type=str,
-                        default="netcdf", choices = ["netcdf", "grib"],
-                        help="Output file type. Defaults to 'netcdf'.")
-    fetch.add_argument("-s", "--split", type=bool,
-                        default=True, required=False,
-                        help=textwrap.dedent('''
->>>>>>> fix unsolved merge conflicts
                              Split output by years. Default is True.
                              '''))
     fetch.add_argument(
@@ -192,7 +167,7 @@ def main():
 
     args = parser.parse_args()
 
-  # input arguments
+    # input arguments
     try:
         infotype = args.type
         try:
@@ -215,15 +190,7 @@ def main():
         era5 = Fetch(years, months, days, hours, variables, outputformat,
                      outputprefix, split, threads)
         era5.fetch()
-<<<<<<< HEAD
-    else:
-        try:
-            print(ref.refdict[infotype])
-        except KeyError:
-            raise Exception('Unknown value for reference argument.')
 
-=======
->>>>>>> fix unsolved merge conflicts
 
 if __name__ == "__main__":
     main()
