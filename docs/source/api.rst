@@ -7,5 +7,8 @@ API
     :local:
     :depth: 1
 
+.. automodule:: info
+     :members:
+
 .. automodule:: fetch
      :members:
