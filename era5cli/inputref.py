@@ -1,4 +1,4 @@
-"""Lists of ERA-5 variables"""
+"""Lists of ERA-5 variables and pressure levels"""
 
 # The available pressure levels in ERA-5
 

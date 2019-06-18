@@ -8,22 +8,6 @@ from era5cli.fetch import Fetch
 import era5cli.inputref as ref
 
 
-usage = """Usage:
-
-    --years <years> --variable <variable>
-
-    Examples:
-
-    runoff for the year 2018
-    >>> era5cli --years 2018 --variable runoff
-
-    runoff for 2017 and 2018
-    >>> era5cli --years 2017,2018 --variable runoff
-
-
-""".format(__file__)
-
-
 def zpadlist(intstr, type, minval, maxval):
     """Return zero padded string and perform input checks."""
     try:
@@ -33,7 +17,7 @@ def zpadlist(intstr, type, minval, maxval):
             print("Invalid {} argument: {}".format(type, intstr))
             sys.exit()
     except TypeError:
-        print("Invalid {} argument: {}".format(type, intstr))
+        reanalysis-era5-pressure-levels-monthly-meansprint("Invalid {} argument: {}".format(type, intstr))
         sys.exit()
     return str(intstr.zfill(2))
 
