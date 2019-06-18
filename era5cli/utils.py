@@ -1,29 +1,35 @@
 """Utility functions."""
 
-import prettytable
-import shutil
+
+def zpadlist(values: list, inputtype: str, minval: int, maxval: int) -> list:
+    """Return zero padded string and perform input checks."""
+    returnlist = []
+    for value in values:
+        assert (int(value) >= minval), (
+            'invalid value specified for {}: {}'.format(inputtype, value))
+        assert (int(value) <= maxval), (
+            'invalid value specified for {}: {}'.format(inputtype, value))
+        returnlist += [str(value.zfill(2))]
+    return returnlist
 
 
-def print_multicolumn(inputlist, header):
-    """Print a list of strings in several columns."""
-    # calculate number of rows needed
-    columns, rows = shutil.get_terminal_size(fallback=(80, 24))
-    maxwidth = max([len(x) for x in inputlist])
-    # calculate number of columns that fit on screen
-    ncols = columns // (maxwidth + 2)
-    # calculate number of rows
-    nrows = - ((-len(inputlist)) // ncols)
-    # the number of columns may be reducible for that many rows.
-    ncols = - ((-len(inputlist)) // nrows)
-    t = prettytable.PrettyTable([str(x) for x in range(ncols)])
-    t.title = header
-    t.header = False
-    t.align = 'l'
-    t.hrules = prettytable.NONE
-    t.vrules = prettytable.NONE
-    chunks = [inputlist[i:i + nrows] for i in range(0, len(inputlist), nrows)]
-    chunks[-1].extend('' for i in range(nrows - len(chunks[-1])))
-    chunks = zip(*chunks)
-    for c in chunks:
-        t.add_row(c)
-    print(t)
+def zpad_days(value: int) -> list:
+    """Return zero padded string."""
+    return zpadlist(value, 'days', 1, 31)
+
+
+def zpad_months(value: int) -> list:
+    """Return zero padded string."""
+    return zpadlist(value, 'months', 1, 12)
+
+
+def format_hours(values: list) -> list:
+    """Return xx:00 formated time string."""
+    returnlist = []
+    for value in values:
+        assert (int(value) >= 0), (
+            'invalid value specified for hours: {}'.format(value))
+        assert (int(value) <= 23), (
+            'invalid value specified for hours: {}'.format(value))
+        returnlist += ["{}:00".format(str(value).zfill(2))]
+    return returnlist

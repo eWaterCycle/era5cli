@@ -4,18 +4,22 @@ import cdsapi
 # from pathos.multiprocessing import ProcessPool as Pool
 from pathos.threading import ThreadPool as Pool
 import era5cli.inputref as ref
+from .utils import format_hours
+from .utils import zpad_days
+from .utils import zpad_months
 
 
 class Fetch:
     """Fetch ERA5 data using cdsapi."""
 
-    def __init__(self, years, months, days, hours, variables, outputformat,
-                 outputprefix, pressurelevels=ref.plevels, split=True,
+    def __init__(self, years: list, months: list, days: list,
+                 hours: list, variables: list, outputformat: str,
+                 outputprefix: str, pressurelevels=ref.plevels, split=True,
                  threads=None):
         """Initialization of Fetch class."""
-        self.months = months
-        self.days = days
-        self.hours = hours
+        self.months = zpad_months(months)
+        self.days = zpad_days(days)
+        self.hours = format_hours(hours)
         self.pressurelevels = pressurelevels
         self.variables = variables
         self.outputformat = outputformat
