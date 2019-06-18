@@ -1,8 +1,26 @@
 """Lists of ERA-5 variables"""
 
+# The available pressure levels in ERA-5
+
+plevels = [
+    '1', '2', '3',
+    '5', '7', '10',
+    '20', '30', '50',
+    '70', '100', '125',
+    '150', '175', '200',
+    '225', '250', '300',
+    '350', '400', '450',
+    '500', '550', '600',
+    '650', '700', '750',
+    '775', '800', '825',
+    '850', '875', '900',
+    '925', '950', '975',
+    '1000'
+]
+
 # The pressure level variables to be downloaded from
 # https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels
-plvars =[
+plvars = [
     'divergence',
     'fraction_of_cloud_cover',
     'geopotential',
@@ -290,3 +308,9 @@ slvars = [
     'wave_spectral_skewness',
     'zero_degree_level',
 ]
+
+refdict = {
+        "levels":plevels,
+        "2Dvars":slvars,
+        "3Dvars":plvars,
+    }

@@ -3,14 +3,15 @@
 import cdsapi
 # from pathos.multiprocessing import ProcessPool as Pool
 from pathos.threading import ThreadPool as Pool
+import era5cli.inputref as ref
 
-from variables import slvars, plvars
 
 class Fetch:
     """Fetch ERA5 data using cdsapi."""
 
-    def __init__(self, pressurelevels=None, years, months, days, hours, variables, outputformat,
-                 outputprefix, split=True, threads=None):
+    def __init__(self,  years, months, days, hours, variables, outputformat,
+                 outputprefix, pressurelevels=ref.plevels, split=True,
+                 threads=None):
         """Initialization of Fetch class."""
         self.months = months
         self.days = days
@@ -28,11 +29,11 @@ class Fetch:
 
     def fetch(self):
         """Split calls and fetch results."""
-        if split:
+        if self.split:
             # split by variable and year
             self.split_variable_yr()
         else:
-            #split by variable
+            # split by variable
             self.split_variable()
 
     def extension(self):
@@ -73,17 +74,11 @@ class Fetch:
             pool = Pool(nodes=self.threads)
         pool.map(self.getdata, variables, years, outputfiles)
 
-    def define_outputfile(outputprefix, variable, year):
-        outputfile = "{}_{}_{}.{}".format(self.outputprefix,
-                                          variable,
-                                          year, self.ext)
-        return outputfile
-
     def getdata(self, variable, years, outputfile):
         """Fetch variables using cds api call."""
         c = cdsapi.Client()
 
-        if variable in slvars:
+        if variable in ref.slvars:
             c.retrieve('reanalysis-era5-single-levels',
                        {'variable': variable,
                         'product_type': 'reanalysis',
@@ -94,16 +89,21 @@ class Fetch:
                         'format': self.outputformat},
                        outputfile)
 
-        elif variable in plvars:
-            c.retrieve('reanalysis-era5-pressure-levels',
-                       {'variable': variable,
-                        'pressure_level': self.pressure_levels,
-                        'product_type': 'reanalysis',
-                        'year': years,
-                        'month': self.months,
-                        'day': self.days,
-                        'time': self.hours,
-                        'format': self.outputformat},
-                       outputfile)
+        elif variable in ref.plvars:
+            if all([l in ref.plevels for l in self.pressure_levels]):
+                c.retrieve('reanalysis-era5-pressure-levels',
+                           {'variable': variable,
+                            'pressure_level': self.pressure_levels,
+                            'product_type': 'reanalysis',
+                            'year': years,
+                            'month': self.months,
+                            'day': self.days,
+                            'time': self.hours,
+                            'format': self.outputformat},
+                           outputfile)
+            else:
+                raise Exception('''
+                    Invalid pressure levels. Allowed values are: {}
+                    '''.format(ref.plevels))
         else:
-            raise Exception('Invalid variable name: {}'.format{variable})
+            raise Exception('Invalid variable name: {}'.format(variable))
