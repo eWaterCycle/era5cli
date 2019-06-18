@@ -8,7 +8,7 @@ import era5cli.inputref as ref
 class Info:
     """Print ERA5 information on available variables and levels."""
 
-    def __init__(self, infotype):
+    def __init__(self, infotype: str):
         """Initialization of Info class."""
         self.infotype = infotype
         try:
