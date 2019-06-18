@@ -86,38 +86,101 @@ def main():
 
     common = argparse.ArgumentParser(add_help=False)
 
+    common.add_argument(
+        "variables", type=str, nargs="+",
+        help=textwrap.dedent('''
+                             The variable to be downloaded. See the cds
+                             website or the info argument for availabe
+                             variables.
+                             ''')
+    )
+
+    common.add_argument(
+        "--years", type=str_seq,
+        required=True,
+        help=textwrap.dedent('''\
+                             Year(s) for which the data should be downloaded.
+                             ''')
+    )
+
+    common.add_argument(
+        "--months", nargs="+",
+        required=False, type=zpad_months,
+        default=[str(m).zfill(2) for m in list(range(1, 13))],
+        help=textwrap.dedent('''\
+                             Months to download data for. Defaults to all
+                             months.
+                             ''')
+    )
+
+    common.add_argument(
+        "--days", nargs="+",
+        required=False, type=zpad_days,
+        default=[str(d).zfill(2) for d in list(range(1, 32))],
+        help=textwrap.dedent('''\
+                             Days to download data for. Defaults to all days.
+                             ''')
+    )
+
+    common.add_argument(
+        "--hours", nargs="+",
+        required=False, type=format_hours,
+        default=["{}:00".format(str(h).zfill(2)) for
+                 h in list(range(0, 24))],
+        help=textwrap.dedent('''\
+                             Time of day in hours to download data for.
+                             Defaults to all hours.
+                             ''')
+    )
+
+    common.add_argument(
+        "--levels", nargs="+", type=int,
+        required=False,
+        help=textwrap.dedent('''\
+                             Pressure levels to download for three dimensional
+                             data. Default is all available levels. See the
+                             cds website or inputref.py for available levels.
+                             ''')
+    )
+
+    common.add_argument(
+        "--outputprefix", type=str, default='era5',
+        help=textwrap.dedent('''\
+                             Prefix of output filename. Default prefix is
+                             era5.
+                             ''')
+    )
+
+    common.add_argument(
+        "--format", type=str,
+        default="netcdf", choices=["netcdf", "grib"],
+        help="Output file type. Defaults to 'netcdf'."
+    )
+
+    common.add_argument(
+        "--split", type=bool,
+        default=True, required=False,
+        help=textwrap.dedent('''
+                             Split output by years. Default is True.
+                             ''')
+    )
+
+    common.add_argument(
+        "--threads", type=int, choices=range(1, 7),
+        required=False, default=None,
+        help=textwrap.dedent('''\
+                             Number of parallel threads to use when downloading
+                             using split. Default is a single process.
+                             ''')
+    )
+
     hourly = subparsers.add_parser(
         'fetchhourly', parents=[common],
         description='Execute the data fetch process.',
         formatter_class=argparse.RawTextHelpFormatter)
 
-    monthly = subparsers.add_parser(
-        'fetchmonthly', parents=[common],
-        description='Execute the data fetch process.',
-        formatter_class=argparse.RawTextHelpFormatter)
-
-    info = subparsers.add_parser(
-        'info',
-        description='Show information on available variables and levels.',
-        formatter_class=argparse.RawTextHelpFormatter)
-
-    common.add_argument(
-        "variables", type=str, nargs="+",
-        help=textwrap.dedent(
-            "The variable to be downloaded. See the cds website or inputref.py\
-            for availabe variables."
-        )
-    )
-
-    common.add_argument(
-        "-y", "--years", type=str_seq,
-        required=True,
-        help=textwrap.dedent('''\
-                             Year(s) for which the data should be downloaded.
-                             '''))
-
     hourly.add_argument(
-        "-p", "--product", type=str_seq,
+        "--product", type=str_seq,
         required=True, choices=[
             'ensemble_mean',
             'ensemble_members',
@@ -129,82 +192,42 @@ def main():
         )
     )
 
+    monthly = subparsers.add_parser(
+        'fetchmonthly', parents=[common],
+        description='Execute the data fetch process.',
+        formatter_class=argparse.RawTextHelpFormatter)
+
     monthly.add_argument(
-        "-e", "--ensemble", type=bool, required=True, 
-        help=textwrap.dedent(
-            "Whether to download high resolution realisation (HRES)\
-            or a reduced resolution ten member ensemble (EDA)"
-        )
-    )
-    monthly.add_argument(
-        "-s", "--synaptic", type=bool, required=True, 
-        help=textwrap.dedent(
-            "Whether to download high resolution realisation (HRES)\
-            or a reduced resolution ten member ensemble (EDA)"
-        )
+        "--ensemble", type=bool, required=True,
+        help=textwrap.dedent('''
+                             Whether to download high resolution realisation
+                             (HRES) or a reduced resolution ten member ensemble
+                             (EDA)
+                             ''')
     )
 
-    common.add_argument(
-        "-m", "--months", nargs="+",
-        required=False, type=zpad_months,
-        default=[str(m).zfill(2) for m in list(range(1, 13))],
-        help=textwrap.dedent('''\
-                             Months to download data for. Defaults to all
-                             months.
-                             '''))
-    common.add_argument(
-        "-d", "--days", nargs="+",
-        required=False, type=zpad_days,
-        default=[str(d).zfill(2) for d in list(range(1, 32))],
-        help=textwrap.dedent('''\
-                             Days to download data for. Defaults to all days.
-                             '''))
-    common.add_argument(
-        "-t", "--hours", nargs="+",
-        required=False, type=format_hours,
-        default=["{}:00".format(str(h).zfill(2)) for
-                 h in list(range(0, 24))],
-        help=textwrap.dedent('''\
-                             Time of day in hours to download data for.
-                             Defaults to all hours.
-                             '''))
-    common.add_argument(
-        "-l", "--levels", nargs="+", type=int,
-        required=False,
-        help=textwrap.dedent('''\
-                             Pressure levels to download for three dimensional
-                             data. Default is all available levels. See the
-                             cds website or inputref.py for available levels.
-                             '''))
-    common.add_argument(
-        "-o", "--outputprefix", type=str, default='era5',
-        help=textwrap.dedent('''\
-                             Prefix of output filename. Default prefix is
-                             era5.
-                             '''))
-    common.add_argument(
-        "-f", "--format", type=str,
-        default="netcdf", choices=["netcdf", "grib"],
-        help="Output file type. Defaults to 'netcdf'.")
-    common.add_argument(
-        "-s", "--split", type=bool,
-        default=True, required=False,
+    monthly.add_argument(
+        "--synaptic", type=bool, required=True,
         help=textwrap.dedent('''
-                             Split output by years. Default is True.
-                             '''))
-    common.add_argument(
-        "--threads", type=int, choices=range(1, 7),
-        required=False, default=None,
-        help=textwrap.dedent('''\
-                             Number of parallel threads to use when downloading
-                             using split. Default is a single process.
-                             '''))
+                             Whether to download high resolution realisation
+                             (HRES) or a reduced resolution ten member ensemble
+                             (EDA)
+                             ''')
+    )
+
+    info = subparsers.add_parser(
+        'info',
+        description='Show information on available variables and levels.',
+        formatter_class=argparse.RawTextHelpFormatter
+    )
+
     info.add_argument(
         "type", type=str, choices=ref.refdict,
         help=textwrap.dedent('''\
                              Print lists of available variables or pressure
                              levels.
-                           '''))
+                           ''')
+    )
 
     args = parser.parse_args()
 
