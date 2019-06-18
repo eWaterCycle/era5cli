@@ -6,6 +6,7 @@ import textwrap
 import sys
 from era5cli.fetch import Fetch
 import era5cli.inputref as ref
+from era5cli.info import Info
 
 
 def zpadlist(intstr, type, minval, maxval):
@@ -170,10 +171,9 @@ def main():
     # input arguments
     try:
         infotype = args.type
-        try:
-            print(ref.refdict[infotype])
-        except KeyError:
-            raise Exception('Unknown value for reference argument.')
+        # List dataset information
+        era5info = Info(infotype)
+        era5info.list()
 
     except AttributeError:
         variables = args.variables
