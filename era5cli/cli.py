@@ -157,6 +157,7 @@ def main():
                              Prefix of output filename. Default prefix is
                              era5.
                              '''))
+<<<<<<< HEAD
     fetch.add_argument(
         "-f", "--format", type=str,
         default="netcdf", choices=["netcdf", "grib"],
@@ -165,6 +166,14 @@ def main():
         "-s", "--split", type=bool,
         default=True, required=False,
         help=textwrap.dedent('''
+=======
+    fetch.add_argument("-f", "--format", type=str,
+                        default="netcdf", choices = ["netcdf", "grib"],
+                        help="Output file type. Defaults to 'netcdf'.")
+    fetch.add_argument("-s", "--split", type=bool,
+                        default=True, required=False,
+                        help=textwrap.dedent('''
+>>>>>>> fix unsolved merge conflicts
                              Split output by years. Default is True.
                              '''))
     fetch.add_argument(
@@ -183,10 +192,15 @@ def main():
 
     args = parser.parse_args()
 
-    # input arguments
-    infotype = args.type
+  # input arguments
+    try:
+        infotype = args.type
+        try:
+            print(ref.refdict[infotype])
+        except KeyError:
+            raise Exception('Unknown value for reference argument.')
 
-    if infotype is None:
+    except AttributeError:
         variables = args.variables
         months = args.months
         days = args.days
@@ -201,12 +215,15 @@ def main():
         era5 = Fetch(years, months, days, hours, variables, outputformat,
                      outputprefix, split, threads)
         era5.fetch()
+<<<<<<< HEAD
     else:
         try:
             print(ref.refdict[infotype])
         except KeyError:
             raise Exception('Unknown value for reference argument.')
 
+=======
+>>>>>>> fix unsolved merge conflicts
 
 if __name__ == "__main__":
     main()
