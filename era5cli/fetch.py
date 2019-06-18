@@ -16,7 +16,7 @@ class Fetch:
         self.months = months
         self.days = days
         self.hours = hours
-        sreanalysis-era5-pressure-levels-monthly-meanself.pressurelevels = pressurelevels
+        self.pressurelevels = pressurelevels
         self.variables = variables
         self.outputformat = outputformat
         self.years = years
