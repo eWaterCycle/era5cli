@@ -90,6 +90,7 @@ def seq_to_list(sequence):
     (first, last) = sequence.split('/')
     return list(range(int(first), int(last) + 1))
 
+
 def main():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
@@ -97,81 +98,87 @@ def main():
         formatter_class=argparse.RawTextHelpFormatter)
     subparsers = parser.add_subparsers(help='sub-command', dest='command')
     subparsers.required = True
-    fetch = subparsers.add_parser('fetch',
+    fetch = subparsers.add_parser(
+        'fetch',
         description='Execute the data fetch process.',
         formatter_class=argparse.RawTextHelpFormatter)
-    info = subparsers.add_parser('info',
+    info = subparsers.add_parser(
+        'info',
         description='Show information on available variables and levels.',
         formatter_class=argparse.RawTextHelpFormatter)
 
-    fetch.add_argument("variables", type=str, nargs="+",
-                        help=textwrap.dedent('''\
+    fetch.add_argument(
+        "variables", type=str, nargs="+",
+        help=textwrap.dedent('''\
                              The variable to be downloaded. See the cds
                              website or inputref.py for availabe variables.
                              '''))
-    fetch.add_argument("-y", "--years", type=str_seq,
-                        required=True,
-                        help=textwrap.dedent('''\
+    fetch.add_argument(
+        "-y", "--years", type=str_seq,
+        required=True,
+        help=textwrap.dedent('''\
                              Year(s) for which the data should be downloaded.
                              '''))
-    fetch.add_argument("-m", "--months", nargs="+",
-                        required=False, type=zpad_months,
-                        default=[str(m).zfill(2) for m in list(range(1, 13))],
-                        help=textwrap.dedent('''\
+    fetch.add_argument(
+        "-m", "--months", nargs="+",
+        required=False, type=zpad_months,
+        default=[str(m).zfill(2) for m in list(range(1, 13))],
+        help=textwrap.dedent('''\
                              Months to download data for. Defaults to all
                              months.
                              '''))
-    fetch.add_argument("-d", "--days", nargs="+",
-                        required=False, type=zpad_days,
-                        default=[str(d).zfill(2) for d in list(range(1, 32))],
-                        help=textwrap.dedent('''\
+    fetch.add_argument(
+        "-d", "--days", nargs="+",
+        required=False, type=zpad_days,
+        default=[str(d).zfill(2) for d in list(range(1, 32))],
+        help=textwrap.dedent('''\
                              Days to download data for. Defaults to all days.
                              '''))
-    fetch.add_argument("-t", "--hours", nargs="+",
-                        required=False, type=format_hours,
-                        default=["{}:00".format(str(h).zfill(2)) for
-                                 h in list(range(0, 24))],
-                        help=textwrap.dedent('''\
+    fetch.add_argument(
+        "-t", "--hours", nargs="+",
+        required=False, type=format_hours,
+        default=["{}:00".format(str(h).zfill(2)) for
+                 h in list(range(0, 24))],
+        help=textwrap.dedent('''\
                              Time of day in hours to download data for.
                              Defaults to all hours.
                              '''))
-    fetch.add_argument("-l", "--levels", nargs="+", type=int,
-                        required=False,
-                        help=textwrap.dedent('''\
+    fetch.add_argument(
+        "-l", "--levels", nargs="+", type=int,
+        required=False,
+        help=textwrap.dedent('''\
                              Pressure levels to download for three dimensional
                              data. Default is all available levels. See the
                              cds website or inputref.py for available levels.
                              '''))
-    fetch.add_argument("-o", "--outputprefix", type=str, default='era5',
-                        help=textwrap.dedent('''\
+    fetch.add_argument(
+        "-o", "--outputprefix", type=str, default='era5',
+        help=textwrap.dedent('''\
                              Prefix of output filename. Default prefix is
                              era5.
                              '''))
-    fetch.add_argument("-f", "--format", type=str,
-                        default="netcdf", choices = ["netcdf", "grib"],
-                        help="Output file type. Defaults to 'netcdf'.")
-<<<<<<< HEAD:era5cli/scripts/era5cli
-    fetch.add_argument("-s", "--split", type=bool,
-                        default=True, required=False,
-=======
-    parser.add_argument("-s", "--split", type=str2bool,
-                        default=True,
-                        required=False, help="Split output by years. Default splits by variables and years.")
-    parser.add_argument("--threads", type=int,
-                        required=False, default=None,
->>>>>>> a33c3fa7eedb1ec821dc9b33178652e167dec17f:era5cli/cli.py
-                        help=textwrap.dedent('''
+    fetch.add_argument(
+        "-f", "--format", type=str,
+        default="netcdf", choices=["netcdf", "grib"],
+        help="Output file type. Defaults to 'netcdf'.")
+    fetch.add_argument(
+        "-s", "--split", type=bool,
+        default=True, required=False,
+        help=textwrap.dedent('''
                              Split output by years. Default is True.
                              '''))
-    fetch.add_argument("--threads", type=int, choices=range(1,7),
-                        required=False, default=None,
-                        help=textwrap.dedent('''\
+    fetch.add_argument(
+        "--threads", type=int, choices=range(1, 7),
+        required=False, default=None,
+        help=textwrap.dedent('''\
                              Number of parallel threads to use when downloading
                              using split. Default is a single process.
                              '''))
-    info.add_argument("type", type=str, choices=ref.refdict,
-                      help=textwrap.dedent('''\
-                           Print lists of available variables or pressure levels.
+    info.add_argument(
+        "type", type=str, choices=ref.refdict,
+        help=textwrap.dedent('''\
+                             Print lists of available variables or pressure
+                             levels.
                            '''))
 
     args = parser.parse_args()
@@ -187,19 +194,18 @@ def main():
         split = args.split
         outputformat = args.format
         threads = args.threads
-        levels =args.levels
+        levels = args.levels
         years = args.years
         outputprefix = args.outputprefix
         # Fetch the data
         era5 = Fetch(years, months, days, hours, variables, outputformat,
-                 outputprefix, split, threads)
+                     outputprefix, split, threads)
         era5.fetch()
     else:
         try:
             print(ref.refdict[infotype])
         except KeyError:
             raise Exception('Unknown value for reference argument.')
-
 
 
 if __name__ == "__main__":
