@@ -78,7 +78,7 @@ class Fetch:
             pool = Pool(nodes=self.threads)
         pool.map(self.getdata, variables, years, outputfiles)
 
-    def getdata(self, variable, years, outputfile):
+    def getdata(self, variable: str, years: list, outputfile: str):
         """Fetch variables using cds api call."""
         c = cdsapi.Client()
 
