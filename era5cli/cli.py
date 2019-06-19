@@ -22,6 +22,18 @@ def seq_to_list(sequence):
     return list(range(int(first), int(last) + 1))
 
 
+def str2bool(v):
+    """Return boolean based on input string."""
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
+
+
 def main():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
@@ -103,7 +115,7 @@ def main():
     )
 
     common.add_argument(
-        "--split", type=bool, default=True, required=False,
+        "--split", type=str2bool, default=True, required=False,
         help=textwrap.dedent('''
                              Split output by years. Default is True.
                              ''')
@@ -119,7 +131,7 @@ def main():
     )
 
     common.add_argument(
-        "--ensemble", type=bool, required=True,
+        "--ensemble", type=str2bool, required=True,
         help=textwrap.dedent('''
                              Whether to download high resolution realisation
                              (HRES) or a reduced resolution ten member ensemble
@@ -134,7 +146,7 @@ def main():
         formatter_class=argparse.RawTextHelpFormatter)
 
     hourly.add_argument(
-        "--statistics", type=bool, required=True,
+        "--statistics", type=str2bool, required=True,
         help=textwrap.dedent('''
                              When downloading hourly ensemble data, choose
                              whether or not to download statistics (mean and
@@ -148,7 +160,7 @@ def main():
         formatter_class=argparse.RawTextHelpFormatter)
 
     monthly.add_argument(
-        "--synoptic", type=bool, required=True,
+        "--synoptic", type=str2bool, required=True,
         help=textwrap.dedent('''
                              Whether to get monthly averaged by hour of day
                              (synoptic=True) or monthly means of daily means
@@ -171,7 +183,7 @@ def main():
     )
 
     args = parser.parse_args()
-
+    import pdb; pdb.set_trace()
     # input arguments
     try:
         infotype = args.type
@@ -228,7 +240,7 @@ def main():
                          synoptic=synoptic,
                          pressurelevels=levels,
                          threads=threads,
-                         split=False)
+                         split=split)
             era5.fetch()
         except AttributeError:
             pass
