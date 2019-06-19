@@ -9,18 +9,18 @@ def zpadlist(values: list, inputtype: str, minval: int, maxval: int) -> list:
             'invalid value specified for {}: {}'.format(inputtype, value))
         assert (int(value) <= maxval), (
             'invalid value specified for {}: {}'.format(inputtype, value))
-        returnlist += [str(value.zfill(2))]
+        returnlist += [str(int(value)).zfill(2)]
     return returnlist
 
 
-def zpad_days(value: int) -> list:
+def zpad_days(values: list) -> list:
     """Return zero padded string."""
-    return zpadlist(value, 'days', 1, 31)
+    return zpadlist(values, 'days', 1, 31)
 
 
-def zpad_months(value: int) -> list:
+def zpad_months(values: list) -> list:
     """Return zero padded string."""
-    return zpadlist(value, 'months', 1, 12)
+    return zpadlist(values, 'months', 1, 12)
 
 
 def format_hours(values: list) -> list:

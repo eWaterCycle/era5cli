@@ -4,9 +4,9 @@ import cdsapi
 # from pathos.multiprocessing import ProcessPool as Pool
 from pathos.threading import ThreadPool as Pool
 import era5cli.inputref as ref
-from .utils import format_hours
-from .utils import zpad_days
-from .utils import zpad_months
+from era5cli.utils import format_hours
+from era5cli.utils import zpad_days
+from era5cli.utils import zpad_months
 
 
 class Fetch:
