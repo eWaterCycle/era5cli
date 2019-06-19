@@ -183,7 +183,6 @@ def main():
     )
 
     args = parser.parse_args()
-    import pdb; pdb.set_trace()
     # input arguments
     try:
         infotype = args.type
