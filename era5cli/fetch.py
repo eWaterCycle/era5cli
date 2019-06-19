@@ -95,9 +95,28 @@ class Fetch:
             raise Exception('Unknown outputformat: {}'.format(
                             self.outputformat))
 
+    def _define_outputfilename(self, var, years):
+        """Define output filename."""
+        start_year = years[0]
+        end_year = years[-1]
+        if not end_year or (end_year == start_year):
+            fname = ("{}_{}_{}_{}".format(self.outputprefix, var,
+                     start_year, self.period))
+        else:
+            fname = ("{}_{}_{}-{}_{}".format(self.outputprefix, var,
+                     start_year, end_year, self.period))
+        if self.ensemble:
+            fname += "_ensemble"
+        if self.statistics:
+            fname += "_statistics"
+        if self.synoptic:
+            fname += "_synoptic"
+        fname += ".{}".format(self.ext)
+        return fname
+
     def _split_variable(self):
         """Split by variable."""
-        outputfiles = ["{}_{}.{}".format(self.outputprefix, var, self.ext)
+        outputfiles = [self._define_outputfilename(var, self.years)
                        for var in self.variables]
         years = len(outputfiles) * [self.years]
         if not self.threads:
@@ -111,9 +130,8 @@ class Fetch:
         outputfiles = []
         variables = []
         for var in self.variables:
-            outputfiles += ["{}_{}_{}.{}".format(self.outputprefix, var, yr,
-                                                 self.ext) for yr in
-                            self.years]
+            outputfiles = [self._define_outputfilename(var, [yr])
+                           for yr in self.years]
             variables += len(outputfiles) * [var]
         if not self.threads:
             pool = Pool()

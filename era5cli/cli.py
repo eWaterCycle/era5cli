@@ -55,10 +55,23 @@ def main():
     )
 
     common.add_argument(
-        "--years", type=str_seq,
+        "--startyear", type=int,
         required=True,
-        help=textwrap.dedent('''\
-                             Year(s) for which the data should be downloaded.
+        help=textwrap.dedent('''
+                             Single year or first year of range for which
+                             data should be downloaded.
+                             Every year will be downloaded in a seperate file
+                             by default. Set "--split false" to change this.
+                             ''')
+    )
+
+    common.add_argument(
+        "--endyear", type=int,
+        required=False, default=None,
+        help=textwrap.dedent('''
+                             Last year of range for which  data should be
+                             downloaded. If only a single year is needed, only
+                             "--startyear" needs to be specified.
                              Every year will be downloaded in a seperate file
                              by default. Set "--split false" to change this.
                              ''')
@@ -90,7 +103,7 @@ def main():
         "--hours", nargs="+",
         required=False, type=int,
         default=list(range(0, 24)),
-        help=textwrap.dedent('''\
+        help=textwrap.dedent('''
                              Time of day in hours to download data for.
                              Defaults to all hours. For every year in
                              "--years" only these hours will be downloaded.
@@ -110,7 +123,7 @@ def main():
 
     common.add_argument(
         "--outputprefix", type=str, default='era5',
-        help=textwrap.dedent('''\
+        help=textwrap.dedent('''
                              Prefix of output filename. Default prefix is
                              "era5".
                              ''')
@@ -197,7 +210,7 @@ def main():
                              Enter variable name (e.g. "total_precipitation")
                              or pressure level (e.g. "825") to show if the
                              variable or level is available and in which list.
-                           ''')
+                             ''')
     )
 
     args = parser.parse_args()
@@ -217,15 +230,22 @@ def main():
         outputformat = args.format
         threads = args.threads
         levels = args.levels
-        years = args.years
         outputprefix = args.outputprefix
         ensemble = args.ensemble
         period = None
+        startyear = args.startyear
+        endyear = args.endyear
+        if not endyear:
+            years = [startyear]
+        else:
+            assert (endyear >= endyear), (
+                'endyear should be >= startyear or None')
+            years = list(range(startyear, endyear + 1))
 
         try:
             statistics = args.statistics
-            period = "montly"
-            era5 = Fetch(years=years,
+            period = "monthly"
+            era5 = Fetch(years,
                          months=months,
                          days=days,
                          hours=hours,
