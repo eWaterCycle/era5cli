@@ -206,10 +206,7 @@ def main():
                              "plevels" for all available pressure levels \n
                              "slvars" for all available single level or 2D
                              variables \n
-                             "plvars" for all available 3D variables \n
-                             Enter variable name (e.g. "total_precipitation")
-                             or pressure level (e.g. "825") to show if the
-                             variable or level is available and in which list.
+                             "plvars" for all available 3D variables.
                              ''')
     )
 

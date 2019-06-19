@@ -14,7 +14,7 @@ Register at Copernicus Climate Data Service
 Create a key ascii file
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-In linux create a file called .cdsapirc in your home directory and add
+In linux create a new file called .cdsapirc in the home directory of your user and add
 the following two lines:
 
 ::
@@ -43,10 +43,6 @@ positional arguments:
               variables
 
               :samp:`plvars` for all available 3D variables 
-
-              Enter variable name (e.g. "total_precipitation")
-              or pressure level (e.g. "825") to show if the
-              variable or level is available and in which list.
 
 optional arguments:
   -h, --help  show this help message and exit
