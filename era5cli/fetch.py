@@ -157,19 +157,19 @@ class Fetch:
 
         if variable in ref.plvars:
             if all([l in ref.plevels for l in self.pressure_levels]):
-                name += "pressure-levels-"
+                name += "pressure-levels"
                 request["pressure_level"] = self.pressure_levels
             else:
                 raise Exception('''
                                 Invalid pressure levels. Allowed values are: {}
                                 '''.format(ref.plevels))
         elif variable in ref.slvars:
-            name += "single-levels-"
+            name += "single-levels"
         else:
             raise Exception('Invalid variable name: {}'.format(variable))
 
         if self.period == "monthly":
-            name += "monthly-means"
+            name += "-monthly-means"
 
         return(name, request)
 
@@ -177,5 +177,5 @@ class Fetch:
         """Fetch variables using cds api call."""
         c = cdsapi.Client()
         name, request = self._build_request(variables, years)
-        print(request)
+        print(name, request, outputfile)
         #c.retrieve(name, request, outputfile)
