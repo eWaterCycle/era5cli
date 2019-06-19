@@ -165,7 +165,7 @@ def main():
     )
 
     hourly = subparsers.add_parser(
-        'fetchhourly', parents=[common],
+        'hourly', parents=[common],
         description='Execute the data fetch process for hourly data.',
         formatter_class=argparse.RawTextHelpFormatter)
 
@@ -180,7 +180,7 @@ def main():
     )
 
     monthly = subparsers.add_parser(
-        'fetchmonthly', parents=[common],
+        'monthly', parents=[common],
         description='Execute the data fetch process for monthly data.',
         formatter_class=argparse.RawTextHelpFormatter)
 
