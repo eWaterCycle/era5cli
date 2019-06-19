@@ -60,6 +60,9 @@ era5cli can be used to fetch both hourly data and monthly averaged data.
 Fetching hourly data
 ====================
 
+Fetch hourly data through an cdsapi call via command line. More information on the available data and options can be found on:
+| `Era5 hourly single levels download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels?tab=overview>`_.
+| `Era5 hourly pressure levels download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels?tab=overview>`_.
 
 ::
 
@@ -135,6 +138,11 @@ optional arguments:
 
 Fetching monthly data
 =====================
+
+Fetch hourly data through an cdsapi call via command line. More information on the available data and options can be found on:
+
+| `Era5 monthly single levels download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels-monthly-means?tab=overview>`_.
+| `Era5 monthly pressure levels download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels-monthly-means?tab=overview>`_.
 
 ::
 
