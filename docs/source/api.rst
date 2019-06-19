@@ -8,7 +8,21 @@ API
     :depth: 1
 
 .. automodule:: info
-     :members:
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 .. automodule:: fetch
-     :members:
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+.. automodule:: inputref
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+.. automodule:: utils
+    :members:
+    :undoc-members:
+    :show-inheritance:
