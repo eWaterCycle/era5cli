@@ -12,6 +12,11 @@ era5cli
    :target: https://travis-ci.com/eWaterCycle/era5cli
    :alt: Travis Build
 
+
+.. image:: https://codecov.io/gh/eWaterCycle/era5cli/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/eWaterCycle/era5cli
+   :alt: Test coverage
+
 A command line interface to download ERA5 data through CDS. Currently only hourly single level data is supported.  
 
 * Free software: Apache Software License 2.0
