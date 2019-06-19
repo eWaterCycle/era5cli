@@ -98,14 +98,12 @@ def main():
     )
 
     common.add_argument(
-        "--format", type=str,
-        default="netcdf", choices=["netcdf", "grib"],
+        "--format", type=str, default="netcdf", choices=["netcdf", "grib"],
         help="Output file type. Defaults to 'netcdf'."
     )
 
     common.add_argument(
-        "--split", type=bool,
-        default=True, required=False,
+        "--split", type=bool, default=True, required=False,
         help=textwrap.dedent('''
                              Split output by years. Default is True.
                              ''')
@@ -120,22 +118,27 @@ def main():
                              ''')
     )
 
+    common.add_argument(
+        "--ensemble", type=bool, required=True,
+        help=textwrap.dedent('''
+                             Whether to download high resolution realisation
+                             (HRES) or a reduced resolution ten member ensemble
+                             (EDA).
+                             ''')
+    )
+
     hourly = subparsers.add_parser(
         'fetchhourly', parents=[common],
         description='Execute the data fetch process.',
         formatter_class=argparse.RawTextHelpFormatter)
 
     hourly.add_argument(
-        "--product", type=str,
-        required=True, choices=[
-            'ensemble_mean',
-            'ensemble_members',
-            'ensemble_spread',
-            'reanalysis'
-        ],
-        help=textwrap.dedent(
-            "The product type to be downloaded for hourly data."
-        )
+        "--statistics", type=bool, required=True, 
+        help=textwrap.dedent('''
+                             When downloading hourly ensemble data, choose
+                             whether or not to download statistics (mean and
+                             spread).
+                             ''')
     )
 
     monthly = subparsers.add_parser(
@@ -143,21 +146,13 @@ def main():
         description='Execute the data fetch process.',
         formatter_class=argparse.RawTextHelpFormatter)
 
-    monthly.add_argument(
-        "--ensemble", type=bool, required=True,
-        help=textwrap.dedent('''
-                             Whether to download high resolution realisation
-                             (HRES) or a reduced resolution ten member ensemble
-                             (EDA)
-                             ''')
-    )
 
     monthly.add_argument(
-        "--synaptic", type=bool, required=True,
+        "--synoptic", type=bool, required=True,
         help=textwrap.dedent('''
-                             Whether to download high resolution realisation
-                             (HRES) or a reduced resolution ten member ensemble
-                             (EDA)
+                             Whether to get monthly averaged by hour of day
+                             (synoptic=True) or monthly means of daily means
+                             (synoptic=False)
                              ''')
     )
 
@@ -195,10 +190,27 @@ def main():
         levels = args.levels
         years = args.years
         outputprefix = args.outputprefix
-        # Fetch the data
-        era5 = Fetch(years, months, days, hours, variables, outputformat,
-                     outputprefix, split, threads)
-        era5.fetch()
+        ensemble = args.ensemble
+        period = None
+
+        try:
+            statistics = args.statistics
+            period = "montly"
+            era5 = Fetch(years, months, days, hours, variables, outputformat,
+                         outputprefix, split, threads, period, statistics)
+            era5.fetch()
+        except AttributeError:
+            pass
+
+        try:
+            synoptic = args.synoptic
+            period = "hourly"
+            era5 = Fetch(years, months, days, hours, variables, outputformat,
+                         outputprefix, split, threads, period, synoptic)
+            era5.fetch()
+        except AttributeError:
+            pass
+
 
 
 if __name__ == "__main__":

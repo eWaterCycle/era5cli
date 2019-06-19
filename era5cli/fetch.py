@@ -14,8 +14,9 @@ class Fetch:
 
     def __init__(self, years: list, months: list, days: list,
                  hours: list, variables: list, outputformat: str,
-                 outputprefix: str, pressurelevels=ref.plevels, split=True,
-                 threads=None):
+                 outputprefix: str, period: str, ensemble: bool,
+                 statistics=None, synoptic=None, pressurelevels=ref.plevels,
+                 split=True, threads=None):
         """Initialization of Fetch class."""
         self.months = zpad_months(months)
         self.days = zpad_days(days)
@@ -27,6 +28,10 @@ class Fetch:
         self.outputprefix = outputprefix
         self.threads = threads
         self.split = split
+        self.period = period
+        self.ensemble = ensemble
+        self.statistics = statistics # only for hourly data
+        self.synoptic = synoptic # only for monthly data
 
         # define extension output filename
         self.extension()
@@ -78,36 +83,62 @@ class Fetch:
             pool = Pool(nodes=self.threads)
         pool.map(self.getdata, variables, years, outputfiles)
 
-    def getdata(self, variable: str, years: list, outputfile: str):
-        """Fetch variables using cds api call."""
-        c = cdsapi.Client()
 
-        if variable in ref.slvars:
-            c.retrieve('reanalysis-era5-single-levels',
-                       {'variable': variable,
-                        'product_type': 'reanalysis',
-                        'year': years,
-                        'month': self.months,
-                        'day': self.days,
-                        'time': self.hours,
-                        'format': self.outputformat},
-                       outputfile)
+    def product_type(self):
+        # construct the product type name from the options
+        producttype = ""
 
-        elif variable in ref.plvars:
+        if self.ensemble:
+            producttype += "ensemble_members"
+        elif not self.ensemble:
+            producttype += "reanalysis"
+
+        if self.period == "monthly":
+            producttype = "monthly_averaged_" + producttype
+            if self.synoptic:
+                producttype += "_by_hour_of_day"
+        elif self.period == "hourly":
+            if self.ensemble and self.statistics:
+                producttype = [
+                    "ensemble_members",
+                    "ensemble_mean",
+                    "ensemble_spread",
+                ]
+
+        return producttype
+
+    def build_request(self, variable):
+        """Build the download request for the retrieve method of cdsapi."""
+        name = "reanalysis-era5-"
+        request = {'variable': variable,
+                   'year': self.years,
+                   'product_type': self.product_type(),
+                   'month': self.months,
+                   'day': self.days,
+                   'time': self.hours,
+                   'format': self.outputformat}
+
+        if variable in ref.plvars:
             if all([l in ref.plevels for l in self.pressure_levels]):
-                c.retrieve('reanalysis-era5-pressure-levels',
-                           {'variable': variable,
-                            'pressure_level': self.pressure_levels,
-                            'product_type': 'reanalysis',
-                            'year': years,
-                            'month': self.months,
-                            'day': self.days,
-                            'time': self.hours,
-                            'format': self.outputformat},
-                           outputfile)
+                name += "pressure-levels-"
+                request["pressure_level"] = self.pressure_levels
             else:
                 raise Exception('''
-                    Invalid pressure levels. Allowed values are: {}
-                    '''.format(ref.plevels))
+                                Invalid pressure levels. Allowed values are: {}
+                                '''.format(ref.plevels))
+        elif variable in ref.slvars:
+            name += "single-levels-"
         else:
             raise Exception('Invalid variable name: {}'.format(variable))
+
+        if self.period == "monthly":
+            name += "monthly-means"
+
+        return(name,request)
+
+    def getdata(self, outputfile: str):
+        """Fetch variables using cds api call."""
+        c = cdsapi.Client()
+        name,request = self.build_request()
+        c.retrieve(name, request, outputfile)
+
