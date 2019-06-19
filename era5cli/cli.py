@@ -47,8 +47,9 @@ def main():
     common.add_argument(
         "--variables", type=str, nargs="+",
         help=textwrap.dedent('''
-                             The variable to be downloaded. See the cds
-                             website or the info argument for availabe
+                             The variables to be downloaded, can be a single
+                             or multiple variables. See the cds
+                             website or run "era5cli info -h" for available
                              variables.
                              ''')
     )
@@ -59,6 +60,8 @@ def main():
         help=textwrap.dedent('''
                              Single year or first year of range for which
                              data should be downloaded.
+                             Every year will be downloaded in a seperate file
+                             by default. Set "--split false" to change this.
                              ''')
     )
 
@@ -68,7 +71,9 @@ def main():
         help=textwrap.dedent('''
                              Last year of range for which  data should be
                              downloaded. If only a single year is needed, only
-                             --startyear needs to be specified.
+                             "--startyear" needs to be specified.
+                             Every year will be downloaded in a seperate file
+                             by default. Set "--split false" to change this.
                              ''')
     )
 
@@ -76,9 +81,10 @@ def main():
         "--months", nargs="+",
         required=False, type=int,
         default=[str(m).zfill(2) for m in list(range(1, 13))],
-        help=textwrap.dedent('''
-                             Months to download data for. Defaults to all
-                             months.
+        help=textwrap.dedent('''\
+                             Month(s) to download data for. Defaults to all
+                             months. For every year in "--years" only these
+                             months will be downloaded.
                              ''')
     )
 
@@ -86,8 +92,10 @@ def main():
         "--days", nargs="+",
         required=False, type=int,
         default=[str(d).zfill(2) for d in list(range(1, 32))],
-        help=textwrap.dedent('''
-                             Days to download data for. Defaults to all days.
+        help=textwrap.dedent('''\
+                             Day(s) to download data for. Defaults to all days.
+                             For every year in "--years" only these days will
+                             be downloaded.
                              ''')
     )
 
@@ -97,18 +105,19 @@ def main():
         default=list(range(0, 24)),
         help=textwrap.dedent('''
                              Time of day in hours to download data for.
-                             Defaults to all hours.
+                             Defaults to all hours. For every year in
+                             "--years" only these hours will be downloaded.
                              ''')
     )
 
     common.add_argument(
         "--levels", nargs="+", type=int,
         required=False,
-        help=textwrap.dedent('''
-                             Pressure levels to download for three dimensional
-                             data. Default is all available levels. See the
-                             cds website or the info argument for availabe
-                             variables.
+        help=textwrap.dedent('''\
+                             Pressure level(s) to download for three
+                             dimensional data. Default is all available
+                             levels. See the cds website or run "era5cli info
+                             -h" for available pressure levels.
                              ''')
     )
 
@@ -116,19 +125,23 @@ def main():
         "--outputprefix", type=str, default='era5',
         help=textwrap.dedent('''
                              Prefix of output filename. Default prefix is
-                             era5.
+                             "era5".
                              ''')
     )
 
     common.add_argument(
         "--format", type=str, default="netcdf", choices=["netcdf", "grib"],
-        help="Output file type. Defaults to 'netcdf'."
+        help=textwrap.dedent('''\
+                             Output file type. Defaults to 'netcdf'."
+                             ''')
     )
 
     common.add_argument(
-        "--split", type=str2bool, default=True, required=False,
+        "--split", type=str2bool, default=True,
         help=textwrap.dedent('''
-                             Split output by years. Default is True.
+                             Split output by years, producing a seperate file
+                             for every year in the "--years" argument. Default
+                             is True.
                              ''')
     )
 
@@ -146,36 +159,37 @@ def main():
         help=textwrap.dedent('''
                              Whether to download high resolution realisation
                              (HRES) or a reduced resolution ten member ensemble
-                             (EDA). True downloads the reduced resolution
-                             ensemble.
+                             (EDA). "--ensemble True" downloads the reduced
+                             resolution ensemble.
                              ''')
     )
 
     hourly = subparsers.add_parser(
-        'fetchhourly', parents=[common],
-        description='Execute the data fetch process.',
+        'hourly', parents=[common],
+        description='Execute the data fetch process for hourly data.',
         formatter_class=argparse.RawTextHelpFormatter)
 
     hourly.add_argument(
-        "--statistics", type=str2bool, required=True,
+        "--statistics", type=str2bool, default=False,
         help=textwrap.dedent('''
-                             When downloading hourly ensemble data, choose
-                             whether or not to download statistics (mean and
-                             spread).
+                             When downloading hourly ensemble data, set
+                             "--statistics True" to download statistics
+                             (ensemble mean and ensemble spread). Default is
+                             False.
                              ''')
     )
 
     monthly = subparsers.add_parser(
-        'fetchmonthly', parents=[common],
-        description='Execute the data fetch process.',
+        'monthly', parents=[common],
+        description='Execute the data fetch process for monthly data.',
         formatter_class=argparse.RawTextHelpFormatter)
 
     monthly.add_argument(
-        "--synoptic", type=str2bool, required=True,
+        "--synoptic", type=str2bool, default=False,
         help=textwrap.dedent('''
-                             Whether to get monthly averaged by hour of day
-                             (synoptic=True) or monthly means of daily means
-                             (synoptic=False).
+                             Set "--synoptic True" to get monthly averaged
+                             by hour of day or set "--synoptic False" to get
+                             monthly means of daily means. Default is False.
                              ''')
     )
 
@@ -186,19 +200,25 @@ def main():
     )
 
     info.add_argument(
-        "type", type=str, choices=ref.refdict,
-        help=textwrap.dedent('''
-                             Print lists of available variables or pressure
-                             levels.
-                           ''')
+        "name", type=str,
+        help=textwrap.dedent('''\
+                             Enter list name to print info list: \n
+                             "plevels" for all available pressure levels \n
+                             "slvars" for all available single level or 2D
+                             variables \n
+                             "plvars" for all available 3D variables \n
+                             Enter variable name (e.g. "total_precipitation")
+                             or pressure level (e.g. "825") to show if the
+                             variable or level is available and in which list.
+                             ''')
     )
 
     args = parser.parse_args()
     # input arguments
     try:
-        infotype = args.type
+        infoname = args.name
         # List dataset information
-        era5info = Info(infotype)
+        era5info = Info(infoname)
         era5info.list()
 
     except AttributeError:

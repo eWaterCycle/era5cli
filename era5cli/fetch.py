@@ -173,7 +173,7 @@ class Fetch:
         pool.map(self._getdata, variables, self.years, outputfiles)
 
     def _product_type(self):
-        # construct the product type name from the options
+        '''Construct the product type name from the options'''
         producttype = ""
 
         if self.ensemble:
