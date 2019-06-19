@@ -23,6 +23,7 @@ def zpadlist(values: list, inputtype: str, minval: int, maxval: int) -> list:
     -------
     list(str)
         List of zero-padded strings (e.g. ['01', '02',..., '31']).
+
     Raises
     ------
     AssertionError

@@ -6,18 +6,49 @@ import era5cli.inputref as ref
 
 
 class Info:
-    """Print ERA5 information on available variables and levels."""
+    """Print ERA5 information on available variables and levels.
+
+    Parameters
+    ----------
+        infotype: str
+            Type of information that needs to be printed. Supported are
+            'levels', '2Dvars', and '3Dvars'.
+
+    Raises
+    ------
+    KeyError
+        If `infotype` is not any of ['levels', '2Dvars', '3Dvars'].
+
+    """
 
     def __init__(self, infotype: str):
-        """Initialization of Info class."""
+        """Initialization of Info class.
+
+        Parameters
+        ----------
+            infotype: str
+                Type of information that needs to be printed. Supported are
+                'levels', '2Dvars', and '3Dvars'.
+
+        Raises
+        ------
+        KeyError
+            If `infotype` is not any of ['levels', '2Dvars', '3Dvars'].
+        """
         self.infotype = infotype
+        """str: Type of information that needs to be printed."""
         try:
-            self.refdict = ref.refdict[self.infotype]
+            self.infolist = ref.refdict[self.infotype]
+            """list: List with information to be printed."""
         except KeyError:
             raise Exception('Unknown value for reference argument.')
 
     def list(self):
-        """List method."""
+        """Print a list of available variables or pressure levels.
+
+        Prints a list of available variables or pressure levels. The output is
+        printed in multiple columns if the size of the terminal supports it.
+        """
         self._define_table_header()
         self._print_multicolumn()
 
@@ -35,21 +66,21 @@ class Info:
         # get size of terminal window
         columns, rows = shutil.get_terminal_size(fallback=(80, 24))
         # maximum width of string in list
-        maxwidth = max([len(x) for x in self.refdict])
+        maxwidth = max([len(x) for x in self.infolist])
         # calculate number of columns that fit on screen
         ncols = columns // (maxwidth + 2)
         # calculate number of rows
-        nrows = - ((-len(self.refdict)) // ncols)
+        nrows = - ((-len(self.infolist)) // ncols)
         # the number of columns may be reducible for that many rows.
-        ncols = - ((-len(self.refdict)) // nrows)
+        ncols = - ((-len(self.infolist)) // nrows)
         table = prettytable.PrettyTable([str(x) for x in range(ncols)])
         table.title = self.header
         table.header = False
         table.align = 'l'
         table.hrules = prettytable.NONE
         table.vrules = prettytable.NONE
-        chunks = [self.refdict[i:i + nrows] for i in
-                  range(0, len(self.refdict), nrows)]
+        chunks = [self.infolist[i:i + nrows] for i in
+                  range(0, len(self.infolist), nrows)]
         chunks[-1].extend('' for i in range(nrows - len(chunks[-1])))
         chunks = zip(*chunks)
         for c in chunks:

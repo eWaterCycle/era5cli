@@ -17,11 +17,6 @@ API
     :undoc-members:
     :show-inheritance:
 
-.. automodule:: inputref
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 .. automodule:: utils
     :members:
     :undoc-members:
