@@ -226,9 +226,9 @@ class Fetch:
 
     def _getdata(self, variables: list, years: list, outputfile: str):
         """Fetch variables using cds api call."""
-        c = cdsapi.Client()
         name, request = self._build_request(variables, years)
         if self.dryrun:
             print(name, request, outputfile)
         else:
+            c = cdsapi.Client()
             c.retrieve(name, request, outputfile)

@@ -4,7 +4,6 @@
 import argparse
 import textwrap
 from era5cli.fetch import Fetch
-import era5cli.inputref as ref
 from era5cli.info import Info
 
 

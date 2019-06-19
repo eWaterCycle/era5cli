@@ -1,7 +1,6 @@
-"""Lists of ERA-5 variables and pressure levels"""
+"""Lists of ERA-5 variables and pressure levels."""
 
 # The available pressure levels in ERA-5
-
 plevels = [
     '1', '2', '3',
     '5', '7', '10',
@@ -309,8 +308,7 @@ slvars = [
     'zero_degree_level',
 ]
 
-refdict = {
-        "levels":plevels,
-        "2Dvars":slvars,
-        "3Dvars":plvars,
-    }
+refdict = {"levels": plevels,
+           "2Dvars": slvars,
+           "3Dvars": plvars,
+           }
