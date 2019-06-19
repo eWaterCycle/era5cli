@@ -10,18 +10,58 @@ from era5cli.utils import zpad_months
 
 
 class Fetch:
-    """Fetch ERA5 data using cdsapi."""
+    """Fetch ERA5 data using cdsapi.
+
+    Parameters
+    ----------
+        years: list(int)
+            List of years to download data for.
+        months: list(int)
+            List of month to download data for (1-12).
+        days: list(int)
+            List of days of month to download data for (1-31).
+        hours: list(int)
+            List of time in hours to download data for (0-23).
+        variables: list(str)
+            List of variable names to download data for.
+        outputformat: str
+            Type of file to download: 'netcdf' or 'grib'.
+        outputprefix: str
+            Prefix to be used for the output filename.
+        period: str
+            Frequency of the data to be downloaded: 'hourly' or 'monthly'.
+        ensemble: bool
+            Whether to download high resolution realisation
+            (HRES) or a reduced resolution ten member ensemble
+            (EDA). If `True` the reduced resolution is fetched.
+        statistics: None, bool
+            When downloading hourly ensemble data, choose
+            whether or not to download statistics (mean and
+            spread).
+        synoptic: None, bool
+            Whether to get monthly averaged by hour of day
+            (synoptic=True) or monthly means of daily means
+            (synoptic=False).
+        pressurelevels: None, list(int)
+            List of pressure levels to download 3D variables for.
+        split: bool
+            Split output files by year if `True`. If `False` all output
+            years will be in a single file.
+        threads: None, int
+            Number of parallel calls to cdsapi. If `None` no
+            parallel calls are done.
+    """
 
     def __init__(self, years: list, months: list, days: list,
                  hours: list, variables: list, outputformat: str,
                  outputprefix: str, period: str, ensemble: bool,
-                 statistics=None, synoptic=None, pressurelevels=ref.plevels,
+                 statistics=None, synoptic=None, pressurelevels=None,
                  split=True, threads=None):
         """Initialization of Fetch class."""
         self.months = zpad_months(months)
         self.days = zpad_days(days)
         self.hours = format_hours(hours)
-        self.pressurelevels = pressurelevels
+        self.pressure_levels = pressurelevels
         self.variables = variables
         self.outputformat = outputformat
         self.years = years
@@ -30,22 +70,22 @@ class Fetch:
         self.split = split
         self.period = period
         self.ensemble = ensemble
-        self.statistics = statistics # only for hourly data
-        self.synoptic = synoptic # only for monthly data
-
-        # define extension output filename
-        self.extension()
+        self.statistics = statistics  # only for hourly data
+        self.synoptic = synoptic  # only for monthly data
 
     def fetch(self):
         """Split calls and fetch results."""
+        # define extension output filename
+        self._extension()
+        # define fetch call depending on split argument
         if self.split:
             # split by variable and year
-            self.split_variable_yr()
+            self._split_variable_yr()
         else:
             # split by variable
-            self.split_variable()
+            self._split_variable()
 
-    def extension(self):
+    def _extension(self):
         """Set filename extension."""
         if (self.outputformat.lower() == 'netcdf'):
             self.ext = "nc"
@@ -55,7 +95,7 @@ class Fetch:
             raise Exception('Unknown outputformat: {}'.format(
                             self.outputformat))
 
-    def split_variable(self):
+    def _split_variable(self):
         """Split by variable."""
         outputfiles = ["{}_{}.{}".format(self.outputprefix, var, self.ext)
                        for var in self.variables]
@@ -64,27 +104,24 @@ class Fetch:
             pool = Pool()
         else:
             pool = Pool(nodes=self.threads)
-        pool.map(self.getdata, self.variables, years, outputfiles)
+        pool.map(self._getdata, self.variables, years, outputfiles)
 
-    def split_variable_yr(self):
+    def _split_variable_yr(self):
         """Fetch variable split by variable and year."""
         outputfiles = []
-        years = []
         variables = []
         for var in self.variables:
             outputfiles += ["{}_{}_{}.{}".format(self.outputprefix, var, yr,
                                                  self.ext) for yr in
                             self.years]
-            years += [yr for yr in self.years]
             variables += len(outputfiles) * [var]
         if not self.threads:
             pool = Pool()
         else:
             pool = Pool(nodes=self.threads)
-        pool.map(self.getdata, variables, years, outputfiles)
+        pool.map(self._getdata, variables, self.years, outputfiles)
 
-
-    def product_type(self):
+    def _product_type(self):
         # construct the product type name from the options
         producttype = ""
 
@@ -107,12 +144,12 @@ class Fetch:
 
         return producttype
 
-    def build_request(self, variable):
+    def _build_request(self, variable, years):
         """Build the download request for the retrieve method of cdsapi."""
         name = "reanalysis-era5-"
         request = {'variable': variable,
-                   'year': self.years,
-                   'product_type': self.product_type(),
+                   'year': years,
+                   'product_type': self._product_type(),
                    'month': self.months,
                    'day': self.days,
                    'time': self.hours,
@@ -134,11 +171,11 @@ class Fetch:
         if self.period == "monthly":
             name += "monthly-means"
 
-        return(name,request)
+        return(name, request)
 
-    def getdata(self, outputfile: str):
+    def _getdata(self, variables: list, years: list, outputfile: str):
         """Fetch variables using cds api call."""
         c = cdsapi.Client()
-        name,request = self.build_request()
-        c.retrieve(name, request, outputfile)
-
+        name, request = self._build_request(variables, years)
+        print(request)
+        #c.retrieve(name, request, outputfile)

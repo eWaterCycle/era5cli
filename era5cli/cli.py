@@ -33,7 +33,7 @@ def main():
     common = argparse.ArgumentParser(add_help=False)
 
     common.add_argument(
-        "variables", type=str, nargs="+",
+        "--variables", type=str, nargs="+",
         help=textwrap.dedent('''
                              The variable to be downloaded. See the cds
                              website or the info argument for availabe
@@ -113,8 +113,8 @@ def main():
         "--threads", type=int, choices=range(1, 7),
         required=False, default=None,
         help=textwrap.dedent('''\
-                             Number of parallel threads to use when downloading
-                             using split. Default is a single process.
+                             Number of parallel threads to use when
+                             downloading. Default is a single process.
                              ''')
     )
 
@@ -123,7 +123,8 @@ def main():
         help=textwrap.dedent('''
                              Whether to download high resolution realisation
                              (HRES) or a reduced resolution ten member ensemble
-                             (EDA).
+                             (EDA). True downloads the reduced resolution
+                             ensemble.
                              ''')
     )
 
@@ -133,7 +134,7 @@ def main():
         formatter_class=argparse.RawTextHelpFormatter)
 
     hourly.add_argument(
-        "--statistics", type=bool, required=True, 
+        "--statistics", type=bool, required=True,
         help=textwrap.dedent('''
                              When downloading hourly ensemble data, choose
                              whether or not to download statistics (mean and
@@ -146,13 +147,12 @@ def main():
         description='Execute the data fetch process.',
         formatter_class=argparse.RawTextHelpFormatter)
 
-
     monthly.add_argument(
         "--synoptic", type=bool, required=True,
         help=textwrap.dedent('''
                              Whether to get monthly averaged by hour of day
                              (synoptic=True) or monthly means of daily means
-                             (synoptic=False)
+                             (synoptic=False).
                              ''')
     )
 
@@ -196,8 +196,19 @@ def main():
         try:
             statistics = args.statistics
             period = "montly"
-            era5 = Fetch(years, months, days, hours, variables, outputformat,
-                         outputprefix, split, threads, period, statistics)
+            era5 = Fetch(years=years,
+                         months=months,
+                         days=days,
+                         hours=hours,
+                         variables=variables,
+                         outputformat=outputformat,
+                         outputprefix=outputprefix,
+                         period=period,
+                         ensemble=ensemble,
+                         statistics=statistics,
+                         pressurelevels=levels,
+                         threads=threads,
+                         split=split)
             era5.fetch()
         except AttributeError:
             pass
@@ -205,12 +216,22 @@ def main():
         try:
             synoptic = args.synoptic
             period = "hourly"
-            era5 = Fetch(years, months, days, hours, variables, outputformat,
-                         outputprefix, split, threads, period, synoptic)
+            era5 = Fetch(years=years,
+                         months=months,
+                         days=days,
+                         hours=hours,
+                         variables=variables,
+                         outputformat=outputformat,
+                         outputprefix=outputprefix,
+                         period=period,
+                         ensemble=ensemble,
+                         synoptic=synoptic,
+                         pressurelevels=levels,
+                         threads=threads,
+                         split=False)
             era5.fetch()
         except AttributeError:
             pass
-
 
 
 if __name__ == "__main__":

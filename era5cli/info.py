@@ -18,7 +18,6 @@ class Info:
     ------
     KeyError
         If `infotype` is not any of ['levels', '2Dvars', '3Dvars'].
-
     """
 
     def __init__(self, infotype: str):
