@@ -54,10 +54,21 @@ def main():
     )
 
     common.add_argument(
-        "--years", type=str_seq,
+        "--startyear", type=int,
         required=True,
-        help=textwrap.dedent('''\
-                             Year(s) for which the data should be downloaded.
+        help=textwrap.dedent('''
+                             Single year or first year of range for which
+                             data should be downloaded.
+                             ''')
+    )
+
+    common.add_argument(
+        "--endyear", type=int,
+        required=False, default=None,
+        help=textwrap.dedent('''
+                             Last year of range for which  data should be
+                             downloaded. If only a single year is needed, only
+                             --startyear needs to be specified.
                              ''')
     )
 
@@ -65,7 +76,7 @@ def main():
         "--months", nargs="+",
         required=False, type=int,
         default=[str(m).zfill(2) for m in list(range(1, 13))],
-        help=textwrap.dedent('''\
+        help=textwrap.dedent('''
                              Months to download data for. Defaults to all
                              months.
                              ''')
@@ -75,7 +86,7 @@ def main():
         "--days", nargs="+",
         required=False, type=int,
         default=[str(d).zfill(2) for d in list(range(1, 32))],
-        help=textwrap.dedent('''\
+        help=textwrap.dedent('''
                              Days to download data for. Defaults to all days.
                              ''')
     )
@@ -84,7 +95,7 @@ def main():
         "--hours", nargs="+",
         required=False, type=int,
         default=list(range(0, 24)),
-        help=textwrap.dedent('''\
+        help=textwrap.dedent('''
                              Time of day in hours to download data for.
                              Defaults to all hours.
                              ''')
@@ -93,7 +104,7 @@ def main():
     common.add_argument(
         "--levels", nargs="+", type=int,
         required=False,
-        help=textwrap.dedent('''\
+        help=textwrap.dedent('''
                              Pressure levels to download for three dimensional
                              data. Default is all available levels. See the
                              cds website or the info argument for availabe
@@ -103,7 +114,7 @@ def main():
 
     common.add_argument(
         "--outputprefix", type=str, default='era5',
-        help=textwrap.dedent('''\
+        help=textwrap.dedent('''
                              Prefix of output filename. Default prefix is
                              era5.
                              ''')
@@ -176,7 +187,7 @@ def main():
 
     info.add_argument(
         "type", type=str, choices=ref.refdict,
-        help=textwrap.dedent('''\
+        help=textwrap.dedent('''
                              Print lists of available variables or pressure
                              levels.
                            ''')
@@ -199,15 +210,22 @@ def main():
         outputformat = args.format
         threads = args.threads
         levels = args.levels
-        years = args.years
         outputprefix = args.outputprefix
         ensemble = args.ensemble
         period = None
+        startyear = args.startyear
+        endyear = args.endyear
+        if not endyear:
+            years = [startyear]
+        else:
+            assert (endyear >= endyear), (
+                'endyear should be >= startyear or None')
+            years = list(range(startyear, endyear + 1))
 
         try:
             statistics = args.statistics
-            period = "montly"
-            era5 = Fetch(years=years,
+            period = "monthly"
+            era5 = Fetch(years,
                          months=months,
                          days=days,
                          hours=hours,
