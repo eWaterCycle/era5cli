@@ -10,34 +10,23 @@ class Info:
 
     Parameters
     ----------
-        infotype: str
-            Type of information that needs to be printed. Supported are
-            'levels', '2dvars', and '3dvars'.
+        infoname: str
+            Name of information that needs to be printed. Supported are
+            'levels', '2dvars', '3dvars' and any variable or pressure level
+            defined in era5cli.inputref
 
     Raises
     ------
-    KeyError
-        If `infotype` is not any of ['levels', '2dvars', '3dvars'].
+    AttributeError
+        If `infoname` is not any of the supported strings.
     """
 
     def __init__(self, infoname: str):
-        """Initialization of Info class.
-
-        Parameters
-        ----------
-            infoname: str
-                Name of information that needs to be printed. Supported are
-                'levels', '2dvars', '3dvars' and any variable or pressure level
-                defined in era5cli.inputref
-
-        Raises
-        ------
-        AttributeError
-            If `infoname` is not any of the supported strings.
-        """
+        """Initialization of Info class."""
         self.infoname = infoname
         """str: Name of information that needs to be printed."""
         self.infotype = None
+        """str: Type of information that needs to be printed."""
         try:
             self.infolist = ref.refdict[self.infoname]
             """list: List with information to be printed."""
