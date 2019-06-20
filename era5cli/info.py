@@ -8,16 +8,17 @@ import era5cli.inputref as ref
 class Info:
     """Print ERA5 information on available variables and levels.
 
-    Parameters
-    ----------
-        infotype: str
-            Type of information that needs to be printed. Supported are
-            'levels', '2dvars', and '3dvars'.
+        Parameters
+        ----------
+            infoname: str
+                Name of information that needs to be printed. Supported are
+                'levels', '2dvars', '3dvars' and any variable or pressure level
+                defined in era5cli.inputref
 
-    Raises
-    ------
-    KeyError
-        If `infotype` is not any of ['levels', '2dvars', '3dvars'].
+        Raises
+        ------
+        AttributeError
+            If `infoname` is not any of the supported strings.
     """
 
     def __init__(self, infoname: str):

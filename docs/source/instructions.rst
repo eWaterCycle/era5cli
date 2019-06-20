@@ -65,149 +65,182 @@ Fetch hourly data through an cdsapi call via command line. More information on t
 | `Era5 hourly single levels download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels?tab=overview>`_.
 | `Era5 hourly pressure levels download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels?tab=overview>`_.
 
+
+Execute the data fetch process for hourly data:
+
 ::
 
    era5cli hourly --variables <variables> --startyear <startyear> --endyear <endyear> --months <months> --days <days> --hours <hours> --levels <levels> --outputprefix <outputprefix> --format <fileformat> --split <split> --threads <threads> --ensemble <ensemble> --statistics <statistics>
 
-Execute the data fetch process for hourly data.
-
 optional arguments:
+
   --variables VARIABLES
                         The variables to be downloaded, can be a single
                         or multiple variables. See the cds
                         website or run :samp:`era5cli info -h` for available
                         variables.
+
   --startyear STARTYEAR
                         Single year or first year of range for which
                         data should be downloaded.
                         Every year will be downloaded in a seperate file
                         by default. Set :samp:`--split false` to change this.
+
   --endyear ENDYEAR     
                         Last year of range for which  data should be
                         downloaded. If only a single year is needed, only
                         :samp:`--startyear` needs to be specified.
                         Every year will be downloaded in a seperate file
                         by default. Set :samp:`--split false` to change this.
+
   --months MONTHS
                         Month(s) to download data for. Defaults to all
-                        months. For every year in :samp:`--years` only these
-                        months will be downloaded.
+                        months. For every year only these months will be
+                        downloaded.
+
   --days DAYS
                         Day(s) to download data for. Defaults to all days.
-                        For every year in :samp:`--years` only these days will
-                        be downloaded.
+                        For every year only these days will be downloaded.
+
   --hours HOURS
                         
                         Time of day in hours to download data for.
-                        Defaults to all hours. For every year in
-                        :samp:`--years` only these hours will be downloaded.
+                        Defaults to all hours. For every year only these hours
+                        will be downloaded.
+
   --levels LEVELS
                         Pressure level(s) to download for three
                         dimensional data. Default is all available
                         levels. See the cds website or run :samp:`era5cli info
                         -h` for available pressure levels.
+
   --outputprefix OUTPUTPREFIX
-                        
                         Prefix of output filename. Default prefix is
                         "era5".
+
   --format FORMAT
                         Choose from :samp:`[netcdf,grib]`.
 
                         Output file type. Defaults to :samp:`netcdf`."
+
   --split SPLIT         
                         Split output by years, producing a seperate file
-                        for every year in the :samp:`--years` argument. Default
+                        for every year instead of merging in one file. Default
                         is True.
+
   --threads THREADS
                         Choose from :samp:`[1,2,3,4,5,6]`.
 
                         Number of parallel threads to use when
                         downloading. Default is a single process.
+
   --ensemble ENSEMBLE   
                         Whether to download high resolution realisation
                         (HRES) or a reduced resolution ten member ensemble
                         (EDA). :samp:`--ensemble True` downloads the reduced
                         resolution ensemble.
+
   --statistics STATISTICS
                         
                         When downloading hourly ensemble data, set
                         :samp:`--statistics True` to download statistics
                         (ensemble mean and ensemble spread). Default is
                         False.
+
   -h, --help            show this help message and exit
 
 
 Fetching monthly data
 =====================
 
-Fetch hourly data through an cdsapi call via command line. More information on the available data and options can be found on:
+Fetch monthly data through an cdsapi call via command line. More information on the available data and options can be found on:
 
-| `Era5 monthly single levels download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels-monthly-means?tab=overview>`_.
-| `Era5 monthly pressure levels download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels-monthly-means?tab=overview>`_.
+| `Era5 monthly single levels download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels-monthly-means?tab=overview>`_
+| `Era5 monthly pressure levels download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels-monthly-means?tab=overview>`_
+
+For the monthly data, some of the variables are not available. Exceptions on the single level data can be found in table 8 of:
+
+| `ERA5 parameter listings <https://confluence.ecmwf.int/display/CKB/ERA5+data+documentation#ERA5datadocumentation-Parameterlistings>`_
+
+
+Execute the data fetch process for monthly data:
 
 ::
 
-   era5cli monthly --variables <variables> --startyear <startyear> --endyear <endyear> --months <months> --days <days> --hours <hours> --levels <levels> --outputprefix <outputprefix> --format <fileformat> --split <split> --threads <threads> --ensemble <ensemble> --synoptic <synoptic>
+   era5cli monthly --variables <variables> --startyear <startyear> --endyear <endyear> --months <months> --hours <hours> --levels <levels> --outputprefix <outputprefix> --format <fileformat> --split <split> --threads <threads> --ensemble <ensemble> --synoptic <synoptic>
 
-Execute the data fetch process for monthly data.
 
 optional arguments:
-  -h, --help            show this help message and exit
+
   --variables VARIABLES
                         The variables to be downloaded, can be a single
                         or multiple variables. See the cds
                         website or run :samp:`era5cli info -h` for available
                         variables.
+
   --startyear STARTYEAR
                         Single year or first year of range for which
                         data should be downloaded.
                         Every year will be downloaded in a seperate file
                         by default. Set :samp:`--split false` to change this.
+
   --endyear ENDYEAR     
                         Last year of range for which  data should be
                         downloaded. If only a single year is needed, only
                         :samp:`--startyear` needs to be specified.
                         Every year will be downloaded in a seperate file
                         by default. Set :samp:`--split false` to change this.
+
   --months MONTHS
                         Month(s) to download data for. Defaults to all
-                        months. For every year in :samp:`--years` only these
-                        months will be downloaded.
+                        months. For every year only these months will be
+                        downloaded.
+
   --days DAYS
                         Day(s) to download data for. Defaults to all days.
-                        For every year in :samp:`--years` only these days will
-                        be downloaded.
-  --hours HOURS                        
+                        For every year only these days will be downloaded.
+
+  --hours HOURS
+                        
                         Time of day in hours to download data for.
-                        Defaults to all hours. For every year in
-                        :samp:`--years` only these hours will be downloaded.
+                        Defaults to all hours. For every year only these hours
+                        will be downloaded.
+
   --levels LEVELS
                         Pressure level(s) to download for three
                         dimensional data. Default is all available
                         levels. See the cds website or run :samp:`era5cli info
                         -h` for available pressure levels.
-  --outputprefix OUTPUTPREFIX                        
+
+  --outputprefix OUTPUTPREFIX
                         Prefix of output filename. Default prefix is
                         "era5".
+
   --format FORMAT
                         Choose from :samp:`[netcdf,grib]`.
 
                         Output file type. Defaults to :samp:`netcdf`."
+
   --split SPLIT         
                         Split output by years, producing a seperate file
-                        for every year in the :samp:`--years` argument. Default
+                        for every year instead of merging in one file. Default
                         is True.
+
   --threads THREADS
                         Choose from :samp:`[1,2,3,4,5,6]`.
 
                         Number of parallel threads to use when
                         downloading. Default is a single process.
+
   --ensemble ENSEMBLE   
                         Whether to download high resolution realisation
                         (HRES) or a reduced resolution ten member ensemble
                         (EDA). :samp:`--ensemble True` downloads the reduced
                         resolution ensemble.
+
   --synoptic SYNOPTIC   
                         Set :samp:`--synoptic True` to get monthly averaged
                         by hour of day or set :samp:`--synoptic False` to get
                         monthly means of daily means. Default is False.
+
+  -h, --help            show this help message and exit
