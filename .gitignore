@@ -90,3 +90,7 @@ testdata.json
 *.a
 *.mod
 *.out
+
+# downloaded data
+*.nc
+*.grb
