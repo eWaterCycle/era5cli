@@ -37,12 +37,12 @@ Show information on available variables and levels.
 positional arguments:
  --name       Enter list name to print info list:
 
-              :samp:`plevels` for all available pressure levels 
+              :samp:`levels` for all available pressure levels 
 
-              :samp:`slvars` for all available single level or 2D
+              :samp:`2dvars` for all available single level or 2D
               variables
 
-              :samp:`plvars` for all available 3D variables 
+              :samp:`3dvars` for all available 3D variables 
 
               Enter variable name (e.g. "total_precipitation")
               or pressure level (e.g. "825") to show if the
