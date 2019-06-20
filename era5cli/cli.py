@@ -4,8 +4,6 @@
 import argparse
 import textwrap
 import sys
-from era5cli.fetch import Fetch
-from era5cli.info import Info
 import era5cli.info as einfo
 import era5cli.fetch as efetch
 
@@ -274,7 +272,6 @@ def _execute(args):
         if args.command == "monthly":
             synoptic = args.synoptic
             statistics = None
-            assert synoptic
         elif args.command == "hourly":
             statistics = args.statistics
             synoptic = None
@@ -300,6 +297,7 @@ def _execute(args):
                             split=args.split)
         era5.fetch()
         return True
+
 
 def main():
     """Main."""
