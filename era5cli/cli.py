@@ -141,7 +141,7 @@ def _parse_args(args):
     )
 
     common.add_argument(
-        "--ensemble", type=_str2bool, required=True,
+        "--ensemble", type=_str2bool, default=False,
         help=textwrap.dedent('''
                              Whether to download high resolution realisation
                              (HRES) or a reduced resolution ten member ensemble
@@ -153,6 +153,7 @@ def _parse_args(args):
     hourly = subparsers.add_parser(
         'hourly', parents=[common],
         description='Execute the data fetch process for hourly data.',
+        help='Use "era5cli hourly --help" for more information.',
         formatter_class=argparse.RawTextHelpFormatter)
 
     hourly.add_argument(
@@ -168,6 +169,7 @@ def _parse_args(args):
     monthly = subparsers.add_parser(
         'monthly', parents=[common],
         description='Execute the data fetch process for monthly data.',
+        help='Use "era5cli monthly --help" for more information.',
         formatter_class=argparse.RawTextHelpFormatter)
 
     monthly.add_argument(
@@ -182,6 +184,7 @@ def _parse_args(args):
     info = subparsers.add_parser(
         'info',
         description='Show information on available variables and levels.',
+        help='Use "era5cli info --help" for more information.',
         formatter_class=argparse.RawTextHelpFormatter
     )
 
@@ -189,10 +192,10 @@ def _parse_args(args):
         "name", type=str,
         help=textwrap.dedent('''\
                              Enter list name to print info list: \n
-                             "plevels" for all available pressure levels \n
-                             "slvars" for all available single level or 2D
+                             "levels" for all available pressure levels \n
+                             "2Dvars" for all available single level or 2D
                              variables \n
-                             "plvars" for all available 3D variables \n
+                             "3Dvars" for all available 3D variables \n
                              Enter variable name (e.g. "total_precipitation")
                              or pressure level (e.g. "825") to show if the
                              variable or level is available and in which list.
@@ -211,7 +214,10 @@ def main():
         infoname = args.name
         # List dataset information
         era5info = Info(infoname)
-        era5info.list()
+        if era5info.infotype == "list":
+            era5info.list()
+        else:
+            era5info.vars()
 
     except AttributeError:
         variables = args.variables

@@ -20,26 +20,33 @@ class Info:
         If `infotype` is not any of ['levels', '2Dvars', '3Dvars'].
     """
 
-    def __init__(self, infotype: str):
+    def __init__(self, infoname: str):
         """Initialization of Info class.
 
         Parameters
         ----------
-            infotype: str
-                Type of information that needs to be printed. Supported are
-                'levels', '2Dvars', and '3Dvars'.
+            infoname: str
+                Name of information that needs to be printed. Supported are
+                'levels', '2Dvars', '3Dvars' and any variable or pressure level
+                defined in era5cli.inputref
 
         Raises
         ------
-        KeyError
-            If `infotype` is not any of ['levels', '2Dvars', '3Dvars'].
+        AttributeError
+            If `infoname` is not any of the supported strings.
         """
-        self.infotype = infotype
-        """str: Type of information that needs to be printed."""
+        self.infoname = infoname
+        """str: Name of information that needs to be printed."""
+        self.infotype = None
         try:
-            self.infolist = ref.refdict[self.infotype]
+            self.infolist = ref.refdict[self.infoname]
             """list: List with information to be printed."""
+            self.infotype = "list"
         except KeyError:
+            for valname,vallist in ref.refdict.items():
+                if self.infoname in vallist:
+                    self.infotype = valname
+        if self.infotype ==None:
             raise Exception('Unknown value for reference argument.')
 
     def list(self):
@@ -51,6 +58,13 @@ class Info:
         self._define_table_header()
         self._print_multicolumn()
 
+    def vars(self):
+        """Return the  variable name or pressure level.
+
+        Print in which list the given variable occurs.
+        """
+        print("{} is in the list: {}".format(self.infoname, self.infotype))
+
     def _define_table_header(self):
         """Define table header."""
         hdict = {
@@ -58,7 +72,7 @@ class Info:
             '2Dvars': '2D variables',
             '3Dvars': '3D variables'
         }
-        self.header = "Available {}:".format(hdict[self.infotype])
+        self.header = "Available {}:".format(hdict[self.infoname])
 
     def _print_multicolumn(self):
         """Print a list of strings in several columns."""
