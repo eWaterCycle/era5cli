@@ -5,6 +5,7 @@ from era5cli.utils import zpadlist
 from era5cli.utils import zpad_days
 from era5cli.utils import zpad_months
 from era5cli.utils import format_hours
+from era5cli.utils import print_multicolumn
 
 
 def test_zpad_days():
@@ -100,3 +101,11 @@ def test_zpadlist():
     invalid2 = list(range(1, 14))
     with pytest.raises(Exception):
         assert zpadlist(invalid2, 'days', 1, 12)  # test if exception is raised
+
+
+def test_print_multicolumn():
+    """Test _print_multicolumn function of Info class."""
+    header = 'header'
+    lst = ['unkown1', 'unkown2', 'unkown3', 'unkown4', 'unkown5', 'unkown6']
+    print_multicolumn(header, lst)
+    assert True

@@ -16,14 +16,6 @@ def test_define_table_header():
     assert isinstance(era5info.header, str)
 
 
-def test_print_multicolumn():
-    """Test _print_multicolumn function of Info class."""
-    era5info = info.Info('levels')
-    era5info._define_table_header()
-    era5info._print_multicolumn()
-    assert True
-
-
 def test_list():
     """Test list function of Info class."""
     era5info = info.Info('levels')
