@@ -1,12 +1,12 @@
 """Fetch ERA5 variables."""
 
 import cdsapi
-# from pathos.multiprocessing import ProcessPool as Pool
 from pathos.threading import ThreadPool as Pool
 import era5cli.inputref as ref
 from era5cli.utils import format_hours
 from era5cli.utils import zpad_days
 from era5cli.utils import zpad_months
+from era5cli.utils import print_multicolumn
 
 
 class Fetch:
@@ -173,7 +173,7 @@ class Fetch:
         pool.map(self._getdata, variables, self.years, outputfiles)
 
     def _product_type(self):
-        '''Construct the product type name from the options'''
+        """Construct the product type name from the options."""
         producttype = ""
 
         if self.ensemble:
@@ -221,8 +221,16 @@ class Fetch:
 
         if self.period == "monthly":
             name += "-monthly-means"
+            if variable in ref.missing_monthly_vars:
+                header = ("There is no monthly data available for the "
+                          "following variables:\n")
+                raise ValueError(print_multicolumn(header,
+                                                   ref.missing_monthly_vars))
 
         return(name, request)
+
+    def _exit(self):
+        pass
 
     def _getdata(self, variables: list, years: list, outputfile: str):
         """Fetch variables using cds api call."""

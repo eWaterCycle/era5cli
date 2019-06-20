@@ -71,53 +71,61 @@ def test_init():
     assert era5.threads == 2
 
 
-def test_fetch():
+@mock.patch("cdsapi.Client", autospec=True)
+def test_fetch_nodryrun(cds):
     """Test fetch function of Fetch class."""
     era5 = initialize()
-    assert era5.fetch(dryrun=True) is None
+    assert era5.fetch() is None
 
     era5 = initialize(outputformat='grib', split=False)
-    assert era5.fetch(dryrun=True) is None
+    assert era5.fetch() is None
 
     era5 = initialize(outputformat='grib', split=False,
                       threads=None)
-    assert era5.fetch(dryrun=True) is None
+    assert era5.fetch() is None
 
     era5 = initialize(outputformat='grib', split=False,
                       threads=None, ensemble=True, statistics=True)
-    assert era5.fetch(dryrun=True) is None
+    assert era5.fetch() is None
 
     era5 = initialize(outputformat='grib', split=False,
                       threads=None, pressurelevels=[1, 2],
                       variables=['temperature'])
-    assert era5.fetch(dryrun=True) is None
+    assert era5.fetch() is None
 
     era5 = initialize(outputformat='grib', split=False,
                       threads=None, pressurelevels=[1, 2],
                       variables=['temperature'],
                       period='monthly')
-    assert era5.fetch(dryrun=True) is None
+    assert era5.fetch() is None
 
     # invalid pressure level should raise ValueError
     era5 = initialize(outputformat='grib', split=False,
                       threads=None, pressurelevels=[1, 2, 9],
                       variables=['temperature'])
     with pytest.raises(ValueError):
-        assert era5.fetch(dryrun=True) is None
+        assert era5.fetch() is None
 
     # invalid variable name should raise ValueError
     era5 = initialize(outputformat='grib', split=False,
                       threads=None,
                       variables=['unknown'])
     with pytest.raises(ValueError):
-        assert era5.fetch(dryrun=True) is None
+        assert era5.fetch() is None
+
+    # check check against monthly unavailable data raise ValueError
+    era5 = initialize(outputformat='grib', split=False,
+                      threads=None,
+                      variables=['wave_spectral_skewness'],
+                      period='monthly')
+    with pytest.raises(ValueError):
+        assert era5.fetch()
 
 
-@mock.patch("cdsapi.Client", autospec=True)
-def test_fetch_nodryrun(cds):
+def test_fetch_dryrun():
     """Test fetch function of Fetch class with dryrun=False."""
     era5 = initialize()
-    assert era5.fetch(dryrun=False) is None
+    assert era5.fetch(dryrun=True) is None
 
 
 def test_extension():

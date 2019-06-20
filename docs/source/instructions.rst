@@ -140,7 +140,7 @@ optional arguments:
 Fetching monthly data
 =====================
 
-Fetch hourly data through an cdsapi call via command line. More information on the available data and options can be found on:
+Fetch monthly data through an cdsapi call via command line. More information on the available data and options can be found on:
 
 | `Era5 monthly single levels download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels-monthly-means?tab=overview>`_.
 | `Era5 monthly pressure levels download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels-monthly-means?tab=overview>`_.

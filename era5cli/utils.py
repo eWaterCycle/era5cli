@@ -1,5 +1,8 @@
 """Utility functions."""
 
+import prettytable
+import shutil
+
 
 def zpadlist(values: list, inputtype: str, minval: int, maxval: int) -> list:
     """Return a list of zero padded strings and perform input checks.
@@ -104,3 +107,30 @@ def format_hours(values: list) -> list:
             'invalid value specified for hours: {}'.format(value))
         returnlist += ["{}:00".format(str(value).zfill(2))]
     return returnlist
+
+
+def print_multicolumn(header: str, info: list):
+    """Print a list of strings in several columns."""
+    # get size of terminal window
+    columns, rows = shutil.get_terminal_size(fallback=(80, 24))
+    # maximum width of string in list
+    maxwidth = max([len(str(x)) for x in info])
+    # calculate number of columns that fit on screen
+    ncols = columns // (maxwidth + 2)
+    # calculate number of rows
+    nrows = - ((-len(info)) // ncols)
+    # the number of columns may be reducible for that many rows.
+    ncols = - ((-len(info)) // nrows)
+    table = prettytable.PrettyTable([str(x) for x in range(ncols)])
+    table.title = header
+    table.header = False
+    table.align = 'l'
+    table.hrules = prettytable.NONE
+    table.vrules = prettytable.NONE
+    chunks = [info[i:i + nrows] for i in
+              range(0, len(info), nrows)]
+    chunks[-1].extend('' for i in range(nrows - len(chunks[-1])))
+    chunks = zip(*chunks)
+    for c in chunks:
+        table.add_row(c)
+    print(table)
