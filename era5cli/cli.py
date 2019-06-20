@@ -199,7 +199,8 @@ def _parse_args(args):
                              Use "era5cli monthly --help" for more information.
 
                              '''),
-        formatter_class=argparse.RawTextHelpFormatter)
+        formatter_class=argparse.RawTextHelpFormatter
+    )
 
     monthly.add_argument(
         "--synoptic", type=_str2bool, default=False,
@@ -248,76 +249,58 @@ def main():
     """Main."""
     # get arguments
     args = _parse_args(sys.argv[1:])
-    # input arguments
-    try:
-        infoname = args.name
+    print(args)
+
+    # the info subroutine
+    if args.command == "info":
         # List dataset information
-        era5info = Info(infoname)
+        era5info = Info(args.name)
         if era5info.infotype == "list":
             era5info.list()
         else:
             era5info.vars()
 
-    except AttributeError:
-        variables = args.variables
-        months = args.months
-        days = args.days
-        hours = args.hours
-        split = args.split
-        outputformat = args.format
-        threads = args.threads
-        levels = args.levels
-        outputprefix = args.outputprefix
-        ensemble = args.ensemble
-        period = None
-        startyear = args.startyear
-        endyear = args.endyear
-        if not endyear:
-            years = [startyear]
+    # the fetching subroutines
+    else:
+        # make list of years to be downloaded
+        if not args.endyear:
+            years = [args.startyear]
         else:
-            assert (endyear >= endyear), (
+            assert (args.endyear >= args.endyear), (
                 'endyear should be >= startyear or None')
-            years = list(range(startyear, endyear + 1))
+            years = list(range(args.startyear, args.endyear + 1))
 
-        try:
-            statistics = args.statistics
-            period = "monthly"
-            era5 = Fetch(years,
-                         months=months,
-                         days=days,
-                         hours=hours,
-                         variables=variables,
-                         outputformat=outputformat,
-                         outputprefix=outputprefix,
-                         period=period,
-                         ensemble=ensemble,
-                         statistics=statistics,
-                         pressurelevels=levels,
-                         threads=threads,
-                         split=split)
-            era5.fetch()
-        except AttributeError:
-            pass
-
-        try:
+        # set subroutine specific arguments for monthly and hourly fetch
+        if args.command == "monthly":
             synoptic = args.synoptic
-            period = "hourly"
-            era5 = Fetch(years=years,
-                         months=months,
-                         days=days,
-                         hours=hours,
-                         variables=variables,
-                         outputformat=outputformat,
-                         outputprefix=outputprefix,
-                         period=period,
-                         ensemble=ensemble,
+            statistics = None
+        elif args.command == "hourly":
+            statistics = args.statistics
+            synoptic = None
+        else:
+            raise AttributeError(
+                'The command "{}" is not valid.'.format(args.command)
+            )
+
+        # try to build and send download request
+        try:
+            era5 = Fetch(years,
+                         months=args.months,
+                         days=args.days,
+                         hours=args.hours,
+                         variables=args.variables,
+                         outputformat=args.format,
+                         outputprefix=args.outputprefix,
+                         period=args.command,
+                         ensemble=args.ensemble,
                          synoptic=synoptic,
-                         pressurelevels=levels,
-                         threads=threads,
-                         split=split)
+                         statistics=statistics,
+                         pressurelevels=args.levels,
+                         threads=args.threads,
+                         split=args.split)
             era5.fetch()
-        except AttributeError:
-            pass
+        except:
+            raise Exception('Data could not be downloaded.')
 
 
 if __name__ == "__main__":
