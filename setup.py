@@ -21,7 +21,7 @@ setup(
     version=about["__version__"],
     author=about["__author__"],
     author_email=about["__email__"],
-    description=("A python library to download ERA5 "
+    description=("A command line interface to download ERA5 data "
                  "from the Copernicus Climate Data Store "
                  "https://climate.copernicus.eu/."),
     license="Apache 2.0",

@@ -1,11 +1,39 @@
 # YAML 1.2
 --- 
+abstract: |
+  A command line interface to download ERA5 data from the 
+Climate Data Store.
 authors: 
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Haren
+    given-names: Ronald
+    name-particle: van
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Camphuijsen
+    given-names: Jaro
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Dzigan
+    given-names: Yifat
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Alidoost
+    given-names: Fakhereh
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Andela
+    given-names: Bouwe
   - 
-    affiliation: "Netherlands eScience Center", " TU Delft"
-    family-names: 
-    given-names: 
-    name-particle: 
+    affiliation: TU Delft"
+    family-names: Aerts
+    given-names: Jerom
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Weel
+    given-names: Berend
+
 cff-version: "1.0.3"
 commit: 
 date-released:
@@ -14,6 +42,6 @@ keywords:
   - "ERA5"
 license: Apache-2.0
 message: "If you use this software, please cite it using these metadata."
-repository-code: "https://github.com/ewatercycle/pyERA5"
-title: pyERA5
-version:
+repository-code: "https://github.com/ewatercycle/era5cli"
+title: era5cli
+version: 1.0.0
