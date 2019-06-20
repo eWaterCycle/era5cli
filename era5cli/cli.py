@@ -6,6 +6,8 @@ import textwrap
 import sys
 from era5cli.fetch import Fetch
 from era5cli.info import Info
+import era5cli.info as einfo
+import era5cli.fetch as efetch
 
 
 def _str2bool(v):
@@ -245,20 +247,18 @@ def _parse_args(args):
     return parser.parse_args(args)
 
 
-def main():
-    """Main."""
-    # get arguments
-    args = _parse_args(sys.argv[1:])
-    print(args)
-
+def _execute(args):
+    """Call to ERA-5 cli library."""
     # the info subroutine
     if args.command == "info":
         # List dataset information
-        era5info = Info(args.name)
+        era5info = einfo.Info(args.name)
         if era5info.infotype == "list":
             era5info.list()
+            return True
         else:
             era5info.vars()
+            return True
 
     # the fetching subroutines
     else:
@@ -266,7 +266,7 @@ def main():
         if not args.endyear:
             years = [args.startyear]
         else:
-            assert (args.endyear >= args.endyear), (
+            assert (args.endyear >= args.startyear), (
                 'endyear should be >= startyear or None')
             years = list(range(args.startyear, args.endyear + 1))
 
@@ -274,6 +274,7 @@ def main():
         if args.command == "monthly":
             synoptic = args.synoptic
             statistics = None
+            assert synoptic
         elif args.command == "hourly":
             statistics = args.statistics
             synoptic = None
@@ -283,21 +284,28 @@ def main():
             )
 
         # try to build and send download request
-        era5 = Fetch(years,
-                     months=args.months,
-                     days=args.days,
-                     hours=args.hours,
-                     variables=args.variables,
-                     outputformat=args.format,
-                     outputprefix=args.outputprefix,
-                     period=args.command,
-                     ensemble=args.ensemble,
-                     synoptic=synoptic,
-                     statistics=statistics,
-                     pressurelevels=args.levels,
-                     threads=args.threads,
-                     split=args.split)
+        era5 = efetch.Fetch(years,
+                            months=args.months,
+                            days=args.days,
+                            hours=args.hours,
+                            variables=args.variables,
+                            outputformat=args.format,
+                            outputprefix=args.outputprefix,
+                            period=args.command,
+                            ensemble=args.ensemble,
+                            synoptic=synoptic,
+                            statistics=statistics,
+                            pressurelevels=args.levels,
+                            threads=args.threads,
+                            split=args.split)
         era5.fetch()
+        return True
+
+def main():
+    """Main."""
+    # get arguments
+    args = _parse_args(sys.argv[1:])
+    _execute(args)
 
 
 if __name__ == "__main__":
