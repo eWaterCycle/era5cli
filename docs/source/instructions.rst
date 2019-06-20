@@ -14,7 +14,7 @@ Register at Copernicus Climate Data Service
 Create a key ascii file
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-In linux create a file called .cdsapirc in your home directory and add
+In linux create a new file called .cdsapirc in the home directory of your user and add
 the following two lines:
 
 ::

@@ -59,22 +59,55 @@ class Fetch:
                  split=True, threads=None):
         """Initialization of Fetch class."""
         self.months = zpad_months(months)
+        """list(str): List of zero-padded strings of months
+        (e.g. ['01', '02',..., '12'])."""
         self.days = zpad_days(days)
+        """list(str): List of zero-padded strings of days
+        (e.g. ['01', '02',..., '12'])."""
         self.hours = format_hours(hours)
+        """list(str): List of xx:00 formatted time strings
+        (e.g. ['00:00', '01:00', ..., '23:00'])."""
         self.pressure_levels = pressurelevels
+        """list(int): List of pressure levels."""
         self.variables = variables
+        """list(str): List of variables."""
         self.outputformat = outputformat
+        """str: File format of output file."""
         self.years = years
+        """list(int): List of years."""
         self.outputprefix = outputprefix
+        """str: Prefix of output filename."""
         self.threads = threads
+        """int: number of parallel threads to use for downloading."""
         self.split = split
+        """bool: Split output files by year if True."""
         self.period = period
+        """str: Frequency of output data (monthly or daily)."""
         self.ensemble = ensemble
+        """bool: Whether to download high resolution realisation
+        (HRES) or a reduced resolution ten member ensemble
+        (EDA). True downloads the reduced resolution
+        ensemble."""
         self.statistics = statistics  # only for hourly data
+        """bool: When downloading hourly ensemble data, choose
+        whether or not to download statistics (mean and
+        spread)."""
         self.synoptic = synoptic  # only for monthly data
+        """bool: Whether to get monthly averaged by hour of day
+        (synoptic=True) or monthly means of daily means
+        (synoptic=False)."""
 
-    def fetch(self):
-        """Split calls and fetch results."""
+    def fetch(self, dryrun=False):
+        """Split calls and fetch results.
+
+        Parameters
+        ----------
+        dryrun: bool
+            Boolean indicating if files should be downloaded. By default
+            files will be downloaded. For a dryrun the cdsapi request will
+            be written to stdout.
+        """
+        self.dryrun = dryrun
         # define extension output filename
         self._extension()
         # define fetch call depending on split argument
@@ -193,7 +226,9 @@ class Fetch:
 
     def _getdata(self, variables: list, years: list, outputfile: str):
         """Fetch variables using cds api call."""
-        c = cdsapi.Client()
         name, request = self._build_request(variables, years)
-        print(name, request, outputfile)
-        #c.retrieve(name, request, outputfile)
+        if self.dryrun:
+            print(name, request, outputfile)
+        else:
+            c = cdsapi.Client()
+            c.retrieve(name, request, outputfile)

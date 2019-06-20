@@ -3,26 +3,12 @@
 
 import argparse
 import textwrap
+import sys
 from era5cli.fetch import Fetch
-import era5cli.inputref as ref
 from era5cli.info import Info
 
 
-def str_seq(intseq):
-    """Validate input argument and return a list of ints."""
-    try:
-        return [int(intseq)]
-    except ValueError:
-        return seq_to_list(intseq)
-
-
-def seq_to_list(sequence):
-    """Return a list from a sequence."""
-    (first, last) = sequence.split('/')
-    return list(range(int(first), int(last) + 1))
-
-
-def str2bool(v):
+def _str2bool(v):
     """Return boolean based on input string."""
     if isinstance(v, bool):
         return v
@@ -34,7 +20,7 @@ def str2bool(v):
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
 
-def main():
+def _parse_args(args):
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
         usage='Use "%(prog)s --help" for more information.',
@@ -80,7 +66,7 @@ def main():
     common.add_argument(
         "--months", nargs="+",
         required=False, type=int,
-        default=[str(m).zfill(2) for m in list(range(1, 13))],
+        default=list(range(1, 13)),
         help=textwrap.dedent('''\
                              Month(s) to download data for. Defaults to all
                              months. For every year in "--years" only these
@@ -91,7 +77,7 @@ def main():
     common.add_argument(
         "--days", nargs="+",
         required=False, type=int,
-        default=[str(d).zfill(2) for d in list(range(1, 32))],
+        default=list(range(1, 32)),
         help=textwrap.dedent('''\
                              Day(s) to download data for. Defaults to all days.
                              For every year in "--years" only these days will
@@ -137,7 +123,7 @@ def main():
     )
 
     common.add_argument(
-        "--split", type=str2bool, default=True,
+        "--split", type=_str2bool, default=True,
         help=textwrap.dedent('''
                              Split output by years, producing a seperate file
                              for every year in the "--years" argument. Default
@@ -155,7 +141,7 @@ def main():
     )
 
     common.add_argument(
-        "--ensemble", type=str2bool, required=True,
+        "--ensemble", type=_str2bool, required=True,
         help=textwrap.dedent('''
                              Whether to download high resolution realisation
                              (HRES) or a reduced resolution ten member ensemble
@@ -170,7 +156,7 @@ def main():
         formatter_class=argparse.RawTextHelpFormatter)
 
     hourly.add_argument(
-        "--statistics", type=str2bool, default=False,
+        "--statistics", type=_str2bool, default=False,
         help=textwrap.dedent('''
                              When downloading hourly ensemble data, set
                              "--statistics True" to download statistics
@@ -185,7 +171,7 @@ def main():
         formatter_class=argparse.RawTextHelpFormatter)
 
     monthly.add_argument(
-        "--synoptic", type=str2bool, default=False,
+        "--synoptic", type=_str2bool, default=False,
         help=textwrap.dedent('''
                              Set "--synoptic True" to get monthly averaged
                              by hour of day or set "--synoptic False" to get
@@ -213,7 +199,13 @@ def main():
                              ''')
     )
 
-    args = parser.parse_args()
+    return parser.parse_args(args)
+
+
+def main():
+    """Main."""
+    # get arguments
+    args = _parse_args(sys.argv[1:])
     # input arguments
     try:
         infoname = args.name

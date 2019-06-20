@@ -6,7 +6,7 @@ from era5cli import info
 def test_init():
     """Test init function of Info class."""
     era5info = info.Info('levels')
-    assert isinstance(era5info.refdict, list)
+    assert isinstance(era5info.infolist, list)
 
 
 def test_define_table_header():
