@@ -137,12 +137,13 @@ def _parse_args(args):
         help=textwrap.dedent('''\
                              Number of parallel threads to use when
                              downloading. Default is a single process.
+        
                              ''')
     )
 
     common.add_argument(
         "--ensemble", type=_str2bool, default=False,
-        help=textwrap.dedent('''
+        help=textwrap.dedent('''\
                              Whether to download high resolution realisation
                              (HRES) or a reduced resolution ten member ensemble
                              (EDA). "--ensemble True" downloads the reduced
@@ -153,12 +154,16 @@ def _parse_args(args):
     hourly = subparsers.add_parser(
         'hourly', parents=[common],
         description='Execute the data fetch process for hourly data.',
-        help='Use "era5cli hourly --help" for more information.',
+        help=textwrap.dedent('''\
+                             Execute the data fetch process for hourly data.
+                             Use "era5cli hourly --help" for more information.
+
+                             '''),
         formatter_class=argparse.RawTextHelpFormatter)
 
     hourly.add_argument(
         "--statistics", type=_str2bool, default=False,
-        help=textwrap.dedent('''
+        help=textwrap.dedent('''\
                              When downloading hourly ensemble data, set
                              "--statistics True" to download statistics
                              (ensemble mean and ensemble spread). Default is
@@ -169,12 +174,16 @@ def _parse_args(args):
     monthly = subparsers.add_parser(
         'monthly', parents=[common],
         description='Execute the data fetch process for monthly data.',
-        help='Use "era5cli monthly --help" for more information.',
+        help=textwrap.dedent('''\
+                             Execute the data fetch process for monthly data.
+                             Use "era5cli monthly --help" for more information.
+
+                             '''),
         formatter_class=argparse.RawTextHelpFormatter)
 
     monthly.add_argument(
         "--synoptic", type=_str2bool, default=False,
-        help=textwrap.dedent('''
+        help=textwrap.dedent('''\
                              Set "--synoptic True" to get monthly averaged
                              by hour of day or set "--synoptic False" to get
                              monthly means of daily means. Default is False.
@@ -184,7 +193,10 @@ def _parse_args(args):
     info = subparsers.add_parser(
         'info',
         description='Show information on available variables and levels.',
-        help='Use "era5cli info --help" for more information.',
+        help=textwrap.dedent('''\
+                             Show information on available variables or levels.
+                             Use "era5cli info --help" for more information.
+                             '''),
         formatter_class=argparse.RawTextHelpFormatter
     )
 
