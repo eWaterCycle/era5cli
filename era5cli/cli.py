@@ -283,24 +283,21 @@ def main():
             )
 
         # try to build and send download request
-        try:
-            era5 = Fetch(years,
-                         months=args.months,
-                         days=args.days,
-                         hours=args.hours,
-                         variables=args.variables,
-                         outputformat=args.format,
-                         outputprefix=args.outputprefix,
-                         period=args.command,
-                         ensemble=args.ensemble,
-                         synoptic=synoptic,
-                         statistics=statistics,
-                         pressurelevels=args.levels,
-                         threads=args.threads,
-                         split=args.split)
-            era5.fetch()
-        except:
-            raise Exception('Data could not be downloaded.')
+        era5 = Fetch(years,
+                     months=args.months,
+                     days=args.days,
+                     hours=args.hours,
+                     variables=args.variables,
+                     outputformat=args.format,
+                     outputprefix=args.outputprefix,
+                     period=args.command,
+                     ensemble=args.ensemble,
+                     synoptic=synoptic,
+                     statistics=statistics,
+                     pressurelevels=args.levels,
+                     threads=args.threads,
+                     split=args.split)
+        era5.fetch()
 
 
 if __name__ == "__main__":

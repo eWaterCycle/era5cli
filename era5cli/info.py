@@ -43,10 +43,10 @@ class Info:
             """list: List with information to be printed."""
             self.infotype = "list"
         except KeyError:
-            for valname,vallist in ref.refdict.items():
+            for valname, vallist in ref.refdict.items():
                 if self.infoname in vallist:
                     self.infotype = valname
-        if self.infotype ==None:
+        if self.infotype is None:
             raise Exception('Unknown value for reference argument.')
 
     def list(self):
