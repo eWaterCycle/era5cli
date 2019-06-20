@@ -17,7 +17,8 @@ era5cli
    :target: https://codecov.io/gh/eWaterCycle/era5cli
    :alt: Test coverage
 
-A command line interface to download ERA5 data through CDS. Currently only hourly single level data is supported.  
+A command line interface to download ERA5 data from the `Copernicus Climate Data Store <https://climate.copernicus.eu/>`_.
+
 
 * Free software: Apache Software License 2.0
 * Documentation: https://era5cli.readthedocs.io.
