@@ -94,3 +94,6 @@ testdata.json
 # downloaded data
 *.nc
 *.grb
+
+# pytest coverage
+*.sml
