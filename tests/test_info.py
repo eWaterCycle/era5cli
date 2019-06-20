@@ -29,3 +29,18 @@ def test_list():
     era5info = info.Info('levels')
     era5info.list()
     assert True
+
+
+def test_vars(capsys):
+    """Test vars function of Info class."""
+    era5info = info.Info('total_precipitation')
+    era5info.vars()
+    captured = capsys.readouterr()
+    assert captured.out.split(' ')[-1].strip() == '2Dvars'
+    del era5info, captured
+
+    era5info = info.Info('850')
+    era5info.vars()
+    captured = capsys.readouterr()
+    assert captured.out.split(' ')[-1].strip() == 'levels'
+    del era5info
