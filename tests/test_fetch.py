@@ -1,24 +1,28 @@
 """Tests for era5cli Fetch class."""
 
 from era5cli import fetch
+import pytest
+import unittest.mock as mock
 
 
-def initialize(outputformat='netcdf', split=True):
+def initialize(outputformat='netcdf', split=True, statistics=None,
+               synoptic=None, ensemble=True, pressurelevels=None,
+               threads=2, period='hourly', variables=['total_precipitation']):
     """Initializer of the class."""
     era5 = fetch.Fetch(years=[2008, 2009],
                        months=list(range(1, 13)),
                        days=list(range(1, 32)),
                        hours=list(range(0, 24)),
-                       variables=['total_precipitation'],
+                       variables=variables,
                        outputformat=outputformat,
                        outputprefix='era5',
-                       period='hourly',
-                       ensemble=True,
-                       statistics=None,
-                       synoptic=None,
-                       pressurelevels=None,
+                       period=period,
+                       ensemble=ensemble,
+                       statistics=statistics,
+                       synoptic=synoptic,
+                       pressurelevels=pressurelevels,
                        split=split,
-                       threads=2)
+                       threads=threads)
     return era5
 
 
@@ -71,21 +75,71 @@ def test_fetch():
     """Test fetch function of Fetch class."""
     era5 = initialize()
     assert era5.fetch(dryrun=True) is None
-    del era5
 
     era5 = initialize(outputformat='grib', split=False)
     assert era5.fetch(dryrun=True) is None
 
+    era5 = initialize(outputformat='grib', split=False,
+                      threads=None)
+    assert era5.fetch(dryrun=True) is None
+
+    era5 = initialize(outputformat='grib', split=False,
+                      threads=None, ensemble=True, statistics=True)
+    assert era5.fetch(dryrun=True) is None
+
+    era5 = initialize(outputformat='grib', split=False,
+                      threads=None, pressurelevels=[1, 2],
+                      variables=['temperature'])
+    assert era5.fetch(dryrun=True) is None
+
+    era5 = initialize(outputformat='grib', split=False,
+                      threads=None, pressurelevels=[1, 2],
+                      variables=['temperature'],
+                      period='monthly')
+    assert era5.fetch(dryrun=True) is None
+
+    # invalid pressure level should raise ValueError
+    era5 = initialize(outputformat='grib', split=False,
+                      threads=None, pressurelevels=[1, 2, 9],
+                      variables=['temperature'])
+    with pytest.raises(ValueError):
+        assert era5.fetch(dryrun=True) is None
+
+    # invalid variable name should raise ValueError
+    era5 = initialize(outputformat='grib', split=False,
+                      threads=None,
+                      variables=['unknown'])
+    with pytest.raises(ValueError):
+        assert era5.fetch(dryrun=True) is None
+
+
+@mock.patch("cdsapi.Client", autospec=True)
+def test_fetch_nodryrun(cds):
+    """Test fetch function of Fetch class with dryrun=False."""
+    era5 = initialize()
+    assert era5.fetch(dryrun=False) is None
+
 
 def test_extension():
     """Test _extension function of Fetch class."""
+    # checking netcdf outputformat
     era5 = initialize()
     era5._extension()
     assert era5.ext == 'nc'
-    del era5
+
+    era5 = initialize(outputformat='netcdf')
+    era5._extension()
+    assert era5.ext == 'nc'
+
+    # checking grib outputformat
     era5 = initialize(outputformat='grib', split=False)
     era5._extension()
     assert era5.ext == 'grb'
+
+    #  unkown outputformat should raise a ValueError
+    era5 = initialize(outputformat='unknown', split=False)
+    with pytest.raises(ValueError):
+        assert era5._extension()
 
 
 def test_define_outputfilename():
@@ -99,6 +153,18 @@ def test_define_outputfilename():
     era5._extension()
     fname = era5._define_outputfilename('total_precipitation', era5.years)
     assert fname == 'era5_total_precipitation_2008-2009_hourly_ensemble.grb'
+
+    era5 = initialize(outputformat='grib', split=False, statistics=True)
+    era5._extension()
+    fname = era5._define_outputfilename('total_precipitation', era5.years)
+    fn = 'era5_total_precipitation_2008-2009_hourly_ensemble_statistics.grb'
+    assert fname == fn
+
+    era5 = initialize(outputformat='grib', split=False, synoptic=True)
+    era5._extension()
+    fname = era5._define_outputfilename('total_precipitation', era5.years)
+    fn = 'era5_total_precipitation_2008-2009_hourly_ensemble_synoptic.grb'
+    assert fname == fn
 
 
 def test_product_type():

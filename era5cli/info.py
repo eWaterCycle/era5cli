@@ -47,7 +47,7 @@ class Info:
                 if self.infoname in vallist:
                     self.infotype = valname
         if self.infotype is None:
-            raise Exception('Unknown value for reference argument.')
+            raise ValueError('Unknown value for reference argument.')
 
     def list(self):
         """Print a list of available variables or pressure levels.
@@ -79,7 +79,7 @@ class Info:
         # get size of terminal window
         columns, rows = shutil.get_terminal_size(fallback=(80, 24))
         # maximum width of string in list
-        maxwidth = max([len(x) for x in self.infolist])
+        maxwidth = max([len(str(x)) for x in self.infolist])
         # calculate number of columns that fit on screen
         ncols = columns // (maxwidth + 2)
         # calculate number of rows

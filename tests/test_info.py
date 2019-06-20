@@ -39,8 +39,8 @@ def test_vars(capsys):
     assert captured.out.split(' ')[-1].strip() == '2Dvars'
     del era5info, captured
 
-    era5info = info.Info('850')
+    era5info = info.Info(850)
     era5info.vars()
     captured = capsys.readouterr()
     assert captured.out.split(' ')[-1].strip() == 'levels'
-    del era5info
+    del era5info, captured

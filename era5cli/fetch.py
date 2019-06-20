@@ -125,8 +125,8 @@ class Fetch:
         elif (self.outputformat.lower() == 'grib'):
             self.ext = 'grb'
         else:
-            raise Exception('Unknown outputformat: {}'.format(
-                            self.outputformat))
+            raise ValueError('Unknown outputformat: {}'.format(
+                             self.outputformat))
 
     def _define_outputfilename(self, var, years):
         """Define output filename."""
@@ -211,13 +211,13 @@ class Fetch:
                 name += "pressure-levels"
                 request["pressure_level"] = self.pressure_levels
             else:
-                raise Exception('''
-                                Invalid pressure levels. Allowed values are: {}
-                                '''.format(ref.plevels))
+                raise ValueError(
+                    "Invalid pressure levels. Allowed values are: {}"
+                    .format(ref.plevels))
         elif variable in ref.slvars:
             name += "single-levels"
         else:
-            raise Exception('Invalid variable name: {}'.format(variable))
+            raise ValueError('Invalid variable name: {}'.format(variable))
 
         if self.period == "monthly":
             name += "-monthly-means"
