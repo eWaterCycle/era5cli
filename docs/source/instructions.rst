@@ -21,7 +21,7 @@ the following two lines:
 
    url: https://cds.climate.copernicus.eu/api/v2
 
-   key: UID:KEY 
+   key: UID:KEY
 
 Replace UID with your user ID and KEY with your API key
 
@@ -37,12 +37,12 @@ Show information on available variables and levels.
 positional arguments:
  --name       Enter list name to print info list:
 
-              :samp:`levels` for all available pressure levels 
+              :samp:`levels` for all available pressure levels
 
-              :samp:`2dvars` for all available single level or 2D
+              :samp:`2Dvars` for all available single level or 2D
               variables
 
-              :samp:`3dvars` for all available 3D variables 
+              :samp:`3Dvars` for all available 3D variables
 
               Enter variable name (e.g. "total_precipitation")
               or pressure level (e.g. "825") to show if the
@@ -85,7 +85,7 @@ optional arguments:
                         data should be downloaded.
                         Every year will be downloaded in a separate file
                         by default. Set :samp:`--split false` to change this.
-  
+
   --endyear ENDYEAR
 
                         Last year of range for which  data should be
@@ -93,32 +93,32 @@ optional arguments:
                         :samp:`--startyear` needs to be specified.
                         Every year will be downloaded in a separate file
                         by default. Set :samp:`--split false` to change this.
-  
+
   --months MONTHS
 
                         Month(s) to download data for. Defaults to all
                         months. For every year in :samp:`--years` only these
                         months will be downloaded.
-  
+
   --days DAYS
 
                         Day(s) to download data for. Defaults to all days.
                         For every year in :samp:`--years` only these days will
                         be downloaded.
-  
+
   --hours HOURS
 
                         Time of day in hours to download data for.
                         Defaults to all hours. Defaults to all hours. For every year only
                         these hours will be downloaded.
-  
+
   --levels LEVELS
 
                         Pressure level(s) to download for three
                         dimensional data. Default is all available
                         levels. See the cds website or run :samp:`era5cli info
                         -h` for available pressure levels.
-  
+
   --outputprefix OUTPUTPREFIX
 
                         Prefix of output filename. Default prefix is
@@ -142,7 +142,7 @@ optional arguments:
 
                         Number of parallel threads to use when
                         downloading. Default is a single process.
-  
+
   --ensemble ENSEMBLE
 
                         Whether to download high resolution realisation
@@ -151,7 +151,7 @@ optional arguments:
                         resolution ensemble.
 
   --statistics STATISTICS
-                        
+
                         When downloading hourly ensemble data, set
                         :samp:`--statistics True` to download statistics
                         (ensemble mean and ensemble spread). Default is
@@ -188,14 +188,14 @@ optional arguments:
                         variables.
 
   --startyear STARTYEAR
- 
+
                         Single year or first year of range for which
                         data should be downloaded.
                         Every year will be downloaded in a separate file
                         by default. Set :samp:`--split false` to change this.
 
   --endyear ENDYEAR
- 
+
                         Last year of range for which  data should be
                         downloaded. If only a single year is needed, only
                         :samp:`--startyear` needs to be specified.
@@ -228,7 +228,7 @@ optional arguments:
                         -h` for available pressure levels.
 
   --outputprefix OUTPUTPREFIX
- 
+
                         Prefix of output filename. Default prefix is
                         "era5".
 
@@ -244,21 +244,21 @@ optional arguments:
                         for every year instead of mergin in one file. Default is True.
 
   --threads THREADS
- 
+
                         Choose from :samp:`[1,2,3,4,5,6]`.
 
                         Number of parallel threads to use when
                         downloading. Default is a single process.
 
   --ensemble ENSEMBLE
- 
+
                         Whether to download high resolution realisation
                         (HRES) or a reduced resolution ten member ensemble
                         (EDA). :samp:`--ensemble True` downloads the reduced
                         resolution ensemble.
 
   --synoptic SYNOPTIC
- 
+
                         Set :samp:`--synoptic True` to get monthly averaged
                         by hour of day or set :samp:`--synoptic False` to get
                         monthly means of daily means. Default is False.

@@ -232,9 +232,9 @@ def _parse_args(args):
         help=textwrap.dedent('''\
                              Enter list name to print info list: \n
                              "levels" for all available pressure levels \n
-                             "2dvars" for all available single level or 2D
+                             "2Dvars" for all available single level or 2D
                              variables \n
-                             "3dvars" for all available 3D variables \n
+                             "3Dvars" for all available 3D variables \n
                              Enter variable name (e.g. "total_precipitation")
                              or pressure level (e.g. "825") to show if the
                              variable or level is available and in which list.
