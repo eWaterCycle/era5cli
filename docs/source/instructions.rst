@@ -83,7 +83,7 @@ optional arguments:
 
                         Single year or first year of range for which
                         data should be downloaded.
-                        Every year will be downloaded in a seperate file
+                        Every year will be downloaded in a separate file
                         by default. Set :samp:`--split false` to change this.
   
   --endyear ENDYEAR
@@ -91,7 +91,7 @@ optional arguments:
                         Last year of range for which  data should be
                         downloaded. If only a single year is needed, only
                         :samp:`--startyear` needs to be specified.
-                        Every year will be downloaded in a seperate file
+                        Every year will be downloaded in a separate file
                         by default. Set :samp:`--split false` to change this.
   
   --months MONTHS
@@ -132,7 +132,7 @@ optional arguments:
 
   --split SPLIT
 
-                        Split output by years, producing a seperate file for every year
+                        Split output by years, producing a separate file for every year
                         instead of merging in one file. D Default
                         is True.
 
@@ -191,7 +191,7 @@ optional arguments:
  
                         Single year or first year of range for which
                         data should be downloaded.
-                        Every year will be downloaded in a seperate file
+                        Every year will be downloaded in a separate file
                         by default. Set :samp:`--split false` to change this.
 
   --endyear ENDYEAR
@@ -199,7 +199,7 @@ optional arguments:
                         Last year of range for which  data should be
                         downloaded. If only a single year is needed, only
                         :samp:`--startyear` needs to be specified.
-                        Every year will be downloaded in a seperate file
+                        Every year will be downloaded in a separate file
                         by default. Set :samp:`--split false` to change this.
 
   --months MONTHS
@@ -240,7 +240,7 @@ optional arguments:
 
   --split SPLIT
 
-                        Split output by years, producing a seperate file
+                        Split output by years, producing a separate file
                         for every year instead of mergin in one file. Default is True.
 
   --threads THREADS

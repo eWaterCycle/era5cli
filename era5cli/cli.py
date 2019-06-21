@@ -47,7 +47,7 @@ def _parse_args(args):
         help=textwrap.dedent('''\
                              Single year or first year of range for which
                              data should be downloaded.
-                             Every year will be downloaded in a seperate file
+                             Every year will be downloaded in a separate file
                              by default. Set "--split false" to change this.
 
                              ''')
@@ -60,7 +60,7 @@ def _parse_args(args):
                              Last year of range for which  data should be
                              downloaded. If only a single year is needed, only
                              "--startyear" needs to be specified.
-                             Every year will be downloaded in a seperate file
+                             Every year will be downloaded in a separate file
                              by default. Set "--split false" to change this.
 
                              ''')
@@ -134,7 +134,7 @@ def _parse_args(args):
     common.add_argument(
         "--split", type=_str2bool, default=True,
         help=textwrap.dedent('''\
-                             Split output by years, producing a seperate file
+                             Split output by years, producing a separate file
                              for every year in the "--years" argument. Default
                              is True.
 
