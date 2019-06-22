@@ -11,7 +11,7 @@ class Info:
     ----------
         infoname: str
             Name of information that needs to be printed. Supported are
-            'levels', '2dvars', '3dvars' and any variable or pressure level
+            'levels', '2Dvars', '3Dvars' and any variable or pressure level
             defined in era5cli.inputref
 
     Raises
@@ -26,6 +26,8 @@ class Info:
         """str: Name of information that needs to be printed."""
         self.infotype = None
         """str: Type of information that needs to be printed."""
+        self.infolist = []
+        """list: List with information to be printed."""
         try:
             self.infolist = ref.refdict[self.infoname]
             """list: List with information to be printed."""
@@ -57,7 +59,7 @@ class Info:
         """Define table header."""
         hdict = {
             'levels': 'pressure levels',
-            '2dvars': '2D variables',
-            '3dvars': '3D variables'
+            '2Dvars': '2D variables',
+            '3Dvars': '3D variables'
         }
         self.header = "Available {}:".format(hdict[self.infoname])

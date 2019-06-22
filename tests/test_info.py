@@ -1,24 +1,30 @@
 """Tests for era5cli Fetch class."""
+import pytest
 
 from era5cli import info
 
 
-def test_init():
+@pytest.mark.parametrize(
+    'arg',
+    ['levels', '2Dvars', '3Dvars', 'total_precipitation', 'temperature'])
+def test_init(arg):
     """Test init function of Info class."""
-    era5info = info.Info('levels')
+    era5info = info.Info(arg)
     assert isinstance(era5info.infolist, list)
 
 
-def test_define_table_header():
+@pytest.mark.parametrize('arg', ['levels', '2Dvars', '3Dvars'])
+def test_define_table_header(arg):
     """Test _define_table_header function of Info class."""
-    era5info = info.Info('levels')
+    era5info = info.Info(arg)
     era5info._define_table_header()
     assert isinstance(era5info.header, str)
 
 
-def test_list():
+@pytest.mark.parametrize('arg', ['levels', '2Dvars', '3Dvars'])
+def test_list(arg):
     """Test list function of Info class."""
-    era5info = info.Info('levels')
+    era5info = info.Info(arg)
     era5info.list()
     assert True
 
