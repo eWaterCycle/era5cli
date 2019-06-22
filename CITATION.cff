@@ -1,8 +1,7 @@
 # YAML 1.2
 --- 
 abstract: |
-  A command line interface to download ERA5 data from the 
-Climate Data Store.
+  A command line interface to download ERA5 data from the Climate Data Store.
 authors: 
   -
     affiliation: "Netherlands eScience Center"
@@ -17,6 +16,10 @@ authors:
     affiliation: "Netherlands eScience Center"
     family-names: Dzigan
     given-names: Yifat
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Drost
+    given-names: Niels
   -
     affiliation: "Netherlands eScience Center"
     family-names: Alidoost
@@ -35,8 +38,7 @@ authors:
     given-names: Berend
 
 cff-version: "1.0.3"
-commit: 
-date-released:
+date-released: 2019-06-22
 doi:
 keywords: 
   - "ERA5"
@@ -44,4 +46,4 @@ license: Apache-2.0
 message: "If you use this software, please cite it using these metadata."
 repository-code: "https://github.com/ewatercycle/era5cli"
 title: era5cli
-version: 1.0.0
+version: 1.0.0rc1
