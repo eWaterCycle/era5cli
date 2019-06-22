@@ -4,6 +4,8 @@
 import argparse
 import textwrap
 import sys
+
+import era5cli.inputref as ref
 import era5cli.info as einfo
 import era5cli.fetch as efetch
 
@@ -104,7 +106,7 @@ def _parse_args(args):
 
     common.add_argument(
         "--levels", nargs="+", type=int,
-        required=False,
+        required=False, default=ref.plevels,
         help=textwrap.dedent('''\
                              Pressure level(s) to download for three
                              dimensional data. Default is all available

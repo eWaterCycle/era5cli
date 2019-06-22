@@ -1,6 +1,7 @@
 """Tests for era5cli utility functios."""
 
 import era5cli.cli as cli
+import era5cli.inputref as ref
 import unittest.mock as mock
 import pytest
 
@@ -25,7 +26,7 @@ def test_parse_args():
     assert args.ensemble
     assert args.format == 'netcdf'
     assert args.hours == list(range(0, 24))
-    assert not args.levels
+    assert args.levels == ref.plevels
     assert args.months == list(range(1, 13))
     assert args.outputprefix == 'era5'
     assert args.split

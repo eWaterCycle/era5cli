@@ -207,10 +207,15 @@ class Fetch:
                    'format': self.outputformat}
 
         if variable in ref.plvars:
-            if all([l in ref.plevels for l in self.pressure_levels]):
-                name += "pressure-levels"
-                request["pressure_level"] = self.pressure_levels
-            else:
+            try:
+                if all([l in ref.plevels for l in self.pressure_levels]):
+                    name += "pressure-levels"
+                    request["pressure_level"] = self.pressure_levels
+                else:
+                    raise ValueError(
+                        "Invalid pressure levels. Allowed values are: {}"
+                        .format(ref.plevels))
+            except TypeError:
                 raise ValueError(
                     "Invalid pressure levels. Allowed values are: {}"
                     .format(ref.plevels))

@@ -218,3 +218,8 @@ def test_build_request():
                     '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
            'format': 'netcdf'}
     assert request == req
+
+    # requesting 3d variable with pressurelevels=None should give a ValueError
+    era5 = initialize(variables=['temperature'], pressurelevels=None)
+    with pytest.raises(ValueError):
+        assert era5._build_request('temperature', [2008])
