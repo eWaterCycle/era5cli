@@ -16,6 +16,9 @@ era5cli
    :target: https://codecov.io/gh/eWaterCycle/era5cli
    :alt: Test coverage
 
+.. image:: https://badge.fury.io/py/era5cli.svg
+    :target: https://badge.fury.io/py/era5cli
+
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3252665.svg
    :target: https://doi.org/10.5281/zenodo.3252665
 
