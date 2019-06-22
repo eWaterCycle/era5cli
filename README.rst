@@ -12,10 +12,12 @@ era5cli
    :target: https://travis-ci.com/eWaterCycle/era5cli
    :alt: Travis Build
 
-
 .. image:: https://codecov.io/gh/eWaterCycle/era5cli/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/eWaterCycle/era5cli
    :alt: Test coverage
+
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3252665.svg
+   :target: https://doi.org/10.5281/zenodo.3252665
 
 A command line interface to download ERA5 data from the `Copernicus Climate Data Store <https://climate.copernicus.eu/>`_.
 

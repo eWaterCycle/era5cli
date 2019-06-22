@@ -39,7 +39,7 @@ authors:
 
 cff-version: "1.0.3"
 date-released: 2019-06-22
-doi:
+doi: 10.5281/zenodo.3252665
 keywords: 
   - "ERA5"
 license: Apache-2.0
