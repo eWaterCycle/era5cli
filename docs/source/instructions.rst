@@ -35,7 +35,7 @@ Info on available variables
 Show information on available variables and levels.
 
 positional arguments:
- --name       Enter list name to print info list:
+ name       Enter list name to print info list:
 
               :samp:`levels` for all available pressure levels
 
@@ -97,13 +97,13 @@ optional arguments:
   --months MONTHS
 
                         Month(s) to download data for. Defaults to all
-                        months. For every year in :samp:`--years` only these
+                        months. For every year, only these
                         months will be downloaded.
 
   --days DAYS
 
                         Day(s) to download data for. Defaults to all days.
-                        For every year in :samp:`--years` only these days will
+                        For every year, only these days will
                         be downloaded.
 
   --hours HOURS
@@ -133,7 +133,7 @@ optional arguments:
   --split SPLIT
 
                         Split output by years, producing a separate file for every year
-                        instead of merging in one file. D Default
+                        instead of merging in one file. Default
                         is True.
 
   --threads THREADS
@@ -217,8 +217,7 @@ optional arguments:
   --hours HOURS
 
                         Time of day in hours to download data for.
-                        Defaults to all hours. For every year in
-                        :samp:`--years` only these hours will be downloaded.
+                        Defaults to all hours. For every year only these hours will be downloaded.
 
   --levels LEVELS
 

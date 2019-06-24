@@ -74,7 +74,7 @@ def _parse_args(args):
         default=list(range(1, 13)),
         help=textwrap.dedent('''\
                              Month(s) to download data for. Defaults to all
-                             months. For every year in "--years" only these
+                             months. For every year, only these
                              months will be downloaded.
 
                              ''')
@@ -86,7 +86,7 @@ def _parse_args(args):
         default=list(range(1, 32)),
         help=textwrap.dedent('''\
                              Day(s) to download data for. Defaults to all days.
-                             For every year in "--years" only these days will
+                             For every year, only these days will
                              be downloaded.
 
                              ''')
@@ -98,8 +98,7 @@ def _parse_args(args):
         default=list(range(0, 24)),
         help=textwrap.dedent('''\
                              Time of day in hours to download data for.
-                             Defaults to all hours. For every year in
-                             "--years" only these hours will be downloaded.
+                             Defaults to all hours. For every year, only these hours will be downloaded.
 
                              ''')
     )
@@ -137,7 +136,7 @@ def _parse_args(args):
         "--split", type=_str2bool, default=True,
         help=textwrap.dedent('''\
                              Split output by years, producing a separate file
-                             for every year in the "--years" argument. Default
+                             for every year. Default
                              is True.
 
                              ''')
