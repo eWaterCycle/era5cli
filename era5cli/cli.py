@@ -98,7 +98,8 @@ def _parse_args(args):
         default=list(range(0, 24)),
         help=textwrap.dedent('''\
                              Time of day in hours to download data for.
-                             Defaults to all hours. For every year, only these hours will be downloaded.
+                             Defaults to all hours. For every year, 
+                             only these hours will be downloaded.
 
                              ''')
     )
