@@ -7,9 +7,10 @@ import unittest.mock as mock
 
 def initialize(outputformat='netcdf', split=True, statistics=None,
                synoptic=None, ensemble=True, pressurelevels=None,
-               threads=2, period='hourly', variables=['total_precipitation']):
+               threads=2, period='hourly', variables=['total_precipitation'],
+               years=[2008, 2009]):
     """Initializer of the class."""
-    era5 = fetch.Fetch(years=[2008, 2009],
+    era5 = fetch.Fetch(years=years,
                        months=list(range(1, 13)),
                        days=list(range(1, 32)),
                        hours=list(range(0, 24)),
@@ -173,6 +174,49 @@ def test_define_outputfilename():
     fname = era5._define_outputfilename('total_precipitation', era5.years)
     fn = 'era5_total_precipitation_2008-2009_hourly_ensemble_synoptic.grb'
     assert fname == fn
+
+
+def test_number_outputfiles(capsys):
+    """test function for the number of outputs."""
+    # two variables and three years
+    era5 = initialize(variables=['total_precipitation', 'runoff'],
+                      years=[2007, 2009], split=True)
+    era5.fetch(dryrun=True)
+    captured = capsys.readouterr()
+    outputlenght = len(captured.out.split('\n'))-1
+    if era5.split:
+        # No. of outputs is 2*3 = 6 if split = True
+        assert outputlenght == len(era5.years)*len(era5.variables)
+    else:
+        # No. of outputs is 2*1 = 2 if split = False
+        assert outputlenght == len(era5.variables)
+
+    # one variable and three years
+    era5 = initialize(variables=['total_precipitation'],
+                      years=[2007, 2009], split=True)
+    era5.fetch(dryrun=True)
+    captured = capsys.readouterr()
+    outputlenght = len(captured.out.split('\n'))-1
+    if era5.split:
+        # No. of outputs is 1*3 = 3 if split = True
+        assert outputlenght == len(era5.years)*len(era5.variables)
+    else:
+        # No. of outputs is 1 if split = False
+        assert outputlenght == len(era5.variables)
+
+    # two variables and one year
+    era5 = initialize(variables=['total_precipitation', 'runoff'],
+                      years=[2007], split=True)
+    era5.fetch(dryrun=True)
+    captured = capsys.readouterr()
+    outputlenght = len(captured.out.split('\n'))-1
+    if era5.split:
+        # No. of outputs is 2*1 = 2 if split = True
+        assert outputlenght == len(era5.years)*len(era5.variables)
+    else:
+        # No. of outputs is 2 if split = False
+        assert outputlenght == len(era5.variables)
+    del era5, captured
 
 
 def test_product_type():

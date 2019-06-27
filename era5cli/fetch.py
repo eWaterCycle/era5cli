@@ -163,14 +163,15 @@ class Fetch:
         outputfiles = []
         variables = []
         for var in self.variables:
-            outputfiles = [self._define_outputfilename(var, [yr])
-                           for yr in self.years]
-            variables += len(outputfiles) * [var]
+            outputfiles += ([self._define_outputfilename(var, [yr])
+                             for yr in self.years])
+            variables += len(self.years) * [var]
+        years = len(self.variables) * self.years
         if not self.threads:
             pool = Pool()
         else:
             pool = Pool(nodes=self.threads)
-        pool.map(self._getdata, variables, self.years, outputfiles)
+        pool.map(self._getdata, variables, years, outputfiles)
 
     def _product_type(self):
         """Construct the product type name from the options."""
