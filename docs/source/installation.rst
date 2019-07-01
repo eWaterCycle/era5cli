@@ -3,7 +3,7 @@ Installation:
 
 Install from PyPI:
 ~~~~~~~~~~~~~~~~~~
-era5cli is available as a package in PyPI <https://pypi.org/projetc/era5cli>.
+era5cli is available as a package in PyPI <https://pypi.org/project/era5cli/>.
 
 Install from GitHub:
 ~~~~~~~~~~~~~~~~~~~~
