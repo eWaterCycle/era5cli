@@ -1,7 +1,7 @@
 """Utility functions."""
 
-import prettytable
 import shutil
+import prettytable
 
 
 def zpadlist(values: list, inputtype: str, minval: int, maxval: int) -> list:
@@ -131,6 +131,6 @@ def print_multicolumn(header: str, info: list):
               range(0, len(info), nrows)]
     chunks[-1].extend('' for i in range(nrows - len(chunks[-1])))
     chunks = zip(*chunks)
-    for c in chunks:
-        table.add_row(c)
+    for chunk in chunks:
+        table.add_row(chunk)
     print(table)

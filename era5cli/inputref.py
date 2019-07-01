@@ -1,7 +1,7 @@
 """Lists of ERA-5 variables and pressure levels."""
 
 # The available pressure levels in ERA-5
-plevels = [
+PLEVELS = [
     1, 2, 3,
     5, 7, 10,
     20, 30, 50,
@@ -19,7 +19,7 @@ plevels = [
 
 # The pressure level variables to be downloaded from
 # https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels
-plvars = [
+PLVARS = [
     'divergence',
     'fraction_of_cloud_cover',
     'geopotential',
@@ -40,7 +40,7 @@ plvars = [
 
 # The single level variables to be downloaded from
 # https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels
-slvars = [
+SLVARS = [
     '100m_u_component_of_wind',
     '100m_v_component_of_wind',
     '10m_u_component_of_neutral_wind',
@@ -308,12 +308,12 @@ slvars = [
     'zero_degree_level',
 ]
 
-refdict = {"levels": plevels,
-           "2Dvars": slvars,
-           "3Dvars": plvars,
+REFDICT = {"levels": PLEVELS,
+           "2Dvars": SLVARS,
+           "3Dvars": PLVARS,
            }
 
-missing_monthly_vars = [
+MISSING_MONTHLY_VARS = [
     'uv_visible_albedo_for_direct_radiation',
     'uv_visible_albedo_for_diffuse_radiation',
     'near_ir_albedo_for_direct_radiation',

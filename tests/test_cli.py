@@ -26,7 +26,7 @@ def test_parse_args():
     assert args.ensemble
     assert args.format == 'netcdf'
     assert args.hours == list(range(0, 24))
-    assert args.levels == ref.plevels
+    assert args.levels == ref.PLEVELS
     assert args.months == list(range(1, 13))
     assert args.outputprefix == 'era5'
     assert args.split
