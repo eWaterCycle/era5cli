@@ -25,7 +25,7 @@ copyright = '2019, Netherlands eScience Center'
 author = 'Ronald van Haren'
 
 # The full version, including alpha/beta/rc tags
-release = '1.0.0rc1'
+release = '1.0.0rc2'
 
 
 # -- General configuration ---------------------------------------------------
