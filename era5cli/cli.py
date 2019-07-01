@@ -10,13 +10,13 @@ import era5cli.info as einfo
 import era5cli.fetch as efetch
 
 
-def _str2bool(v):
+def _str2bool(string):
     """Return boolean based on input string."""
-    if isinstance(v, bool):
-        return v
-    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+    if isinstance(string, bool):
+        return string
+    if string.lower() in ('yes', 'true', 't', 'y', '1'):
         return True
-    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+    elif string.lower() in ('no', 'false', 'f', 'n', '0'):
         return False
     else:
         raise argparse.ArgumentTypeError('Boolean value expected.')
@@ -106,7 +106,7 @@ def _parse_args(args):
 
     common.add_argument(
         "--levels", nargs="+", type=int,
-        required=False, default=ref.plevels,
+        required=False, default=ref.PLEVELS,
         help=textwrap.dedent('''\
                              Pressure level(s) to download for three
                              dimensional data. Default is all available

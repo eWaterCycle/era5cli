@@ -29,11 +29,11 @@ class Info:
         self.infolist = []
         """list: List with information to be printed."""
         try:
-            self.infolist = ref.refdict[self.infoname]
+            self.infolist = ref.REFDICT[self.infoname]
             """list: List with information to be printed."""
             self.infotype = "list"
         except KeyError:
-            for valname, vallist in ref.refdict.items():
+            for valname, vallist in ref.REFDICT.items():
                 if self.infoname in vallist:
                     self.infotype = valname
         if self.infotype is None:

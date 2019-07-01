@@ -120,24 +120,26 @@ class Fetch:
 
     def _extension(self):
         """Set filename extension."""
-        if (self.outputformat.lower() == 'netcdf'):
+        if self.outputformat.lower() == 'netcdf':
             self.ext = "nc"
-        elif (self.outputformat.lower() == 'grib'):
+        elif self.outputformat.lower() == 'grib':
             self.ext = 'grb'
         else:
             raise ValueError('Unknown outputformat: {}'.format(
-                             self.outputformat))
+                self.outputformat))
 
     def _define_outputfilename(self, var, years):
         """Define output filename."""
         start_year = years[0]
         end_year = years[-1]
         if not end_year or (end_year == start_year):
-            fname = ("{}_{}_{}_{}".format(self.outputprefix, var,
-                     start_year, self.period))
+            fname = ("{}_{}_{}_{}".format(
+                self.outputprefix, var,
+                start_year, self.period))
         else:
-            fname = ("{}_{}_{}-{}_{}".format(self.outputprefix, var,
-                     start_year, end_year, self.period))
+            fname = ("{}_{}_{}-{}_{}".format(
+                self.outputprefix, var,
+                start_year, end_year, self.period))
         if self.ensemble:
             fname += "_ensemble"
         if self.statistics:
@@ -207,31 +209,31 @@ class Fetch:
                    'time': self.hours,
                    'format': self.outputformat}
 
-        if variable in ref.plvars:
+        if variable in ref.PLVARS:
             try:
-                if all([l in ref.plevels for l in self.pressure_levels]):
+                if all([l in ref.PLEVELS for l in self.pressure_levels]):
                     name += "pressure-levels"
                     request["pressure_level"] = self.pressure_levels
                 else:
                     raise ValueError(
                         "Invalid pressure levels. Allowed values are: {}"
-                        .format(ref.plevels))
+                        .format(ref.PLEVELS))
             except TypeError:
                 raise ValueError(
                     "Invalid pressure levels. Allowed values are: {}"
-                    .format(ref.plevels))
-        elif variable in ref.slvars:
+                    .format(ref.PLEVELS))
+        elif variable in ref.SLVARS:
             name += "single-levels"
         else:
             raise ValueError('Invalid variable name: {}'.format(variable))
 
         if self.period == "monthly":
             name += "-monthly-means"
-            if variable in ref.missing_monthly_vars:
+            if variable in ref.MISSING_MONTHLY_VARS:
                 header = ("There is no monthly data available for the "
                           "following variables:\n")
                 raise ValueError(print_multicolumn(header,
-                                                   ref.missing_monthly_vars))
+                                                   ref.MISSING_MONTHLY_VARS))
 
         return(name, request)
 
@@ -244,5 +246,5 @@ class Fetch:
         if self.dryrun:
             print(name, request, outputfile)
         else:
-            c = cdsapi.Client()
-            c.retrieve(name, request, outputfile)
+            connection = cdsapi.Client()
+            connection.retrieve(name, request, outputfile)
