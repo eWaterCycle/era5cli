@@ -36,6 +36,10 @@ authors:
     affiliation: "Netherlands eScience Center"
     family-names: Weel
     given-names: Berend
+  - 
+    affiliation: TU Delft"
+    family-names: Hut
+    given-names: Rolf
 
 cff-version: "1.0.3"
 date-released: 2019-07-01
