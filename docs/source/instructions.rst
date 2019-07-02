@@ -14,6 +14,8 @@ Register at Copernicus Climate Data Service
 Create a key ascii file
 ~~~~~~~~~~~~~~~~~~~~~~~
 
+Linux
+~~~~~
 In linux create a new file called .cdsapirc in the home directory of your user and add
 the following two lines:
 
@@ -24,6 +26,32 @@ the following two lines:
    key: UID:KEY
 
 Replace UID with your user ID and KEY with your API key
+
+Windows
+~~~~~~~
+In Windows create a new file called .cdsapirc (e.g. with Notepad) where in your windows environment, %USERPROFILE% is usually located at C:\Users\Username folder). And add the following two lines
+
+::
+
+   url: https://cds.climate.copernicus.eu/api/v2
+
+   key: UID:KEY
+
+Replace UID with your user ID and KEY with your API key
+
+MacOS
+~~~~~
+In MacOS run 'touch ~/.cdsapirc' in your Terminal to create your key file and add the following two lines:
+
+
+::
+
+   url: https://cds.climate.copernicus.eu/api/v2
+
+   key: UID:KEY
+
+Replace UID with your user ID and KEY with your API key
+
 
 Info on available variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
