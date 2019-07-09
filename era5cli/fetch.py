@@ -64,7 +64,11 @@ class Fetch:
         try:
             self.days = zpad_days(days)
         except TypeError:
-            self.days = None
+            if period == 'monthly':
+                self.days = None
+            else:
+                raise ValueError("Invalid days argument supplied: {}"
+                                 .format(days))
         """list(str): List of zero-padded strings of days
         (e.g. ['01', '02',..., '12'])."""
         self.hours = format_hours(hours)

@@ -8,12 +8,13 @@ import unittest.mock as mock
 def initialize(outputformat='netcdf', split=True, statistics=None,
                synoptic=None, ensemble=True, pressurelevels=None,
                threads=2, period='hourly', variables=['total_precipitation'],
-               years=[2008, 2009]):
+               years=[2008, 2009], months=list(range(1, 13)),
+               days=list(range(1, 32)), hours=list(range(0, 24))):
     """Initializer of the class."""
     era5 = fetch.Fetch(years=years,
-                       months=list(range(1, 13)),
-                       days=list(range(1, 32)),
-                       hours=list(range(0, 24)),
+                       months=months,
+                       days=days,
+                       hours=hours,
                        variables=variables,
                        outputformat=outputformat,
                        outputprefix='era5',
@@ -70,6 +71,18 @@ def test_init():
     assert era5.pressure_levels is None
     assert era5.split
     assert era5.threads == 2
+
+    # initializing hourly variable with days=None should result in ValueError
+    with pytest.raises(ValueError):
+        era5 = initialize(variables=['temperature'],
+                          period='hourly',
+                          days=None)
+
+    # initializing monthly variable with days=None returns fetch.Fetch object
+    era5 = initialize(variables=['temperature'],
+                      period='monthly',
+                      days=None)
+    assert isinstance(era5, fetch.Fetch)
 
 
 @mock.patch("cdsapi.Client", autospec=True)
