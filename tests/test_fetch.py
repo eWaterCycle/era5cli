@@ -8,12 +8,13 @@ import unittest.mock as mock
 def initialize(outputformat='netcdf', split=True, statistics=None,
                synoptic=None, ensemble=True, pressurelevels=None,
                threads=2, period='hourly', variables=['total_precipitation'],
-               years=[2008, 2009]):
+               years=[2008, 2009], months=list(range(1, 13)),
+               days=list(range(1, 32)), hours=list(range(0, 24))):
     """Initializer of the class."""
     era5 = fetch.Fetch(years=years,
-                       months=list(range(1, 13)),
-                       days=list(range(1, 32)),
-                       hours=list(range(0, 24)),
+                       months=months,
+                       days=days,
+                       hours=hours,
                        variables=variables,
                        outputformat=outputformat,
                        outputprefix='era5',
@@ -70,6 +71,18 @@ def test_init():
     assert era5.pressure_levels is None
     assert era5.split
     assert era5.threads == 2
+
+    # initializing hourly variable with days=None should result in ValueError
+    with pytest.raises(ValueError):
+        era5 = initialize(variables=['temperature'],
+                          period='hourly',
+                          days=None)
+
+    # initializing monthly variable with days=None returns fetch.Fetch object
+    era5 = initialize(variables=['temperature'],
+                      period='monthly',
+                      days=None)
+    assert isinstance(era5, fetch.Fetch)
 
 
 @mock.patch("cdsapi.Client", autospec=True)
@@ -177,29 +190,29 @@ def test_define_outputfilename():
 
 
 def test_number_outputfiles(capsys):
-    """test function for the number of outputs."""
+    """Test function for the number of outputs."""
     # two variables and three years
     era5 = initialize(variables=['total_precipitation', 'runoff'],
-                      years=[2007, 2009], split=True)
+                      years=[2007, 2008, 2009], split=True)
     era5.fetch(dryrun=True)
     captured = capsys.readouterr()
-    outputlenght = len(captured.out.split('\n'))-1
+    outputlenght = len(captured.out.split('\n')) - 1
     if era5.split:
         # No. of outputs is 2*3 = 6 if split = True
-        assert outputlenght == len(era5.years)*len(era5.variables)
+        assert outputlenght == len(era5.years) * len(era5.variables)
     else:
         # No. of outputs is 2*1 = 2 if split = False
         assert outputlenght == len(era5.variables)
 
     # one variable and three years
     era5 = initialize(variables=['total_precipitation'],
-                      years=[2007, 2009], split=True)
+                      years=[2007, 2008, 2009], split=True)
     era5.fetch(dryrun=True)
     captured = capsys.readouterr()
-    outputlenght = len(captured.out.split('\n'))-1
+    outputlenght = len(captured.out.split('\n')) - 1
     if era5.split:
         # No. of outputs is 1*3 = 3 if split = True
-        assert outputlenght == len(era5.years)*len(era5.variables)
+        assert outputlenght == len(era5.years) * len(era5.variables)
     else:
         # No. of outputs is 1 if split = False
         assert outputlenght == len(era5.variables)
@@ -209,10 +222,10 @@ def test_number_outputfiles(capsys):
                       years=[2007], split=True)
     era5.fetch(dryrun=True)
     captured = capsys.readouterr()
-    outputlenght = len(captured.out.split('\n'))-1
+    outputlenght = len(captured.out.split('\n')) - 1
     if era5.split:
         # No. of outputs is 2*1 = 2 if split = True
-        assert outputlenght == len(era5.years)*len(era5.variables)
+        assert outputlenght == len(era5.years) * len(era5.variables)
     else:
         # No. of outputs is 2 if split = False
         assert outputlenght == len(era5.variables)
@@ -245,7 +258,10 @@ def test_product_type():
 
 def test_build_request():
     """Test _build_request function of Fetch class."""
-    era5 = initialize()
+    # hourly data
+    era5 = initialize(period='hourly',
+                      variables=['total_precipitation'],
+                      years=[2008])
     (name, request) = era5._build_request('total_precipitation', [2008])
     assert name == 'reanalysis-era5-single-levels'
     req = {'variable': 'total_precipitation', 'year': [2008],
@@ -256,6 +272,24 @@ def test_build_request():
                    '10', '11', '12', '13', '14', '15', '16', '17', '18',
                    '19', '20', '21', '22', '23', '24', '25', '26', '27',
                    '28', '29', '30', '31'],
+           'time': ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00',
+                    '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
+                    '12:00', '13:00', '14:00', '15:00', '16:00', '17:00',
+                    '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
+           'format': 'netcdf'}
+    print(request['day'])
+    assert request == req
+
+    # monthly data
+    era5 = initialize(period='monthly',
+                      variables=['total_precipitation'],
+                      years=[2008])
+    (name, request) = era5._build_request('total_precipitation', [2008])
+    assert name == 'reanalysis-era5-single-levels-monthly-means'
+    req = {'variable': 'total_precipitation', 'year': [2008],
+           'product_type': 'monthly_averaged_ensemble_members',
+           'month': ['01', '02', '03', '04', '05', '06',
+                     '07', '08', '09', '10', '11', '12'],
            'time': ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00',
                     '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
                     '12:00', '13:00', '14:00', '15:00', '16:00', '17:00',

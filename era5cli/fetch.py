@@ -18,7 +18,7 @@ class Fetch:
             List of years to download data for.
         months: list(int)
             List of month to download data for (1-12).
-        days: list(int)
+        days: list(int), None
             List of days of month to download data for (1-31).
         hours: list(int)
             List of time in hours to download data for (0-23).
@@ -61,7 +61,14 @@ class Fetch:
         self.months = zpad_months(months)
         """list(str): List of zero-padded strings of months
         (e.g. ['01', '02',..., '12'])."""
-        self.days = zpad_days(days)
+        try:
+            self.days = zpad_days(days)
+        except TypeError:
+            if period == 'monthly':
+                self.days = None
+            else:
+                raise ValueError("Invalid days argument supplied: {}"
+                                 .format(days))
         """list(str): List of zero-padded strings of days
         (e.g. ['01', '02',..., '12'])."""
         self.hours = format_hours(hours)
@@ -205,10 +212,10 @@ class Fetch:
                    'year': years,
                    'product_type': self._product_type(),
                    'month': self.months,
-                   'day': self.days,
                    'time': self.hours,
                    'format': self.outputformat}
 
+        # variable is pressure level variable
         if variable in ref.PLVARS:
             try:
                 if all([l in ref.PLEVELS for l in self.pressure_levels]):
@@ -222,8 +229,10 @@ class Fetch:
                 raise ValueError(
                     "Invalid pressure levels. Allowed values are: {}"
                     .format(ref.PLEVELS))
+        # variable is single level variable
         elif variable in ref.SLVARS:
             name += "single-levels"
+        # variable is unknown
         else:
             raise ValueError('Invalid variable name: {}'.format(variable))
 
@@ -234,6 +243,10 @@ class Fetch:
                           "following variables:\n")
                 raise ValueError(print_multicolumn(header,
                                                    ref.MISSING_MONTHLY_VARS))
+        elif self.period == "hourly":
+            # Add day list to request if applicable
+            if self.days:
+                request["day"] = self.days
 
         return(name, request)
 
