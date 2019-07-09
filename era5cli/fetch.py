@@ -3,10 +3,7 @@
 import cdsapi
 from pathos.threading import ThreadPool as Pool
 import era5cli.inputref as ref
-from era5cli.utils import format_hours
-from era5cli.utils import zpad_days
-from era5cli.utils import zpad_months
-from era5cli.utils import print_multicolumn
+import era5cli.utils
 
 
 class Fetch:
@@ -58,11 +55,11 @@ class Fetch:
                  statistics=None, synoptic=None, pressurelevels=None,
                  split=True, threads=None):
         """Initialization of Fetch class."""
-        self.months = zpad_months(months)
+        self.months = era5cli.utils._zpad_months(months)
         """list(str): List of zero-padded strings of months
         (e.g. ['01', '02',..., '12'])."""
         try:
-            self.days = zpad_days(days)
+            self.days = era5cli.utils._zpad_days(days)
         except TypeError:
             if period == 'monthly':
                 self.days = None
@@ -71,7 +68,7 @@ class Fetch:
                                  .format(days))
         """list(str): List of zero-padded strings of days
         (e.g. ['01', '02',..., '12'])."""
-        self.hours = format_hours(hours)
+        self.hours = era5cli.utils._format_hours(hours)
         """list(str): List of xx:00 formatted time strings
         (e.g. ['00:00', '01:00', ..., '23:00'])."""
         self.pressure_levels = pressurelevels
@@ -241,8 +238,9 @@ class Fetch:
             if variable in ref.MISSING_MONTHLY_VARS:
                 header = ("There is no monthly data available for the "
                           "following variables:\n")
-                raise ValueError(print_multicolumn(header,
-                                                   ref.MISSING_MONTHLY_VARS))
+                raise ValueError(era5cli.utils._print_multicolumn(
+                    header,
+                    ref.MISSING_MONTHLY_VARS))
         elif self.period == "hourly":
             # Add day list to request if applicable
             if self.days:
@@ -261,3 +259,4 @@ class Fetch:
         else:
             connection = cdsapi.Client()
             connection.retrieve(name, request, outputfile)
+            era5cli.utils._append_history(outputfile)

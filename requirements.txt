@@ -1,3 +1,4 @@
 cdsapi
 pathos
 PTable
+netCDF4

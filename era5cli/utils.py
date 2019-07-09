@@ -2,9 +2,14 @@
 
 import shutil
 import prettytable
+from netCDF4 import Dataset
+from pathlib import Path
+
+import era5cli
+from era5cli.__version__ import __version__ as era5cliversion
 
 
-def zpadlist(values: list, inputtype: str, minval: int, maxval: int) -> list:
+def _zpadlist(values: list, inputtype: str, minval: int, maxval: int) -> list:
     """Return a list of zero padded strings and perform input checks.
 
     Returns a list of zero padded strings of day numbers from a list of
@@ -42,7 +47,7 @@ def zpadlist(values: list, inputtype: str, minval: int, maxval: int) -> list:
     return returnlist
 
 
-def zpad_days(values: list) -> list:
+def _zpad_days(values: list) -> list:
     """Return a list of zero padded strings.
 
     Returns a list of zero padded strings of day numbers from a list of
@@ -59,10 +64,10 @@ def zpad_days(values: list) -> list:
     list(str)
         List of zero-padded strings of months (e.g. ['01', '02',..., '31']).
     """
-    return zpadlist(values, 'days', 1, 31)
+    return _zpadlist(values, 'days', 1, 31)
 
 
-def zpad_months(values: list) -> list:
+def _zpad_months(values: list) -> list:
     """Return a list of zero padded strings.
 
     Returns a list of zero padded strings of month numbers from a list of
@@ -79,10 +84,10 @@ def zpad_months(values: list) -> list:
     list(str)
         List of zero-padded strings of months (e.g. ['01', '02',..., '12']).
     """
-    return zpadlist(values, 'months', 1, 12)
+    return _zpadlist(values, 'months', 1, 12)
 
 
-def format_hours(values: list) -> list:
+def _format_hours(values: list) -> list:
     """Return a list of xx:00 formated time strings.
 
     Returns a list xx:00 formated time strings from a list of input hours.
@@ -109,8 +114,16 @@ def format_hours(values: list) -> list:
     return returnlist
 
 
-def print_multicolumn(header: str, info: list):
-    """Print a list of strings in several columns."""
+def _print_multicolumn(header: str, info: list):
+    """Print a list of strings in several columns.
+
+    Parameters
+    ----------
+    header: str
+        Table header string.
+    info: list()
+        Data to be printed.
+    """
     # get size of terminal window
     columns, rows = shutil.get_terminal_size(fallback=(80, 24))
     # maximum width of string in list
@@ -134,3 +147,34 @@ def print_multicolumn(header: str, info: list):
     for chunk in chunks:
         table.add_row(chunk)
     print(table)
+
+
+def _append_history(fname):
+    """Append era5cli version information.
+
+    Parameters
+    ----------
+    fname: str
+        Filename.
+    """
+    appendtxt = "Downloaded using {} {}.".format(era5cli.__name__,
+                                                 era5cliversion)
+    extension = Path(fname).suffix
+    if extension == ".nc":
+        _append_netcdf_history(fname, appendtxt)
+
+
+def _append_netcdf_history(ncfile: str, appendtxt: str):
+    """Append era5cli version and download command to netCDF history.
+
+    Parameters
+    ----------
+    ncfile: str
+        Filename of netCDF file.
+    appendtxt: str
+        Text to append to history of netCDF file.
+    """
+    # open netCDF file rw and append to history
+    ncfile = Dataset(ncfile, 'r+')
+    ncfile.history = "{}\n{}".format(appendtxt, ncfile.history)
+    ncfile.close()
