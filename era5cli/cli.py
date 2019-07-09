@@ -211,11 +211,14 @@ def _build_parser():
     )
 
     monthly.add_argument(
-        "--synoptic", type=_str2bool, default=False,
+        "--synoptic", type=str, default=None, const="all", nargs="*",
         help=textwrap.dedent('''\
-                             Set "--synoptic True" to get monthly averaged
-                             by hour of day or set "--synoptic False" to get
-                             monthly means of daily means. Default is False.
+                             Time of day in hours to get the synoptic means
+                             (monthly averaged by hour of day) for. Defaults
+                             to "None" in which case the monthly average of
+                             daily means is chosen. Set as a flag without
+                             command-line argument (e.g. "--synoptic") to
+                             download all hours (0-23).
 
                              ''')
     )
@@ -287,10 +290,12 @@ def _execute(args):
             synoptic = args.synoptic
             statistics = None
             days = None
+            hours = None
         elif args.command == "hourly":
             statistics = args.statistics
             synoptic = None
             days = args.days
+            hours = args.hours
         else:
             raise AttributeError(
                 'The command "{}" is not valid.'.format(args.command)
@@ -300,7 +305,7 @@ def _execute(args):
         era5 = efetch.Fetch(years,
                             months=args.months,
                             days=days,
-                            hours=args.hours,
+                            hours=hours,
                             variables=args.variables,
                             outputformat=args.format,
                             outputprefix=args.outputprefix,
@@ -311,7 +316,7 @@ def _execute(args):
                             pressurelevels=args.levels,
                             threads=args.threads,
                             split=args.split)
-        era5.fetch()
+        era5.fetch(dryrun=True)
         return True
 
 
