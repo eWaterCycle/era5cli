@@ -22,8 +22,8 @@ def _str2bool(string):
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
 
-def _parse_args(args):
-    """Parse command line arguments."""
+def _build_parser():
+    """Build the argument parser"""
     parser = argparse.ArgumentParser(
         usage='Use "%(prog)s --help" for more information.',
         formatter_class=argparse.RawTextHelpFormatter)
@@ -244,6 +244,12 @@ def _parse_args(args):
                              ''')
     )
 
+    return parser
+
+
+def _parse_args(args):
+    """Parse command line arguments."""
+    parser = _build_parser()
     return parser.parse_args(args)
 
 

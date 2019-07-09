@@ -3,3 +3,4 @@ flake8
 pytest-flake8
 pytest-cov
 Sphinx
+sphinx-argparse
