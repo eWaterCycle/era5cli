@@ -4,7 +4,6 @@ Welcome to era5cli's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
    installation
    instructions
