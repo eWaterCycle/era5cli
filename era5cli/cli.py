@@ -69,42 +69,6 @@ def _parse_args(args):
     )
 
     common.add_argument(
-        "--months", nargs="+",
-        required=False, type=int,
-        default=list(range(1, 13)),
-        help=textwrap.dedent('''\
-                             Month(s) to download data for. Defaults to all
-                             months. For every year, only these
-                             months will be downloaded.
-
-                             ''')
-    )
-
-    common.add_argument(
-        "--days", nargs="+",
-        required=False, type=int,
-        default=list(range(1, 32)),
-        help=textwrap.dedent('''\
-                             Day(s) to download data for. Defaults to all days.
-                             For every year, only these days will
-                             be downloaded.
-
-                             ''')
-    )
-
-    common.add_argument(
-        "--hours", nargs="+",
-        required=False, type=int,
-        default=list(range(0, 24)),
-        help=textwrap.dedent('''\
-                             Time of day in hours to download data for.
-                             Defaults to all hours. For every year,
-                             only these hours will be downloaded.
-
-                             ''')
-    )
-
-    common.add_argument(
         "--levels", nargs="+", type=int,
         required=False, default=ref.PLEVELS,
         help=textwrap.dedent('''\
@@ -164,8 +128,50 @@ def _parse_args(args):
                              ''')
     )
 
+    mnth = argparse.ArgumentParser(add_help=False)
+
+    mnth.add_argument(
+        "--months", nargs="+",
+        required=False, type=int,
+        default=list(range(1, 13)),
+        help=textwrap.dedent('''\
+                             Month(s) to download data for. Defaults to all
+                             months. For every year, only these
+                             months will be downloaded.
+
+                             ''')
+    )
+
+    day = argparse.ArgumentParser(add_help=False)
+
+    day.add_argument(
+        "--days", nargs="+",
+        required=False, type=int,
+        default=list(range(1, 32)),
+        help=textwrap.dedent('''\
+                             Day(s) to download data for. Defaults to all days.
+                             For every year, only these days will
+                             be downloaded.
+
+                             ''')
+    )
+
+    hour = argparse.ArgumentParser(add_help=False)
+
+    hour.add_argument(
+        "--hours", nargs="+",
+        required=False, type=int,
+        default=list(range(0, 24)),
+        help=textwrap.dedent('''\
+                             Time of day in hours to download data for.
+                             Defaults to all hours. For every year,
+                             only these hours will be downloaded.
+
+                             ''')
+    )
+
     hourly = subparsers.add_parser(
-        'hourly', parents=[common],
+        'hourly', parents=[common, mnth, day, hour],
         description='Execute the data fetch process for hourly data.',
         prog=textwrap.dedent('''\
                              Use "era5cli hourly --help" for more information.
@@ -190,7 +196,7 @@ def _parse_args(args):
     )
 
     monthly = subparsers.add_parser(
-        'monthly', parents=[common],
+        'monthly', parents=[common, mnth, hour],
         description='Execute the data fetch process for monthly data.',
         prog=textwrap.dedent('''\
                              Use "era5cli monthly --help" for more information.
@@ -274,9 +280,11 @@ def _execute(args):
         if args.command == "monthly":
             synoptic = args.synoptic
             statistics = None
+            days = None
         elif args.command == "hourly":
             statistics = args.statistics
             synoptic = None
+            days = args.days
         else:
             raise AttributeError(
                 'The command "{}" is not valid.'.format(args.command)
@@ -285,7 +293,7 @@ def _execute(args):
         # try to build and send download request
         era5 = efetch.Fetch(years,
                             months=args.months,
-                            days=args.days,
+                            days=days,
                             hours=args.hours,
                             variables=args.variables,
                             outputformat=args.format,
