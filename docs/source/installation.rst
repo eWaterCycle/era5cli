@@ -1,5 +1,5 @@
 Installation
--------------
+------------
 
 Install from PyPI:
 ~~~~~~~~~~~~~~~~~~
