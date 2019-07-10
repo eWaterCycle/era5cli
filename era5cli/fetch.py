@@ -60,19 +60,22 @@ class Fetch:
         self.months = era5cli.utils._zpad_months(months)
         """list(str): List of zero-padded strings of months
         (e.g. ['01', '02',..., '12'])."""
-        try:
-            self.days = era5cli.utils._zpad_days(days)
-        except TypeError:
-            if period == 'monthly':
-                self.days = None
+        if period == 'monthly':
+            self.days = None
+            if synoptic:
+                self.hours = era5cli.utils._format_hours(hours)
+                """list(str): List of xx:00 formatted time strings
+                (e.g. ['00:00', '01:00', ..., '23:00'])."""
             else:
-                raise ValueError("Invalid days argument supplied: {}"
-                                 .format(days))
-        """list(str): List of zero-padded strings of days
-        (e.g. ['01', '02',..., '12'])."""
-        self.hours = era5cli.utils._format_hours(hours)
-        """list(str): List of xx:00 formatted time strings
-        (e.g. ['00:00', '01:00', ..., '23:00'])."""
+                self.hours = None
+        else:
+            self.days = era5cli.utils._zpad_days(days)
+            """list(str): List of zero-padded strings of days
+            (e.g. ['01', '02',..., '12'])."""
+            self.hours = era5cli.utils._format_hours(hours)
+            """list(str): List of xx:00 formatted time strings
+            (e.g. ['00:00', '01:00', ..., '23:00'])."""
+
         self.pressure_levels = pressurelevels
         """list(int): List of pressure levels."""
         self.variables = variables
