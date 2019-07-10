@@ -196,7 +196,7 @@ def _build_parser():
     )
 
     monthly = subparsers.add_parser(
-        'monthly', parents=[common, mnth, hour],
+        'monthly', parents=[common, mnth],
         description='Execute the data fetch process for monthly data.',
         prog=textwrap.dedent('''\
                              Use "era5cli monthly --help" for more information.
@@ -211,13 +211,13 @@ def _build_parser():
     )
 
     monthly.add_argument(
-        "--synoptic", type=str, default=None, const="all", nargs="*",
+        "--synoptic", type=str, default=None, nargs="+",
         help=textwrap.dedent('''\
                              Time of day in hours to get the synoptic means
-                             (monthly averaged by hour of day) for. Defaults
+                             (monthly averaged by hour of day) for. For example
+                             "--synoptic 0 4 5 6 23". The option defaults
                              to "None" in which case the monthly average of
-                             daily means is chosen. Set as a flag without
-                             command-line argument (e.g. "--synoptic") to
+                             daily means is chosen. Set "--synoptic all") to
                              download all hours (0-23).
 
                              ''')
