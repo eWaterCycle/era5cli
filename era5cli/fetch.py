@@ -2,6 +2,8 @@
 
 import cdsapi
 from pathos.threading import ThreadPool as Pool
+import os
+
 import era5cli.inputref as ref
 from era5cli.utils import format_hours
 from era5cli.utils import zpad_days
@@ -259,5 +261,12 @@ class Fetch:
         if self.dryrun:
             print(name, request, outputfile)
         else:
+            queueing_message = (
+                os.linesep,
+                "Download request is being queued at Copernicus.",
+                os.linesep, "It can take some time before downloading starts,",
+                "please do not kill this process in the meantime.",
+                os.linesep)
             connection = cdsapi.Client()
+            print(queueing_message)  # print queueing message
             connection.retrieve(name, request, outputfile)
