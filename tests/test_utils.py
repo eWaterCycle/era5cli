@@ -123,7 +123,7 @@ def test_print_multicolumn():
 
 def test_append_history():
     """Test append_history utility function."""
-    # tmpDir = tempfile.gettempdir()
+    # test netCDF file with existing history
     (fd, filename) = tempfile.mkstemp(suffix=".nc")
     # create tmp netCDF file
     ncfile = Dataset(filename, 'w')
@@ -141,5 +141,20 @@ def test_append_history():
     hist_split = new_history.split('\n')
     assert hist_split[0] == appendtxt
     assert hist_split[1] == orig_history
+    # remove temporary file
+    os.remove(filename)
+
+    # test netCDF file without existing history
+    ncfile = Dataset(filename, 'w')
+    ncfile.close()
+    # test append history
+    era5cli.utils._append_history(filename)
+    # load netCDF file
+    ncfile = Dataset(filename, 'r')
+    new_history = ncfile.history
+    appendtxt = "Downloaded using {} {}.".format(
+        era5cli.__name__,
+        era5cliversion)
+    new_history = appendtxt
     # remove temporary file
     os.remove(filename)
