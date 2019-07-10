@@ -1,7 +1,7 @@
 """Print ERA5 information on available variables and levels."""
 
 import era5cli.inputref as ref
-from era5cli.utils import print_multicolumn
+from era5cli.utils import _print_multicolumn
 
 
 class Info:
@@ -46,7 +46,7 @@ class Info:
         printed in multiple columns if the size of the terminal supports it.
         """
         self._define_table_header()
-        print_multicolumn(self.header, self.infolist)
+        _print_multicolumn(self.header, self.infolist)
 
     def vars(self):
         """Return the  variable name or pressure level.

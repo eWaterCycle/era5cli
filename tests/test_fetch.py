@@ -86,7 +86,8 @@ def test_init():
 
 
 @mock.patch("cdsapi.Client", autospec=True)
-def test_fetch_nodryrun(cds):
+@mock.patch("era5cli.utils._append_history", autospec=True)
+def test_fetch_nodryrun(cds, era5cli_utils_append_history):
     """Test fetch function of Fetch class."""
     era5 = initialize()
     assert era5.fetch() is None
