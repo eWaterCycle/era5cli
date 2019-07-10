@@ -23,7 +23,7 @@ def _str2bool(string):
 
 
 def _build_parser():
-    """Build the argument parser"""
+    """Build the argument parser."""
     parser = argparse.ArgumentParser(
         usage='Use "%(prog)s --help" for more information.',
         formatter_class=argparse.RawTextHelpFormatter)
