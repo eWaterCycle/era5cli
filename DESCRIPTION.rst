@@ -1,1 +1,3 @@
-A command line interface to download ERA5 data from the `Copernicus Climate Data Store <https://climate.copernicus.eu/>`_.
+.. include:: ../../README.rst
+  :start-after: inclusion-marker-start-do-not-remove
+  :end-before: inclusion-marker-end-do-not-remove

@@ -22,8 +22,11 @@ era5cli
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3252665.svg
    :target: https://doi.org/10.5281/zenodo.3252665
 
-.. include:: ./DESCRIPTION.rst
+.. inclusion-marker-start-do-not-remove
 
+A command line interface to download ERA5 data from the `Copernicus Climate Data Store <https://climate.copernicus.eu/>`_.
+
+.. inclusion-marker-end-do-not-remove
 
 * Free software: Apache Software License 2.0
 * Documentation: https://era5cli.readthedocs.io.
