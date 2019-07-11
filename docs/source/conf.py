@@ -22,10 +22,10 @@ master_doc = 'index'
 
 project = 'era5cli'
 copyright = '2019, Netherlands eScience Center'
-author = 'Ronald van Haren'
+author = 'era5cli team'
 
 # The full version, including alpha/beta/rc tags
-release = '1.0.0rc2'
+release = '1.0.0rc3'
 
 
 # -- General configuration ---------------------------------------------------

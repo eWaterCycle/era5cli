@@ -1,6 +1,6 @@
 Welcome to era5cli's documentation!
 ===================================
-.. include:: ../../README.rst
+.. include:: ../../DESCRIPTION.rst
 
 .. toctree::
    :maxdepth: 2

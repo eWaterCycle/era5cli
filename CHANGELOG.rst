@@ -1,6 +1,13 @@
 Changelog
 *********
 
+1.0.0rc3 (2019-months-days)
+=====================
+* Third Release Candidate for the stable 1.0.0 era5cli release.
+* Improve documentation #21 #29.
+* Cleanup command line options #19.
+* Append era5cli version to history of downloaded netCDF file #17.
+
 1.0.0rc2 (2019-07-01)
 =====================
 * Second Release Candidate for the stable 1.0.0 era5cli release.
