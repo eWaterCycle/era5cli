@@ -55,7 +55,7 @@ def test_main_fetch(fetch):
 
     # monthly call without endyear
     argv = ['monthly', '--startyear', '2008', '--ensemble', 'false',
-            '--variables', 'total_precipitation', '--synoptic', 'true',
+            '--variables', 'total_precipitation', '--synoptic',
             '--split', 'true', '--ensemble', 'true']
     args = cli._parse_args(argv)
     cli._execute(args)

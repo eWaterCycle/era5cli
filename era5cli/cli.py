@@ -280,7 +280,7 @@ def _set_period_args(args):
         days = None
         if args.synoptic is False:
             synoptic = None
-            hours = None
+            hours = [0]
         elif len(args.synoptic) == 0:
             synoptic = True
             hours = range(0, 24)
@@ -332,7 +332,7 @@ def _execute(args):
                             pressurelevels=args.levels,
                             threads=args.threads,
                             split=args.split)
-        era5.fetch(dryrun=True)
+        era5.fetch()
         return True
 
 

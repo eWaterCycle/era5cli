@@ -62,20 +62,14 @@ class Fetch:
         (e.g. ['01', '02',..., '12'])."""
         if period == 'monthly':
             self.days = None
-            if synoptic:
-                self.hours = era5cli.utils._format_hours(hours)
-                """list(str): List of xx:00 formatted time strings
-                (e.g. ['00:00', '01:00', ..., '23:00'])."""
-            else:
-                self.hours = None
         else:
             self.days = era5cli.utils._zpad_days(days)
             """list(str): List of zero-padded strings of days
             (e.g. ['01', '02',..., '12'])."""
-            self.hours = era5cli.utils._format_hours(hours)
-            """list(str): List of xx:00 formatted time strings
-            (e.g. ['00:00', '01:00', ..., '23:00'])."""
 
+        self.hours = era5cli.utils._format_hours(hours)
+        """list(str): List of xx:00 formatted time strings
+        (e.g. ['00:00', '01:00', ..., '23:00'])."""
         self.pressure_levels = pressurelevels
         """list(int): List of pressure levels."""
         self.variables = variables

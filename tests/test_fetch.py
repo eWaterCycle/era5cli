@@ -73,7 +73,7 @@ def test_init():
     assert era5.threads == 2
 
     # initializing hourly variable with days=None should result in ValueError
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         era5 = initialize(variables=['temperature'],
                           period='hourly',
                           days=None)
