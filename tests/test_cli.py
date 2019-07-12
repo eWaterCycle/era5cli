@@ -41,7 +41,8 @@ def test_main_fetch(fetch):
     """Test if Fetch part of main completes without error."""
     argv = ['hourly', '--startyear', '2008', '--ensemble', 'false',
             '--variables', 'total_precipitation', '--statistics', 'true',
-            '--split', 'true', '--endyear', '2008', '--ensemble', 'true']
+            '--split', 'true', '--endyear', '2008', '--ensemble', 'true',
+            '--dryrun', 'false']
     args = cli._parse_args(argv)
     assert cli._execute(args)
 

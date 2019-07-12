@@ -8,7 +8,7 @@ import unittest.mock as mock
 def initialize(outputformat='netcdf', split=True, statistics=None,
                synoptic=None, ensemble=True, pressurelevels=None,
                threads=2, period='hourly', variables=['total_precipitation'],
-               years=[2008, 2009], months=list(range(1, 13)),
+               years=[2008, 2009], months=list(range(1, 13)), dryrun=False,
                days=list(range(1, 32)), hours=list(range(0, 24))):
     """Initializer of the class."""
     era5 = fetch.Fetch(years=years,
@@ -24,7 +24,8 @@ def initialize(outputformat='netcdf', split=True, statistics=None,
                        synoptic=synoptic,
                        pressurelevels=pressurelevels,
                        split=split,
-                       threads=threads)
+                       threads=threads, 
+                       dryrun=dryrun)
     return era5
 
 
@@ -43,7 +44,8 @@ def test_init():
                        synoptic=None,
                        pressurelevels=None,
                        split=True,
-                       threads=2)
+                       threads=2,
+                       dryrun=False)
 
     valid_months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
                     '11', '12']
@@ -71,6 +73,7 @@ def test_init():
     assert era5.pressure_levels is None
     assert era5.split
     assert era5.threads == 2
+    assert ~era5.dryrun
 
     # initializing hourly variable with days=None should result in ValueError
     with pytest.raises(ValueError):
@@ -139,8 +142,8 @@ def test_fetch_nodryrun(cds, era5cli_utils_append_history):
 
 def test_fetch_dryrun():
     """Test fetch function of Fetch class with dryrun=False."""
-    era5 = initialize()
-    assert era5.fetch(dryrun=True) is None
+    era5 = initialize(dryrun=True)
+    assert era5.fetch() is None
 
 
 def test_extension():
@@ -194,8 +197,8 @@ def test_number_outputfiles(capsys):
     """Test function for the number of outputs."""
     # two variables and three years
     era5 = initialize(variables=['total_precipitation', 'runoff'],
-                      years=[2007, 2008, 2009], split=True)
-    era5.fetch(dryrun=True)
+                      years=[2007, 2008, 2009], split=True, dryrun=True)
+    era5.fetch()
     captured = capsys.readouterr()
     outputlenght = len(captured.out.split('\n')) - 1
     if era5.split:
@@ -207,8 +210,8 @@ def test_number_outputfiles(capsys):
 
     # one variable and three years
     era5 = initialize(variables=['total_precipitation'],
-                      years=[2007, 2008, 2009], split=True)
-    era5.fetch(dryrun=True)
+                      years=[2007, 2008, 2009], split=True, dryrun=True)
+    era5.fetch()
     captured = capsys.readouterr()
     outputlenght = len(captured.out.split('\n')) - 1
     if era5.split:
@@ -220,8 +223,8 @@ def test_number_outputfiles(capsys):
 
     # two variables and one year
     era5 = initialize(variables=['total_precipitation', 'runoff'],
-                      years=[2007], split=True)
-    era5.fetch(dryrun=True)
+                      years=[2007], split=True, dryrun=True)
+    era5.fetch()
     captured = capsys.readouterr()
     outputlenght = len(captured.out.split('\n')) - 1
     if era5.split:
