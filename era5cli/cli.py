@@ -131,9 +131,10 @@ def _build_parser():
     common.add_argument(
         "--dryrun", type=_str2bool, default=False,
         help=textwrap.dedent('''\
-                             Whether to start downloading the request or just print information
-                             on the chosen parameters and output file names.
-                             "--dryrun False" starts downloading the request.
+                             Whether to start downloading the request or just
+                             print information on the chosen parameters and output
+                             file names. "--dryrun False" starts downloading
+                             the request.
 
                              ''')
     )

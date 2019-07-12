@@ -116,7 +116,7 @@ class Fetch:
             files will be downloaded. For a dryrun the cdsapi request will
             be written to stdout.
         """
-        self.dryrun=dryrun
+        self.dryrun = dryrun
         # define extension output filename
         self._extension()
         # define fetch call depending on split argument
