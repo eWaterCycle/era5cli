@@ -320,9 +320,8 @@ def _execute(args):
                             statistics=statistics,
                             pressurelevels=args.levels,
                             threads=args.threads,
-                            split=args.split, 
-                            dryrun=args.dryrun)
-        era5.fetch()
+                            split=args.split)
+        era5.fetch(dryrun=args.dryrun)
         return True
 
 

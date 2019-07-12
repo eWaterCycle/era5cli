@@ -59,7 +59,7 @@ class Fetch:
                  hours: list, variables: list, outputformat: str,
                  outputprefix: str, period: str, ensemble: bool,
                  statistics=None, synoptic=None, pressurelevels=None,
-                 split=True, threads=None, dryrun=False):
+                 split=True, threads=None):
         """Initialization of Fetch class."""
         self.months = era5cli.utils._zpad_months(months)
         """list(str): List of zero-padded strings of months
@@ -106,12 +106,17 @@ class Fetch:
         """bool: Whether to get monthly averaged by hour of day
         (synoptic=True) or monthly means of daily means
         (synoptic=False)."""
-        self.dryrun = dryrun
-        """bool: indicating if files should be downloaded. By default
-        files will be downloaded. For a dryrun the cdsapi request will
-        be written to stdout."""
 
-    def fetch(self):
+    def fetch(self, dryrun=False):
+        """Split calls and fetch results.
+        Parameters
+        ----------
+        dryrun: bool
+            Boolean indicating if files should be downloaded. By default
+            files will be downloaded. For a dryrun the cdsapi request will
+            be written to stdout.
+        """
+        self.dryrun=dryrun
         # define extension output filename
         self._extension()
         # define fetch call depending on split argument
