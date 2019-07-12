@@ -108,8 +108,8 @@ class Fetch:
         (synoptic=False)."""
         self.dryrun = dryrun
         """bool: indicating if files should be downloaded. By default
-            files will be downloaded. For a dryrun the cdsapi request will
-            be written to stdout."""
+        files will be downloaded. For a dryrun the cdsapi request will
+        be written to stdout."""
 
     def fetch(self):
         # define extension output filename
