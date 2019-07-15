@@ -5,7 +5,7 @@ Welcome to era5cli's documentation!
   :end-before: inclusion-marker-end-do-not-remove
 
 Content
-=======
+~~~~~~~
 
 .. toctree::
    :maxdepth: 2
@@ -17,7 +17,7 @@ Content
 
 
 Indices and tables
-==================
+~~~~~~~~~~~~~~~~~~
 
 * :ref:`genindex`
 * :ref:`modindex`
