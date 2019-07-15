@@ -7,6 +7,7 @@ import os
 import era5cli.inputref as ref
 import era5cli.utils
 
+
 class Fetch:
     """Fetch ERA5 data using cdsapi.
 
