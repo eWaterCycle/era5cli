@@ -36,5 +36,5 @@ era5cli enables you to: ​
 
 .. inclusion-marker-end-do-not-remove
 
-* Free software: Apache Software License 2.0
-* Documentation: https://era5cli.readthedocs.io.
+Free software: Apache Software License 2.0
+Documentation: https://era5cli.readthedocs.io.
