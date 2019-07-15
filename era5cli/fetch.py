@@ -20,7 +20,9 @@ class Fetch:
         days: list(int), None
             List of days of month to download data for (1-31).
         hours: list(int)
-            List of time in hours to download data for (0-23).
+            List of time in hours to download data for (0-23). When downloading
+            synoptic monthly data, this parameter is used to list the synoptic
+            hours to download data for.
         variables: list(str)
             List of variable names to download data for.
         outputformat: str
