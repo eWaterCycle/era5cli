@@ -2,10 +2,10 @@
 
 import cdsapi
 from pathos.threading import ThreadPool as Pool
+import os
 
 import era5cli.inputref as ref
 import era5cli.utils
-
 
 class Fetch:
     """Fetch ERA5 data using cdsapi.
@@ -262,9 +262,12 @@ class Fetch:
             print(name, request, outputfile)
         else:
             queueing_message = (
-                "\nDownload request is being queued at Copernicus.\n",
+                os.linesep,
+                "Download request is being queued at Copernicus.",
+                os.linesep,
                 "It can take some time before downloading starts, ",
-                "please do not kill this process in the meantime.\n",
+                "please do not kill this process in the meantime.",
+                os.linesep
                 )
             connection = cdsapi.Client()
             print("".join(queueing_message))  # print queueing message
