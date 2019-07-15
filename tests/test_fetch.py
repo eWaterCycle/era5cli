@@ -5,7 +5,7 @@ import pytest
 import unittest.mock as mock
 
 
-def initialize(outputformat='netcdf', split=True, statistics=None,
+def initialize(outputformat='netcdf', merge=False, statistics=None,
                synoptic=None, ensemble=True, pressurelevels=None,
                threads=2, period='hourly', variables=['total_precipitation'],
                years=[2008, 2009], months=list(range(1, 13)),
@@ -23,7 +23,7 @@ def initialize(outputformat='netcdf', split=True, statistics=None,
                        statistics=statistics,
                        synoptic=synoptic,
                        pressurelevels=pressurelevels,
-                       split=split,
+                       merge=merge,
                        threads=threads)
     return era5
 
@@ -42,7 +42,7 @@ def test_init():
                        statistics=None,
                        synoptic=None,
                        pressurelevels=None,
-                       split=True,
+                       merge=False,
                        threads=2)
 
     valid_months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
@@ -69,7 +69,7 @@ def test_init():
     assert era5.statistics is None
     assert era5.synoptic is None
     assert era5.pressure_levels is None
-    assert era5.split
+    assert not era5.merge
     assert era5.threads == 2
 
     # initializing hourly variable with days=None should result in ValueError
@@ -92,44 +92,44 @@ def test_fetch_nodryrun(cds, era5cli_utils_append_history):
     era5 = initialize()
     assert era5.fetch() is None
 
-    era5 = initialize(outputformat='grib', split=False)
+    era5 = initialize(outputformat='grib', merge=True)
     assert era5.fetch() is None
 
-    era5 = initialize(outputformat='grib', split=False,
+    era5 = initialize(outputformat='grib', merge=True,
                       threads=None)
     assert era5.fetch() is None
 
-    era5 = initialize(outputformat='grib', split=False,
+    era5 = initialize(outputformat='grib', merge=True,
                       threads=None, ensemble=True, statistics=True)
     assert era5.fetch() is None
 
-    era5 = initialize(outputformat='grib', split=False,
+    era5 = initialize(outputformat='grib', merge=True,
                       threads=None, pressurelevels=[1, 2],
                       variables=['temperature'])
     assert era5.fetch() is None
 
-    era5 = initialize(outputformat='grib', split=False,
+    era5 = initialize(outputformat='grib', merge=True,
                       threads=None, pressurelevels=[1, 2],
                       variables=['temperature'],
                       period='monthly')
     assert era5.fetch() is None
 
     # invalid pressure level should raise ValueError
-    era5 = initialize(outputformat='grib', split=False,
+    era5 = initialize(outputformat='grib', merge=True,
                       threads=None, pressurelevels=[1, 2, 9],
                       variables=['temperature'])
     with pytest.raises(ValueError):
         assert era5.fetch() is None
 
     # invalid variable name should raise ValueError
-    era5 = initialize(outputformat='grib', split=False,
+    era5 = initialize(outputformat='grib', merge=True,
                       threads=None,
                       variables=['unknown'])
     with pytest.raises(ValueError):
         assert era5.fetch() is None
 
     # check check against monthly unavailable data raise ValueError
-    era5 = initialize(outputformat='grib', split=False,
+    era5 = initialize(outputformat='grib', merge=True,
                       threads=None,
                       variables=['wave_spectral_skewness'],
                       period='monthly')
@@ -155,12 +155,12 @@ def test_extension():
     assert era5.ext == 'nc'
 
     # checking grib outputformat
-    era5 = initialize(outputformat='grib', split=False)
+    era5 = initialize(outputformat='grib', merge=True)
     era5._extension()
     assert era5.ext == 'grb'
 
     #  unkown outputformat should raise a ValueError
-    era5 = initialize(outputformat='unknown', split=False)
+    era5 = initialize(outputformat='unknown', merge=True)
     with pytest.raises(ValueError):
         assert era5._extension()
 
@@ -172,18 +172,18 @@ def test_define_outputfilename():
     fname = era5._define_outputfilename('total_precipitation', [2008])
     assert fname == 'era5_total_precipitation_2008_hourly_ensemble.nc'
 
-    era5 = initialize(outputformat='grib', split=False)
+    era5 = initialize(outputformat='grib', merge=True)
     era5._extension()
     fname = era5._define_outputfilename('total_precipitation', era5.years)
     assert fname == 'era5_total_precipitation_2008-2009_hourly_ensemble.grb'
 
-    era5 = initialize(outputformat='grib', split=False, statistics=True)
+    era5 = initialize(outputformat='grib', merge=True, statistics=True)
     era5._extension()
     fname = era5._define_outputfilename('total_precipitation', era5.years)
     fn = 'era5_total_precipitation_2008-2009_hourly_ensemble_statistics.grb'
     assert fname == fn
 
-    era5 = initialize(outputformat='grib', split=False, synoptic=True)
+    era5 = initialize(outputformat='grib', merge=True, synoptic=True)
     era5._extension()
     fname = era5._define_outputfilename('total_precipitation', era5.years)
     fn = 'era5_total_precipitation_2008-2009_hourly_ensemble_synoptic.grb'
@@ -194,41 +194,41 @@ def test_number_outputfiles(capsys):
     """Test function for the number of outputs."""
     # two variables and three years
     era5 = initialize(variables=['total_precipitation', 'runoff'],
-                      years=[2007, 2008, 2009], split=True)
+                      years=[2007, 2008, 2009], merge=False)
     era5.fetch(dryrun=True)
     captured = capsys.readouterr()
     outputlenght = len(captured.out.split('\n')) - 1
-    if era5.split:
-        # No. of outputs is 2*3 = 6 if split = True
+    if not era5.merge:
+        # No. of outputs is 2*3 = 6 if merge = False
         assert outputlenght == len(era5.years) * len(era5.variables)
     else:
-        # No. of outputs is 2*1 = 2 if split = False
+        # No. of outputs is 2*1 = 2 if merge = True
         assert outputlenght == len(era5.variables)
 
     # one variable and three years
     era5 = initialize(variables=['total_precipitation'],
-                      years=[2007, 2008, 2009], split=True)
+                      years=[2007, 2008, 2009], merge=False)
     era5.fetch(dryrun=True)
     captured = capsys.readouterr()
     outputlenght = len(captured.out.split('\n')) - 1
-    if era5.split:
-        # No. of outputs is 1*3 = 3 if split = True
+    if not era5.merge:
+        # No. of outputs is 1*3 = 3 if merge = False
         assert outputlenght == len(era5.years) * len(era5.variables)
     else:
-        # No. of outputs is 1 if split = False
+        # No. of outputs is 1 if merge = True
         assert outputlenght == len(era5.variables)
 
     # two variables and one year
     era5 = initialize(variables=['total_precipitation', 'runoff'],
-                      years=[2007], split=True)
+                      years=[2007], merge=False)
     era5.fetch(dryrun=True)
     captured = capsys.readouterr()
     outputlenght = len(captured.out.split('\n')) - 1
-    if era5.split:
-        # No. of outputs is 2*1 = 2 if split = True
+    if not era5.merge:
+        # No. of outputs is 2*1 = 2 if merge = False
         assert outputlenght == len(era5.years) * len(era5.variables)
     else:
-        # No. of outputs is 2 if split = False
+        # No. of outputs is 2 if merge = True
         assert outputlenght == len(era5.variables)
     del era5, captured
 

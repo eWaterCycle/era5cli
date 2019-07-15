@@ -46,9 +46,10 @@ class Fetch:
             (synoptic=False).
         pressurelevels: None, list(int)
             List of pressure levels to download 3D variables for.
-        split: bool
-            Split output files by year if `True`. If `False` all output
-            years will be in a single file.
+        merge: bool
+            Merge yearly output files (merge=True), or split
+            output files into separate files for every year
+            (merge=False).
         threads: None, int
             Number of parallel calls to cdsapi. If `None` no
             parallel calls are done.
