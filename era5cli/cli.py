@@ -128,6 +128,17 @@ def _build_parser():
                              ''')
     )
 
+    common.add_argument(
+        "--dryrun", type=_str2bool, default=False,
+        help=textwrap.dedent('''\
+                             Whether to start downloading the request or just
+                             print information on the chosen parameters and
+                             output file names. "--dryrun True" will print
+                             the information.
+
+                             ''')
+    )
+
     mnth = argparse.ArgumentParser(add_help=False)
 
     mnth.add_argument(
@@ -331,7 +342,7 @@ def _execute(args):
                             pressurelevels=args.levels,
                             threads=args.threads,
                             split=args.split)
-        era5.fetch()
+        era5.fetch(dryrun=args.dryrun)
         return True
 
 

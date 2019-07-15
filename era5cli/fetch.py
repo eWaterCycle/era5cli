@@ -51,6 +51,10 @@ class Fetch:
         threads: None, int
             Number of parallel calls to cdsapi. If `None` no
             parallel calls are done.
+        dryrun: bool
+            Indicating if files should be downloaded. By default
+            files will be downloaded. For a dryrun the cdsapi request will
+            be written to stdout.
     """
 
     def __init__(self, years: list, months: list, days: list,
