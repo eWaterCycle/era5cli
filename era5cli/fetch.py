@@ -109,6 +109,7 @@ class Fetch:
 
     def fetch(self, dryrun=False):
         """Split calls and fetch results.
+
         Parameters
         ----------
         dryrun: bool
