@@ -265,10 +265,12 @@ class Fetch:
             queueing_message = (
                 os.linesep,
                 "Download request is being queued at Copernicus.",
-                os.linesep, "It can take some time before downloading starts,",
+                os.linesep,
+                "It can take some time before downloading starts, ",
                 "please do not kill this process in the meantime.",
-                os.linesep)
+                os.linesep
+                )
             connection = cdsapi.Client()
-            print(queueing_message)  # print queueing message
+            print("".join(queueing_message))  # print queueing message
             connection.retrieve(name, request, outputfile)
             era5cli.utils._append_history(outputfile)
