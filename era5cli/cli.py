@@ -133,8 +133,8 @@ def _build_parser():
         help=textwrap.dedent('''\
                              Whether to start downloading the request or just
                              print information on the chosen parameters and
-                             output file names. "--dryrun False" starts
-                             downloading the request.
+                             output file names. "--dryrun True" prints
+                             the information.
 
                              ''')
     )
