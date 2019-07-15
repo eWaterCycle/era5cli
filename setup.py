@@ -29,7 +29,6 @@ setup(
     url="https://github.com/ewatercycle/era5cli",
     packages=find_packages(),
     include_package_data=True,    # include everything in source control
-    package_data={'era5cli': ['cartesius/*']},
     long_description=README,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
