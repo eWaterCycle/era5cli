@@ -33,7 +33,7 @@ def _build_parser():
     common = argparse.ArgumentParser(add_help=False)
 
     common.add_argument(
-        "--variables", type=str, nargs="+",
+        "--variables", type=str, required=True, nargs="+",
         help=textwrap.dedent('''\
                              The variables to be downloaded, can be a single
                              or multiple variables. See the cds
@@ -196,7 +196,7 @@ def _build_parser():
     )
 
     monthly = subparsers.add_parser(
-        'monthly', parents=[common, mnth, hour],
+        'monthly', parents=[common, mnth],
         description='Execute the data fetch process for monthly data.',
         prog=textwrap.dedent('''\
                              Use "era5cli monthly --help" for more information.
@@ -211,11 +211,14 @@ def _build_parser():
     )
 
     monthly.add_argument(
-        "--synoptic", type=_str2bool, default=False,
+        "--synoptic", type=int, default=False, nargs="*",
         help=textwrap.dedent('''\
-                             Set "--synoptic True" to get monthly averaged
-                             by hour of day or set "--synoptic False" to get
-                             monthly means of daily means. Default is False.
+                             Time of day in hours to get the synoptic means
+                             (monthly averaged by hour of day) for. For example
+                             "--synoptic 0 4 5 6 23". Give empty option
+                             "--synoptic" to download all hours (0-23).
+                             The option defaults to "None" in which case the
+                             monthly average of daily means is chosen.
 
                              ''')
     )
@@ -259,18 +262,48 @@ def _parse_args(args):
     return parser.parse_args(args)
 
 
+def _run_info(args):
+    # List dataset information
+    era5info = einfo.Info(args.name)
+    if era5info.infotype == "list":
+        era5info.list()
+        return True
+    else:
+        era5info.vars()
+        return True
+
+
+def _set_period_args(args):
+    # set subroutine specific arguments for monthly and hourly fetch
+    if args.command == "monthly":
+        statistics = None
+        days = None
+        if args.synoptic is False:
+            synoptic = None
+            hours = [0]
+        elif len(args.synoptic) == 0:
+            synoptic = True
+            hours = range(0, 24)
+        else:
+            synoptic = True
+            hours = args.synoptic
+    elif args.command == "hourly":
+        synoptic = None
+        statistics = args.statistics
+        days = args.days
+        hours = args.hours
+    else:
+        raise AttributeError(
+            'The command "{}" is not valid.'.format(args.command)
+        )
+    return synoptic, statistics, days, hours
+
+
 def _execute(args):
     """Call to ERA-5 cli library."""
     # the info subroutine
     if args.command == "info":
-        # List dataset information
-        era5info = einfo.Info(args.name)
-        if era5info.infotype == "list":
-            era5info.list()
-            return True
-        else:
-            era5info.vars()
-            return True
+        _run_info(args)
 
     # the fetching subroutines
     else:
@@ -282,25 +315,12 @@ def _execute(args):
                 'endyear should be >= startyear or None')
             years = list(range(args.startyear, args.endyear + 1))
 
-        # set subroutine specific arguments for monthly and hourly fetch
-        if args.command == "monthly":
-            synoptic = args.synoptic
-            statistics = None
-            days = None
-        elif args.command == "hourly":
-            statistics = args.statistics
-            synoptic = None
-            days = args.days
-        else:
-            raise AttributeError(
-                'The command "{}" is not valid.'.format(args.command)
-            )
-
+        synoptic, statistics, days, hours = _set_period_args(args)
         # try to build and send download request
         era5 = efetch.Fetch(years,
                             months=args.months,
                             days=days,
-                            hours=args.hours,
+                            hours=hours,
                             variables=args.variables,
                             outputformat=args.format,
                             outputprefix=args.outputprefix,
