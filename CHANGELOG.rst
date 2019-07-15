@@ -12,7 +12,7 @@ Release Notes
 ~~~~~~~~~~~~~~~~~~~~~
 * Second Release Candidate for the stable 1.0.0 era5cli release.
 * Fix downloading all variables when requesting multiple variables and using --split `#23 <https://github.com/eWaterCycle/era5cli/issues/23>`_.
-* Fix link to Pypi package in documentation `#22 <https://github.com/eWaterCycle/era5cli/issues/22>`_.
+* Fix link to PyPi package in documentation `#22 <https://github.com/eWaterCycle/era5cli/issues/22>`_.
 
 1.0.0rc1 (2019-06-22)
 ~~~~~~~~~~~~~~~~~~~~~
