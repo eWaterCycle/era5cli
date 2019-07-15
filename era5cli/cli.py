@@ -36,9 +36,9 @@ def _build_parser():
         "--variables", type=str, required=True, nargs="+",
         help=textwrap.dedent('''\
                              The variables to be downloaded, can be a single
-                             or multiple variables. See the cds
-                             website or run "era5cli info -h" for available
-                             variables.
+                             or multiple variables. See the Copernicus Climate
+                             Data Store website or run "era5cli info -h" for
+                             available variables.
 
                              ''')
     )
@@ -101,8 +101,7 @@ def _build_parser():
         "--split", type=_str2bool, default=True,
         help=textwrap.dedent('''\
                              Split output by years, producing a separate file
-                             for every year. Default
-                             is True.
+                             for every year. Default is True.
 
                              ''')
     )

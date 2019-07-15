@@ -101,6 +101,6 @@ For the monthly data, some of the variables are not available. Exceptions on the
 Removing or canceling requests
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ERA-5 download requests will be saved in the `Your requests section of the Copernicus Climate Data Service <https://cds.climate.copernicus.eu/cdsapp#!/yourrequests>`_. Here you can re-download the requested data, cancel active requests, or remove old requests. 
+ERA-5 download requests will be saved in the `Your requests <https://cds.climate.copernicus.eu/cdsapp#!/yourrequests>`_ section in your profile on the Copernicus Climate Data Store. Here you can re-download the requested data, cancel active requests, or remove old requests. 
 
 Note that it is currently not possible to cancel active requests from the command line: Killing the process will not download the data to your local machine but still add it to your Copernicus account.

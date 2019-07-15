@@ -1,17 +1,17 @@
 Installation
 ------------
 
-Install from PyPI:
-~~~~~~~~~~~~~~~~~~
-era5cli is available as a package in PyPI <https://pypi.org/project/era5cli/>.
+Install from PyPI
+~~~~~~~~~~~~~~~~~
+era5cli is available as a package in `PyPI <https://pypi.org/project/era5cli/>`_.
 
 To install from PyPI, the following command can be used:
 ::
 
    pip install era5cli
 
-Install from GitHub:
-~~~~~~~~~~~~~~~~~~~~
+Install from GitHub
+~~~~~~~~~~~~~~~~~~~
 To install directly from GitHub, the following command can be used:
 ::
 

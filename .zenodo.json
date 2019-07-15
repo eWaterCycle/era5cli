@@ -31,6 +31,10 @@
         {
             "affiliation": "Netherlands eScience Center",
             "name": "Weel, Berend"
+        },
+        {
+            "affiliation": "TU Delft",
+            "name": "Hut, Rolf"
         }
     ],
     "description": "  A command line interface to download ERA5 data from the Climate Data Store.",
