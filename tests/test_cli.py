@@ -36,6 +36,31 @@ def test_parse_args():
     assert args.variables == ['total_precipitation']
 
 
+def test_period_args():
+    """Test the period specific argument setter with synoptic options."""
+    argv = ['monthly', '--startyear', '2008', '--ensemble', 'false',
+            '--variables', 'total_precipitation',
+            '--endyear', '2008', '--ensemble', 'true']
+    args = cli._parse_args(argv)
+    period_args = cli._set_period_args(args)
+    # Period_args consists of (synoptic, statistics, days, hours)
+    assert period_args == (None, None, None, [0])
+
+    argv = ['monthly', '--startyear', '2008', '--ensemble', 'false',
+            '--variables', 'total_precipitation',
+            '--synoptic', '4', '7', '--ensemble', 'true']
+    args = cli._parse_args(argv)
+    period_args = cli._set_period_args(args)
+    # Period_args consists of (synoptic, statistics, days, hours)
+    assert period_args == (True, None, None, [4, 7])
+
+    # test whether the info option does not end up in _set_period_args
+    argv = ['info', '2Dvars']
+    args = cli._parse_args(argv)
+    with pytest.raises(AttributeError):
+        assert cli._set_period_args(args)
+
+
 @mock.patch("era5cli.fetch.Fetch", autospec=True)
 def test_main_fetch(fetch):
     """Test if Fetch part of main completes without error."""

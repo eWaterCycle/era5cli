@@ -310,7 +310,6 @@ def _execute(args):
         # make list of years to be downloaded
         if not args.endyear:
             years = [args.startyear]
-            print(years)
         else:
             assert (args.endyear >= args.startyear), (
                 'endyear should be >= startyear or None')
