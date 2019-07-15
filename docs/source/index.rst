@@ -4,6 +4,9 @@ Welcome to era5cli's documentation!
   :start-after: inclusion-marker-start-do-not-remove
   :end-before: inclusion-marker-end-do-not-remove
 
+Content
+=======
+
 .. toctree::
    :maxdepth: 2
 
