@@ -1,7 +1,7 @@
 Release Notes
 *************
 
-1.0.0rc3 (2019-07-15)
+1.0.0rc3 (2019-07-16)
 ~~~~~~~~~~~~~~~~~~~~~
 * Third Release Candidate for the stable 1.0.0 era5cli release.
 * Improve documentation `#21 <https://github.com/eWaterCycle/era5cli/issues/21>`_ `#29 <https://github.com/eWaterCycle/era5cli/issues/29>`_.
