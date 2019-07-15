@@ -26,6 +26,14 @@ era5cli
 
 A command line interface to download ERA5 data from the `Copernicus Climate Data Store <https://climate.copernicus.eu/>`_.
 
+era5cli enables you to: ​
+
+- download meteorological data in GRIB/NetCDF
+- list and retrieve information on available variables and pressure levels
+- select multiple variables for several months and years
+- split outputs by years, producing a separate file for every year instead of merging them in one file
+- download multiple files at once
+
 .. inclusion-marker-end-do-not-remove
 
 * Free software: Apache Software License 2.0
