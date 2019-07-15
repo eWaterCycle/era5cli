@@ -12,7 +12,6 @@ Content
 
    installation
    instructions
-   changes
    api
 
 
@@ -22,3 +21,14 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+
+Meta Information
+~~~~~~~~~~~~~~~~
+
+.. toctree::
+   :maxdepth: 1
+
+   contribute
+   changes
+   license
