@@ -2,7 +2,6 @@
 
 import cdsapi
 from pathos.threading import ThreadPool as Pool
-import os
 
 import era5cli.inputref as ref
 import era5cli.utils
