@@ -1,8 +1,9 @@
 """Fetch ERA5 variables."""
 
+import os
+
 import cdsapi
 from pathos.threading import ThreadPool as Pool
-import os
 
 import era5cli.inputref as ref
 import era5cli.utils
@@ -45,9 +46,10 @@ class Fetch:
             (synoptic=False).
         pressurelevels: None, list(int)
             List of pressure levels to download 3D variables for.
-        split: bool
-            Split output files by year if `True`. If `False` all output
-            years will be in a single file.
+        merge: bool
+            Merge yearly output files (merge=True), or split
+            output files into separate files for every year
+            (merge=False).
         threads: None, int
             Number of parallel calls to cdsapi. If `None` no
             parallel calls are done.
@@ -61,7 +63,7 @@ class Fetch:
                  hours: list, variables: list, outputformat: str,
                  outputprefix: str, period: str, ensemble: bool,
                  statistics=None, synoptic=None, pressurelevels=None,
-                 split=True, threads=None):
+                 merge=False, threads=None):
         """Initialization of Fetch class."""
         self.months = era5cli.utils._zpad_months(months)
         """list(str): List of zero-padded strings of months
@@ -88,8 +90,8 @@ class Fetch:
         """str: Prefix of output filename."""
         self.threads = threads
         """int: number of parallel threads to use for downloading."""
-        self.split = split
-        """bool: Split output files by year if True."""
+        self.merge = merge
+        """bool: Merge yearly output files if True."""
         self.period = period
         """str: Frequency of output data (monthly or daily)."""
         self.ensemble = ensemble
@@ -120,7 +122,7 @@ class Fetch:
         # define extension output filename
         self._extension()
         # define fetch call depending on split argument
-        if self.split:
+        if not self.merge:
             # split by variable and year
             self._split_variable_yr()
         else:

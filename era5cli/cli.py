@@ -10,18 +10,6 @@ import era5cli.info as einfo
 import era5cli.fetch as efetch
 
 
-def _str2bool(string):
-    """Return boolean based on input string."""
-    if isinstance(string, bool):
-        return string
-    if string.lower() in ('yes', 'true', 't', 'y', '1'):
-        return True
-    elif string.lower() in ('no', 'false', 'f', 'n', '0'):
-        return False
-    else:
-        raise argparse.ArgumentTypeError('Boolean value expected.')
-
-
 def _build_parser():
     """Build the argument parser."""
     parser = argparse.ArgumentParser(
@@ -98,10 +86,11 @@ def _build_parser():
     )
 
     common.add_argument(
-        "--split", type=_str2bool, default=True,
+        "--merge", action="store_true", default=False,
         help=textwrap.dedent('''\
-                             Split output by years, producing a separate file
-                             for every year. Default is True.
+                             Merge yearly output files.
+                             Default is split output files into separate files
+                             for every year.
 
                              ''')
     )
@@ -117,23 +106,23 @@ def _build_parser():
     )
 
     common.add_argument(
-        "--ensemble", type=_str2bool, default=False,
+        "--ensemble", action="store_true", default=False,
         help=textwrap.dedent('''\
                              Whether to download high resolution realisation
                              (HRES) or a reduced resolution ten member ensemble
-                             (EDA). "--ensemble True" downloads the reduced
-                             resolution ensemble.
+                             (EDA). Providing the "--ensemble" argument
+                             downloads the reduced resolution ensemble.
 
                              ''')
     )
 
     common.add_argument(
-        "--dryrun", type=_str2bool, default=False,
+        "--dryrun", action="store_true", default=False,
         help=textwrap.dedent('''\
                              Whether to start downloading the request or just
                              print information on the chosen parameters and
-                             output file names. "--dryrun True" will print
-                             the information.
+                             output file names. Providing the "--dryrun"
+                             argument will print the information to stdout.
 
                              ''')
     )
@@ -195,12 +184,11 @@ def _build_parser():
         formatter_class=argparse.RawTextHelpFormatter)
 
     hourly.add_argument(
-        "--statistics", type=_str2bool, default=False,
+        "--statistics", action="store_true",
         help=textwrap.dedent('''\
-                             When downloading hourly ensemble data, set
-                             "--statistics True" to download statistics
-                             (ensemble mean and ensemble spread). Default is
-                             False.
+                             When downloading hourly ensemble data, provide
+                             the "--statistics" argument to download statistics
+                             (ensemble mean and ensemble spread).
 
                              ''')
     )
@@ -340,7 +328,7 @@ def _execute(args):
                             statistics=statistics,
                             pressurelevels=args.levels,
                             threads=args.threads,
-                            split=args.split)
+                            merge=args.merge)
         era5.fetch(dryrun=args.dryrun)
         return True
 

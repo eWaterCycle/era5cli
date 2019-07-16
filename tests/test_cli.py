@@ -1,24 +1,17 @@
 """Tests for era5cli utility functios."""
 
-import era5cli.cli as cli
-import era5cli.inputref as ref
 import unittest.mock as mock
 import pytest
 
-
-def test_str2bool():
-    """Test str2bool cli utility function."""
-    for f in ['No', 'False', 'F', 'N', '0']:
-        assert not cli._str2bool(f)
-    for t in ['Yes', 'True', 'T', 'Y', '1']:
-        assert cli._str2bool(t)
+import era5cli.cli as cli
+import era5cli.inputref as ref
 
 
 def test_parse_args():
     """Test argument parser of cli."""
-    argv = ['hourly', '--startyear', '2008', '--ensemble', 'false',
-            '--variables', 'total_precipitation', '--statistics', 'true',
-            '--split', 'true', '--endyear', '2008', '--ensemble', 'true']
+    argv = ['hourly', '--startyear', '2008',
+            '--variables', 'total_precipitation', '--statistics',
+            '--endyear', '2008', '--ensemble']
     args = cli._parse_args(argv)
     assert args.command == 'hourly'
     assert args.days == list(range(1, 32))
@@ -29,7 +22,7 @@ def test_parse_args():
     assert args.levels == ref.PLEVELS
     assert args.months == list(range(1, 13))
     assert args.outputprefix == 'era5'
-    assert args.split
+    assert not args.merge
     assert args.startyear == 2008
     assert args.statistics
     assert not args.threads
@@ -38,17 +31,17 @@ def test_parse_args():
 
 def test_period_args():
     """Test the period specific argument setter with synoptic options."""
-    argv = ['monthly', '--startyear', '2008', '--ensemble', 'false',
+    argv = ['monthly', '--startyear', '2008',
             '--variables', 'total_precipitation',
-            '--endyear', '2008', '--ensemble', 'true']
+            '--endyear', '2008', '--ensemble']
     args = cli._parse_args(argv)
     period_args = cli._set_period_args(args)
     # Period_args consists of (synoptic, statistics, days, hours)
     assert period_args == (None, None, None, [0])
 
-    argv = ['monthly', '--startyear', '2008', '--ensemble', 'false',
+    argv = ['monthly', '--startyear', '2008',
             '--variables', 'total_precipitation',
-            '--synoptic', '4', '7', '--ensemble', 'true']
+            '--synoptic', '4', '7', '--ensemble']
     args = cli._parse_args(argv)
     period_args = cli._set_period_args(args)
     # Period_args consists of (synoptic, statistics, days, hours)
@@ -64,24 +57,24 @@ def test_period_args():
 @mock.patch("era5cli.fetch.Fetch", autospec=True)
 def test_main_fetch(fetch):
     """Test if Fetch part of main completes without error."""
-    argv = ['hourly', '--startyear', '2008', '--ensemble', 'false',
-            '--variables', 'total_precipitation', '--statistics', 'true',
-            '--split', 'true', '--endyear', '2008', '--ensemble', 'true']
+    argv = ['hourly', '--startyear', '2008',
+            '--variables', 'total_precipitation', '--statistics',
+            '--endyear', '2008', '--ensemble']
     args = cli._parse_args(argv)
     assert cli._execute(args)
 
     # should give an AssertionError if endyear is before startyear
-    argv = ['hourly', '--startyear', '2008', '--ensemble', 'false',
-            '--variables', 'total_precipitation', '--statistics', 'true',
-            '--split', 'true', '--endyear', '2007', '--ensemble', 'true']
+    argv = ['hourly', '--startyear', '2008',
+            '--variables', 'total_precipitation', '--statistics',
+            '--endyear', '2007', '--ensemble']
     args = cli._parse_args(argv)
     with pytest.raises(AssertionError):
         assert cli._execute(args)
 
     # monthly call without endyear
-    argv = ['monthly', '--startyear', '2008', '--ensemble', 'false',
+    argv = ['monthly', '--startyear', '2008',
             '--variables', 'total_precipitation', '--synoptic',
-            '--split', 'true', '--ensemble', 'true']
+            '--ensemble']
     args = cli._parse_args(argv)
     cli._execute(args)
 
