@@ -4,6 +4,8 @@ import shutil
 import prettytable
 from netCDF4 import Dataset
 from pathlib import Path
+import datetime
+import textwrap
 
 import era5cli
 from era5cli.__version__ import __version__ as era5cliversion
@@ -149,7 +151,7 @@ def _print_multicolumn(header: str, info: list):
     print(table)
 
 
-def _append_history(fname):
+def _append_history(name, request, fname):
     """Append era5cli version information.
 
     Parameters
@@ -157,8 +159,10 @@ def _append_history(fname):
     fname: str
         Filename.
     """
-    appendtxt = "Downloaded using {} {}.".format(era5cli.__name__,
-                                                 era5cliversion)
+    dtime = datetime.datetime.now(tz=datetime.timezone.utc).strftime(
+        "%Y-%m-%d %H:%M:%S %Z")
+    appendtxt = "{} by {} {}: {} {}".format(dtime, era5cli.__name__,
+                                            era5cliversion, name, request)
     extension = Path(fname).suffix
     if extension == ".nc":
         _append_netcdf_history(fname, appendtxt)
@@ -177,7 +181,9 @@ def _append_netcdf_history(ncfile: str, appendtxt: str):
     # open netCDF file rw and append to history
     ncfile = Dataset(ncfile, 'r+')
     try:
-        ncfile.history = "{}\n{}".format(appendtxt, ncfile.history)
+        ncfile.history = textwrap.dedent('''\
+            {}
+            {}'''.format(appendtxt, ncfile.history))
     except AttributeError:
         ncfile.history = appendtxt
     ncfile.close()
