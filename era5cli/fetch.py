@@ -275,4 +275,4 @@ class Fetch:
             connection = cdsapi.Client()
             print("".join(queueing_message))  # print queueing message
             connection.retrieve(name, request, outputfile)
-            era5cli.utils._append_history(outputfile)
+            era5cli.utils._append_history(name, request, outputfile)

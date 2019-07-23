@@ -125,13 +125,15 @@ def test_append_history():
     """Test append_history utility function."""
     # test netCDF file with existing history
     (fd, filename) = tempfile.mkstemp(suffix=".nc")
+    name = "reanalysis-era5-single-levels"
+    request = "request"
     # create tmp netCDF file
     ncfile = Dataset(filename, 'w')
     orig_history = "Test history line."
     ncfile.history = orig_history
     ncfile.close()
     # test append history
-    era5cli.utils._append_history(filename)
+    era5cli.utils._append_history(name, request, filename)
     # load netCDF file
     ncfile = Dataset(filename, 'r')
     new_history = ncfile.history
@@ -139,7 +141,7 @@ def test_append_history():
         era5cli.__name__,
         era5cliversion)
     hist_split = new_history.split('\n')
-    assert hist_split[0] == appendtxt
+    assert hist_split[0].split()[-2:] == [name, request]
     assert hist_split[1] == orig_history
     # remove temporary file
     os.remove(filename)
@@ -148,7 +150,7 @@ def test_append_history():
     ncfile = Dataset(filename, 'w')
     ncfile.close()
     # test append history
-    era5cli.utils._append_history(filename)
+    era5cli.utils._append_history(name, request, filename)
     # load netCDF file
     ncfile = Dataset(filename, 'r')
     new_history = ncfile.history
