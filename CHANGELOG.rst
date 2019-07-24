@@ -1,6 +1,11 @@
 Release Notes
 *************
 
+1.0.0 (2019-07-25)
+~~~~~~~~~~~~~~~~~~~~~
+* The stable 1.0.0 era5cli release.
+* Adding more useful information to netCDF history `#48 <https://github.com/eWaterCycle/era5cli/pull/48>`_
+
 1.0.0rc3 (2019-07-16)
 ~~~~~~~~~~~~~~~~~~~~~
 * Third Release Candidate for the stable 1.0.0 era5cli release.

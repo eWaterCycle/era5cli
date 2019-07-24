@@ -42,7 +42,7 @@ authors:
     given-names: Rolf
 
 cff-version: "1.0.3"
-date-released: 2019-07-16
+date-released: 2019-07-25
 doi: 10.5281/zenodo.3252665
 keywords: 
   - "ERA5"
@@ -50,4 +50,4 @@ license: Apache-2.0
 message: "If you use this software, please cite it using these metadata."
 repository-code: "https://github.com/ewatercycle/era5cli"
 title: era5cli
-version: 1.0.0rc3
+version: 1.0.0
