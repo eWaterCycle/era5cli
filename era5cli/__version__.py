@@ -9,5 +9,5 @@
 __author__ = ('Ronald van Haren', 'Jaro Camphuijsen', 'Yifat Dzigan',
               'Niels Drost', 'Fakhereh Alidoost', 'Bouwe Andela',
               'Jerom Aerts', 'Berend Weel', 'Rolf Hut')
-__email__ = 'r.vanharen@esciencecenter.nl'
+__email__ = 'ewatercycle@esciencecenter.nl'
 __version__ = '1.0.0'
