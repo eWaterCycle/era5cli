@@ -326,22 +326,23 @@ def _execute(args):
 
         synoptic, statistics, days, hours = _set_period_args(args)
         # try to build and send download request
-        era5 = efetch.Fetch(years,
-                            months=args.months,
-                            days=days,
-                            hours=hours,
-                            variables=args.variables,
-                            outputformat=args.format,
-                            outputprefix=args.outputprefix,
-                            period=args.command,
-                            ensemble=args.ensemble,
-                            synoptic=synoptic,
-                            statistics=statistics,
-                            pressurelevels=args.levels,
-                            threads=args.threads,
-                            merge=args.merge,
-                            preliminary_back_extension=
-                            args.preliminary_back_extension)
+        era5 = efetch.Fetch(
+            years,
+            months=args.months,
+            days=days,
+            hours=hours,
+            variables=args.variables,
+            outputformat=args.format,
+            outputprefix=args.outputprefix,
+            period=args.command,
+            ensemble=args.ensemble,
+            synoptic=synoptic,
+            statistics=statistics,
+            pressurelevels=args.levels,
+            threads=args.threads,
+            merge=args.merge,
+            preliminary_back_extension=args.preliminary_back_extension,
+        )
         era5.fetch(dryrun=args.dryrun)
         return True
 
