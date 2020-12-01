@@ -1,15 +1,14 @@
 language: python
-dist: xenial
 python:
-  - "3.5"
   - "3.6"
   - "3.7"
+  - "3.8"
 install:
   - pip install .
   - pip install -r requirements.txt
   - pip install -r requirements-dev.txt
 script:
-- py.test --cov=era5cli --cov-report term --cov-report xml:cov.sml tests/  
-- flake8
+  - py.test --cov=era5cli --cov-report term --cov-report xml:cov.sml tests/
+  - flake8
 after_success:
-- bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash)

@@ -222,7 +222,7 @@ class Fetch:
         # variable is pressure level variable
         if variable in ref.PLVARS:
             try:
-                if all([l in ref.PLEVELS for l in self.pressure_levels]):
+                if all(level in ref.PLEVELS for level in self.pressure_levels):
                     name += "pressure-levels"
                     request["pressure_level"] = self.pressure_levels
                 else:
