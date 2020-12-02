@@ -57,13 +57,15 @@ class Fetch:
             Indicating if files should be downloaded. By default
             files will be downloaded. For a dryrun the cdsapi request will
             be written to stdout.
+        preliminary_back_extension: bool
+            Whether to download the preliminary back extension (1950-1978).
     """
 
     def __init__(self, years: list, months: list, days: list,
                  hours: list, variables: list, outputformat: str,
                  outputprefix: str, period: str, ensemble: bool,
                  statistics=None, synoptic=None, pressurelevels=None,
-                 merge=False, threads=None):
+                 merge=False, threads=None, preliminary_back_extension=False):
         """Initialization of Fetch class."""
         self.months = era5cli.utils._zpad_months(months)
         """list(str): List of zero-padded strings of months
@@ -107,6 +109,7 @@ class Fetch:
         """bool: Whether to get monthly averaged by hour of day
         (synoptic=True) or monthly means of daily means
         (synoptic=False)."""
+        self.preliminary_back_extension = preliminary_back_extension
 
     def fetch(self, dryrun=False):
         """Split calls and fetch results.
@@ -252,6 +255,9 @@ class Fetch:
             # Add day list to request if applicable
             if self.days:
                 request["day"] = self.days
+
+        if self.preliminary_back_extension:
+            name += "-preliminary-back-extension"
 
         return(name, request)
 
