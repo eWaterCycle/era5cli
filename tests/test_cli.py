@@ -71,6 +71,22 @@ def test_main_fetch(fetch):
     with pytest.raises(AssertionError):
         assert cli._execute(args)
 
+    # should give an AssertionError if years are out of bounds
+    argv = ['hourly', '--startyear', '1950',
+            '--variables', 'total_precipitation', '--statistics',
+            '--endyear', '2007', '--ensemble']
+    args = cli._parse_args(argv)
+    with pytest.raises(AssertionError):
+        assert cli._execute(args)
+
+    # should give an AssertionError if years are out of bounds
+    argv = ['hourly', '--startyear', '1950',
+            '--variables', 'total_precipitation', '--statistics',
+            '--endyear', '2007', '--ensemble', '--prelimbe']
+    args = cli._parse_args(argv)
+    with pytest.raises(AssertionError):
+        assert cli._execute(args)
+
     # monthly call without endyear
     argv = ['monthly', '--startyear', '2008',
             '--variables', 'total_precipitation', '--synoptic',

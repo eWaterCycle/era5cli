@@ -9,7 +9,8 @@ def initialize(outputformat='netcdf', merge=False, statistics=None,
                synoptic=None, ensemble=True, pressurelevels=None,
                threads=2, period='hourly', variables=['total_precipitation'],
                years=[2008, 2009], months=list(range(1, 13)),
-               days=list(range(1, 32)), hours=list(range(0, 24))):
+               days=list(range(1, 32)), hours=list(range(0, 24)),
+               prelimbe=False):
     """Initializer of the class."""
     era5 = fetch.Fetch(years=years,
                        months=months,
@@ -71,6 +72,7 @@ def test_init():
     assert era5.pressure_levels is None
     assert not era5.merge
     assert era5.threads == 2
+    assert not era5.prelimbe
 
     # initializing hourly variable with days=None should result in ValueError
     with pytest.raises(TypeError):
@@ -247,10 +249,20 @@ def test_product_type():
     producttype = era5._product_type()
     assert producttype == 'monthly_averaged_reanalysis'
 
+    era5.prelimbe = True
+    producttype = era5._product_type()
+    assert producttype == 'reanalysis-monthly-means-of-daily-means'
+
+    era5.prelimbe = False
     era5.synoptic = True
     producttype = era5._product_type()
     assert producttype == 'monthly_averaged_reanalysis_by_hour_of_day'
 
+    era5.prelimbe = True
+    producttype = era5._product_type()
+    assert producttype == 'reanalysis-synoptic-monthly-means'
+
+    era5.prelimbe = False
     era5.ensemble = False
     era5.statistics = True
     producttype = era5._product_type()
