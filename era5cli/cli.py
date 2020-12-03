@@ -5,6 +5,8 @@ import argparse
 import textwrap
 import sys
 
+from datetime import datetime
+
 import era5cli.inputref as ref
 import era5cli.info as einfo
 import era5cli.fetch as efetch
@@ -281,13 +283,38 @@ def _run_info(args):
         era5info.vars()
         return True
 
+def _construct_year_list(args):
+    if not args.endyear:
+        endyear = args.startyear
+    else:
+        endyear = args.endyear
+        
+    # check whether correct years have been entered
+    for year in (args.startyear, endyear):
+        if args.prelimbe:
+            assert 1950 <= year <= 1978, (
+                'year should be between 1950 and 1978'
+            )
+        else:
+            assert 1979 <= year <= datetime.now().year, (
+                'year should be between 1979 and present'
+            )
+    
+    assert endyear >= args.startyear, (
+        'endyear should be >= startyear or None')
+    
+    # make list of years to be downloaded
+    years = list(range(args.startyear, endyear + 1))
+
+    return years
+
 
 def _set_period_args(args):
     # set subroutine specific arguments for monthly and hourly fetch
     if args.command == "monthly":
         statistics = None
         days = None
-        if args.synoptic is False:
+        if not args.synoptic:
             synoptic = None
             hours = [0]
         elif len(args.synoptic) == 0:
@@ -299,6 +326,11 @@ def _set_period_args(args):
     elif args.command == "hourly":
         synoptic = None
         statistics = args.statistics
+        if statistics:
+            assert args.ensemble, (
+                "Statistics can only be computed over an ensemble, "
+                "add --ensemble or remove --statistics."
+                )
         days = args.days
         hours = args.hours
     else:
@@ -316,14 +348,7 @@ def _execute(args):
 
     # the fetching subroutines
     else:
-        # make list of years to be downloaded
-        if not args.endyear:
-            years = [args.startyear]
-        else:
-            assert (args.endyear >= args.startyear), (
-                'endyear should be >= startyear or None')
-            years = list(range(args.startyear, args.endyear + 1))
-
+        years = _construct_year_list(args)
         synoptic, statistics, days, hours = _set_period_args(args)
         # try to build and send download request
         era5 = efetch.Fetch(
