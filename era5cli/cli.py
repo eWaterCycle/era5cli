@@ -128,11 +128,11 @@ def _build_parser():
     )
 
     common.add_argument(
-        "--preliminary-back-extension", action="store_true", default=False,
+        "--prelimbe", action="store_true", default=False,
         help=textwrap.dedent('''\
                              Whether to download the preliminary back extension
                              (1950-1978). Providing the
-                             "--preliminary-back-extension" argument downloads
+                             "--prelimbe" argument downloads data from
                              the preliminary back extension.
 
                              ''')
@@ -341,7 +341,7 @@ def _execute(args):
             pressurelevels=args.levels,
             threads=args.threads,
             merge=args.merge,
-            preliminary_back_extension=args.preliminary_back_extension,
+            prelimbe=args.prelimbe,
         )
         era5.fetch(dryrun=args.dryrun)
         return True
