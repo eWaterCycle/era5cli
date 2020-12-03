@@ -283,12 +283,13 @@ def _run_info(args):
         era5info.vars()
         return True
 
+
 def _construct_year_list(args):
     if not args.endyear:
         endyear = args.startyear
     else:
         endyear = args.endyear
-        
+
     # check whether correct years have been entered
     for year in (args.startyear, endyear):
         if args.prelimbe:
@@ -299,10 +300,10 @@ def _construct_year_list(args):
             assert 1979 <= year <= datetime.now().year, (
                 'year should be between 1979 and present'
             )
-    
+
     assert endyear >= args.startyear, (
         'endyear should be >= startyear or None')
-    
+
     # make list of years to be downloaded
     years = list(range(args.startyear, endyear + 1))
 

@@ -110,7 +110,7 @@ class Fetch:
         (synoptic=True) or monthly means of daily means
         (synoptic=False)."""
         self.prelimbe = prelimbe
-        """bool: Whether to select from the ERA5 preliminary back 
+        """bool: Whether to select from the ERA5 preliminary back
         extension which supports years from 1950 to 1978"""
 
     def fetch(self, dryrun=False):
@@ -200,7 +200,7 @@ class Fetch:
         elif not self.ensemble:
             producttype += "reanalysis"
 
-        if self.period == "monthly" and not self.prelimbe: 
+        if self.period == "monthly" and not self.prelimbe:
             producttype = "monthly_averaged_" + producttype
             if self.synoptic:
                 producttype += "_by_hour_of_day"
@@ -219,7 +219,7 @@ class Fetch:
                 "ensemble_mean",
                 "ensemble_spread",
             ]
-            
+
         return producttype
 
     def _build_request(self, variable, years):
