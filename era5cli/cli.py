@@ -315,7 +315,7 @@ def _set_period_args(args):
     if args.command == "monthly":
         statistics = None
         days = None
-        if not args.synoptic:
+        if args.synoptic is False:
             synoptic = None
             hours = [0]
         elif len(args.synoptic) == 0:

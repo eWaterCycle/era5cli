@@ -46,6 +46,14 @@ def test_period_args():
     period_args = cli._set_period_args(args)
     # Period_args consists of (synoptic, statistics, days, hours)
     assert period_args == (True, None, None, [4, 7])
+    
+    argv = ['monthly', '--startyear', '2008',
+            '--variables', 'total_precipitation',
+            '--synoptic', '--ensemble']
+    args = cli._parse_args(argv)
+    period_args = cli._set_period_args(args)
+    # Period_args consists of (synoptic, statistics, days, hours)
+    assert period_args == (True, None, None, range(0,24))
 
     # test whether the info option does not end up in _set_period_args
     argv = ['info', '2Dvars']
