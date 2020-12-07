@@ -57,13 +57,15 @@ class Fetch:
             Indicating if files should be downloaded. By default
             files will be downloaded. For a dryrun the cdsapi request will
             be written to stdout.
+        prelimbe: bool
+            Whether to download the preliminary back extension (1950-1978).
     """
 
     def __init__(self, years: list, months: list, days: list,
                  hours: list, variables: list, outputformat: str,
                  outputprefix: str, period: str, ensemble: bool,
                  statistics=None, synoptic=None, pressurelevels=None,
-                 merge=False, threads=None):
+                 merge=False, threads=None, prelimbe=False):
         """Initialization of Fetch class."""
         self.months = era5cli.utils._zpad_months(months)
         """list(str): List of zero-padded strings of months
@@ -107,6 +109,9 @@ class Fetch:
         """bool: Whether to get monthly averaged by hour of day
         (synoptic=True) or monthly means of daily means
         (synoptic=False)."""
+        self.prelimbe = prelimbe
+        """bool: Whether to select from the ERA5 preliminary back
+        extension which supports years from 1950 to 1978"""
 
     def fetch(self, dryrun=False):
         """Split calls and fetch results.
@@ -195,17 +200,25 @@ class Fetch:
         elif not self.ensemble:
             producttype += "reanalysis"
 
-        if self.period == "monthly":
+        if self.period == "monthly" and not self.prelimbe:
             producttype = "monthly_averaged_" + producttype
             if self.synoptic:
                 producttype += "_by_hour_of_day"
-        elif self.period == "hourly":
-            if self.ensemble and self.statistics:
-                producttype = [
-                    "ensemble_members",
-                    "ensemble_mean",
-                    "ensemble_spread",
-                ]
+        elif self.period == "monthly" and self.prelimbe:
+            if self.ensemble:
+                producttype = "members-"
+            elif not self.ensemble:
+                producttype = "reanalysis-"
+            if self.synoptic:
+                producttype += "synoptic-monthly-means"
+            elif not self.synoptic:
+                producttype += "monthly-means-of-daily-means"
+        elif self.period == "hourly" and self.ensemble and self.statistics:
+            producttype = [
+                "ensemble_members",
+                "ensemble_mean",
+                "ensemble_spread",
+            ]
 
         return producttype
 
@@ -252,6 +265,9 @@ class Fetch:
             # Add day list to request if applicable
             if self.days:
                 request["day"] = self.days
+
+        if self.prelimbe:
+            name += "-preliminary-back-extension"
 
         return(name, request)
 

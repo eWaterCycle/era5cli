@@ -9,7 +9,8 @@ def initialize(outputformat='netcdf', merge=False, statistics=None,
                synoptic=None, ensemble=True, pressurelevels=None,
                threads=2, period='hourly', variables=['total_precipitation'],
                years=[2008, 2009], months=list(range(1, 13)),
-               days=list(range(1, 32)), hours=list(range(0, 24))):
+               days=list(range(1, 32)), hours=list(range(0, 24)),
+               prelimbe=False):
     """Initializer of the class."""
     era5 = fetch.Fetch(years=years,
                        months=months,
@@ -24,7 +25,8 @@ def initialize(outputformat='netcdf', merge=False, statistics=None,
                        synoptic=synoptic,
                        pressurelevels=pressurelevels,
                        merge=merge,
-                       threads=threads)
+                       threads=threads,
+                       prelimbe=prelimbe)
     return era5
 
 
@@ -43,7 +45,8 @@ def test_init():
                        synoptic=None,
                        pressurelevels=None,
                        merge=False,
-                       threads=2)
+                       threads=2,
+                       prelimbe=False)
 
     valid_months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
                     '11', '12']
@@ -71,6 +74,7 @@ def test_init():
     assert era5.pressure_levels is None
     assert not era5.merge
     assert era5.threads == 2
+    assert not era5.prelimbe
 
     # initializing hourly variable with days=None should result in ValueError
     with pytest.raises(TypeError):
@@ -247,10 +251,24 @@ def test_product_type():
     producttype = era5._product_type()
     assert producttype == 'monthly_averaged_reanalysis'
 
+    era5.prelimbe = True
+    producttype = era5._product_type()
+    assert producttype == 'reanalysis-monthly-means-of-daily-means'
+
+    era5.prelimbe = False
     era5.synoptic = True
     producttype = era5._product_type()
     assert producttype == 'monthly_averaged_reanalysis_by_hour_of_day'
 
+    era5.prelimbe = True
+    producttype = era5._product_type()
+    assert producttype == 'reanalysis-synoptic-monthly-means'
+
+    era5.ensemble = True
+    producttype = era5._product_type()
+    assert producttype == 'members-synoptic-monthly-means'
+
+    era5.prelimbe = False
     era5.ensemble = False
     era5.statistics = True
     producttype = era5._product_type()
@@ -278,7 +296,6 @@ def test_build_request():
                     '12:00', '13:00', '14:00', '15:00', '16:00', '17:00',
                     '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
            'format': 'netcdf'}
-    print(request['day'])
     assert request == req
 
     # monthly data
@@ -289,6 +306,28 @@ def test_build_request():
     assert name == 'reanalysis-era5-single-levels-monthly-means'
     req = {'variable': 'total_precipitation', 'year': [2008],
            'product_type': 'monthly_averaged_ensemble_members',
+           'month': ['01', '02', '03', '04', '05', '06',
+                     '07', '08', '09', '10', '11', '12'],
+           'time': ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00',
+                    '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
+                    '12:00', '13:00', '14:00', '15:00', '16:00', '17:00',
+                    '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
+           'format': 'netcdf'}
+    assert request == req
+
+    # preliminary back extension
+    era5 = initialize(period='monthly',
+                      variables=['total_precipitation'],
+                      years=[1970],
+                      prelimbe=True)
+    (name, request) = era5._build_request('total_precipitation', [1970])
+    print(request)
+    assert name == (
+        "reanalysis-era5-single-levels-monthly"
+        "-means-preliminary-back-extension"
+    )
+    req = {'variable': 'total_precipitation', 'year': [1970],
+           'product_type': 'members-monthly-means-of-daily-means',
            'month': ['01', '02', '03', '04', '05', '06',
                      '07', '08', '09', '10', '11', '12'],
            'time': ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00',
