@@ -38,7 +38,7 @@
         },
         {
             "affiliation": "Swedish Meteorological and Hydrological Institute",
-            "name": "Zimmerman, Klaus"
+            "name": "Zimmermann, Klaus"
         }
     ],
     "description": "  A command line interface to download ERA5 data from the Climate Data Store.",
