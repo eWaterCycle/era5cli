@@ -42,7 +42,7 @@ authors:
     given-names: Rolf
   - 
     affiliation: "Swedish Meteorological and Hydrological Institute"
-    family-names: Zimmerman
+    family-names: Zimmermann
     given-names: Klaus
 
 cff-version: "1.0.3"
