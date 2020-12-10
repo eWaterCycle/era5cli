@@ -1,6 +1,12 @@
 Release Notes
 *************
 
+1.1.0 (2020-12-10)
+~~~~~~~~~~~~~~~~~~~~~
+* The 1.1.0 era5cli minor release.
+* Add support for ERA5 preliminary back extension `#58 <https://github.com/eWaterCycle/era5cli/pull/58>`_
+* Update tests `#57 <https://github.com/eWaterCycle/era5cli/pull/57>`_
+
 1.0.0 (2019-07-25)
 ~~~~~~~~~~~~~~~~~~~~~
 * The stable 1.0.0 era5cli release.

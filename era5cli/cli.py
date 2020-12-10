@@ -38,7 +38,8 @@ def _build_parser():
         required=True,
         help=textwrap.dedent('''\
                              Single year or first year of range for which
-                             data should be downloaded.
+                             data should be downloaded (between 1979 -
+                             present).
                              Every year will be downloaded in a separate file
                              by default. Set "--split false" to change this.
 
@@ -49,8 +50,9 @@ def _build_parser():
         "--endyear", type=int,
         required=False, default=None,
         help=textwrap.dedent('''\
-                             Last year of range for which  data should be
-                             downloaded. If only a single year is needed, only
+                             Last year of range for which data should be
+                             downloaded (between 1979 - present).
+                             If only a single year is needed, only
                              "--startyear" needs to be specified.
                              Every year will be downloaded in a separate file
                              by default. Set "--split false" to change this.
@@ -132,10 +134,12 @@ def _build_parser():
     common.add_argument(
         "--prelimbe", action="store_true", default=False,
         help=textwrap.dedent('''\
-                             Whether to download the preliminary back extension
-                             (1950-1978). Providing the
-                             "--prelimbe" argument downloads data from
-                             the preliminary back extension.
+                             Whether to download the preliminary back
+                             extension. Providing the "--prelimbe" argument
+                             downloads data from the preliminary back
+                             extension. Note that when "--prelimbe" is used,
+                             "--startyear" and "--endyear" should be set
+                             between 1950 and 1978.
 
                              ''')
     )

@@ -29,7 +29,7 @@ authors:
     family-names: Andela
     given-names: Bouwe
   - 
-    affiliation: TU Delft"
+    affiliation: "TU Delft"
     family-names: Aerts
     given-names: Jerom
   -
@@ -37,12 +37,16 @@ authors:
     family-names: Weel
     given-names: Berend
   - 
-    affiliation: TU Delft"
+    affiliation: "TU Delft"
     family-names: Hut
     given-names: Rolf
+  - 
+    affiliation: "Swedish Meteorological and Hydrological Institute"
+    family-names: Zimmerman
+    given-names: Klaus
 
 cff-version: "1.0.3"
-date-released: 2019-07-25
+date-released: 2020-12-10
 doi: 10.5281/zenodo.3252665
 keywords: 
   - "ERA5"
@@ -50,4 +54,4 @@ license: Apache-2.0
 message: "If you use this software, please cite it using these metadata."
 repository-code: "https://github.com/ewatercycle/era5cli"
 title: era5cli
-version: 1.0.0
+version: 1.1.0
