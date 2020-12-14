@@ -33,6 +33,7 @@ With era5cli you can: ​
 - select multiple variables for several months and years
 - split outputs by years, producing a separate file for every year instead of merging them in one file
 - download multiple files at once
+- download ERA5 back extension (preliminary version)
 
 .. inclusion-marker-end-do-not-remove
 
