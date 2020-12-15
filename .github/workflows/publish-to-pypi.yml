@@ -1,8 +1,8 @@
 name: Publish Python distributions to PyPI and TestPyPI
 
-on: 
-  release:
-    types: [published]
+on: push
+  # release:
+  #   types: [published]
 
 
 jobs:
@@ -32,17 +32,25 @@ jobs:
         --wheel
         --outdir dist/
 
-    # Publish the package to test.pypi for every tagged version
+    # test
     - name: Publish distribution to Test PyPI
-      if: startsWith(github.ref, 'refs/tags')
+      if: "!contains(github.ref, 'gh-actions') && !contains(github.ref, 'rc')"
       uses: pypa/gh-action-pypi-publish@master
       with:
         password: ${{ secrets.test_pypi_password }}
         repository_url: http://test.pypi.org/legacy/
 
-    # Publish a tagged version on PyPI for non-release candidates
-    - name: Publish distribution to PyPI
-      if: startsWith(github.ref, 'refs/tags') && ! contains(github.ref, 'rc')
-      uses: pypa/gh-action-pypi-publish@master
-      with:
-        password: ${{ secrets.pypi_password }}
+    # # Publish the package to test.pypi for every tagged version
+    # - name: Publish distribution to Test PyPI
+    #   if: startsWith(github.ref, 'refs/tags')
+    #   uses: pypa/gh-action-pypi-publish@master
+    #   with:
+    #     password: ${{ secrets.test_pypi_password }}
+    #     repository_url: http://test.pypi.org/legacy/
+
+    # # Publish a tagged version on PyPI for non-release candidates
+    # - name: Publish distribution to PyPI
+    #   if: "startsWith(github.ref, 'refs/tags') && !contains(github.ref, 'rc')"
+    #   uses: pypa/gh-action-pypi-publish@master
+    #   with:
+    #     password: ${{ secrets.pypi_password }}
