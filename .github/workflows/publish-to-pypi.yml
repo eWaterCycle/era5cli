@@ -34,7 +34,7 @@ jobs:
 
     # test
     - name: Publish distribution to Test PyPI
-      if: "!contains(github.ref, 'gh-actions') && !contains(github.ref, 'rc')"
+      if: "contains(github.ref, 'gh-actions') && !contains(github.ref, 'rc')"
       uses: pypa/gh-action-pypi-publish@master
       with:
         password: ${{ secrets.test_pypi_password }}
