@@ -1,6 +1,10 @@
 Release Notes
 *************
 
+1.1.1rc1 (2020-12-15)
+~~~~~~~~~~~~~~~~~~~~~
+* Patch to fix the github actions publish automation `#64 <https://github.com/eWaterCycle/era5cli/pull/64>`_
+
 1.1.0 (2020-12-14)
 ~~~~~~~~~~~~~~~~~~~~~
 * The stable 1.1.0 era5cli minor release.
