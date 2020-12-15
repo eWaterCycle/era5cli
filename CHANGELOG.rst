@@ -1,9 +1,13 @@
 Release Notes
 *************
 
+1.1.1 (2020-12-15)
+~~~~~~~~~~~~~~~~~~~~~
+* Patch to fix the github actions publish automation `#64 <https://github.com/eWaterCycle/era5cli/pull/64>`_
+
 1.1.0 (2020-12-14)
 ~~~~~~~~~~~~~~~~~~~~~
-* The 1.1.0 era5cli minor release.
+* The stable 1.1.0 era5cli minor release.
 * Add support for ERA5 preliminary back extension `#58 <https://github.com/eWaterCycle/era5cli/pull/58>`_
 * Update tests `#57 <https://github.com/eWaterCycle/era5cli/pull/57>`_
 * Add automated PyPI package building and publishing with github Actions `#62 <https://github.com/eWaterCycle/era5cli/pull/62>`_
