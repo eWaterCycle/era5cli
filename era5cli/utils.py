@@ -187,3 +187,4 @@ def _append_netcdf_history(ncfile: str, appendtxt: str):
     except AttributeError:
         ncfile.history = appendtxt
     ncfile.close()
+
