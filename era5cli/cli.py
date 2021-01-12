@@ -225,7 +225,7 @@ def _build_parser():
     )
 
     monthly = subparsers.add_parser(
-        'monthly', parents=[common, mnth, rgn],
+        'monthly', parents=[common, rgn, mnth],
         description='Execute the data fetch process for monthly data.',
         prog=textwrap.dedent('''\
                              Use "era5cli monthly --help" for more information.
@@ -251,7 +251,6 @@ def _build_parser():
 
                              ''')
     )
-
 
     info = subparsers.add_parser(
         'info',

@@ -87,7 +87,7 @@ class Fetch:
         self.variables = variables
         """list(str): List of variables."""
         self.area = area
-        """list(int): Lİst of coordinates"""
+        """list(int): List of coordinates"""
         self.outputformat = outputformat
         """str: File format of output file."""
         self.years = years
