@@ -26,7 +26,7 @@ class Fetch:
             hours to download data for.
         variables: list(str)
             List of variable names to download data for.
-        area: list(int)
+        area: list(float)
             Lon-lat values to download data for. (-180 and 180, -90 and 90)
         outputformat: str
             Type of file to download: 'netcdf' or 'grib'.

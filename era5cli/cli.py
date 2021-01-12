@@ -153,7 +153,7 @@ def _build_parser():
         help=textwrap.dedent('''
                             Coordinates to download data for. Defaults to whole
                             available region. For subregion extraction, provide coordinates 
-                            as ymax,xmin,ymin,xmax
+                            as {ymax,xmin,ymin,xmax}
 
                             ''')
     )
