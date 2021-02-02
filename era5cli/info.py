@@ -11,8 +11,8 @@ class Info:
     ----------
         infoname: str
             Name of information that needs to be printed. Supported are
-            'levels', '2Dvars', '3Dvars', 'ERA5land', and any variable or pressure level
-            defined in era5cli.inputref
+            'levels', '2Dvars', '3Dvars', 'ERA5land', and any variable or
+            pressure level defined in era5cli.inputref
 
     Raises
     ------
@@ -54,7 +54,8 @@ class Info:
 
         Print in which list the given variable occurs.
         """
-        print("{} is in the list(s): {}".format(self.infoname, self.infotype))
+        lists = ', '.join(self.infotype)
+        print("{} is in the list(s): {}".format(self.infoname, lists))
 
     def _define_table_header(self):
         """Define table header."""
