@@ -308,9 +308,36 @@ SLVARS = [
     'zero_degree_level',
 ]
 
+
+ERA5_LAND_VARS = [
+    'lake_bottom_temperature',
+    'lake_ice_depth',
+    'lake_ice_temperature',
+    'lake_mix_layer_depth',
+    'lake_mix_layer_temperature',
+    'lake_shape_factor',
+    'lake_total_layer_temperature',
+    'skin_reservoir_content',
+    'skin_temperature',
+    'snow_albedo',
+    'snow_density',
+    'snow_depth_water_equivalent',
+    'soil_temperature_level_1',
+    'soil_temperature_level_2',
+    'soil_temperature_level_3',
+    'soil_temperature_level_4',
+    'temperature_of_snow_layer',
+    'volumetric_soil_water_layer_1',
+    'volumetric_soil_water_layer_2',
+    'volumetric_soil_water_layer_3',
+    'volumetric_soil_water_layer_4'
+]
+
+
 REFDICT = {"levels": PLEVELS,
            "2Dvars": SLVARS,
            "3Dvars": PLVARS,
+           "ERA5land": ERA5_LAND_VARS
            }
 
 MISSING_MONTHLY_VARS = [

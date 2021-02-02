@@ -261,6 +261,7 @@ def _build_parser():
                              "2Dvars" for all available single level or 2D
                              variables \n
                              "3Dvars" for all available 3D variables \n
+                             "ERA5land" for all available in ERA5 land \n
                              Enter variable name (e.g. "total_precipitation")
                              or pressure level (e.g. "825") to show if the
                              variable or level is available and in which list.
