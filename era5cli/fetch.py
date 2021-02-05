@@ -152,23 +152,18 @@ class Fetch:
 
     def _define_outputfilename(self, var, years):
         """Define output filename."""
-        start_year = years[0]
-        end_year = years[-1]
-        if not end_year or (end_year == start_year):
-            fname = ("{}_{}_{}_{}".format(
-                self.outputprefix, var,
-                start_year, self.period))
-        else:
-            fname = ("{}_{}_{}-{}_{}".format(
-                self.outputprefix, var,
-                start_year, end_year, self.period))
+        start, end = years[0], years[-1]
+
+        prefix = f"{self.outputprefix}-land" if self.land else self.outputprefix
+        yearblock = f"{start}-{end}" if not start == end else f"{start}"
+        fname = f"{prefix}_{var}_{yearblock}_{self.period}"
         if self.ensemble:
             fname += "_ensemble"
         if self.statistics:
             fname += "_statistics"
         if self.synoptic:
             fname += "_synoptic"
-        fname += ".{}".format(self.ext)
+        fname += f".{self.ext}"
         return fname
 
     def _split_variable(self):
