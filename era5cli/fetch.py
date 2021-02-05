@@ -59,17 +59,20 @@ class Fetch:
             be written to stdout.
         prelimbe: bool
             Whether to download the preliminary back extension (1950-1978).
+        land: bool
+            Whether to download ERA5-Land data. 
     """
 
     def __init__(self, years: list, months: list, days: list,
                  hours: list, variables: list, outputformat: str,
                  outputprefix: str, period: str, ensemble: bool,
                  statistics=None, synoptic=None, pressurelevels=None,
-                 merge=False, threads=None, prelimbe=False):
+                 merge=False, threads=None, prelimbe=False, land=False):
         """Initialization of Fetch class."""
         self.months = era5cli.utils._zpad_months(months)
         """list(str): List of zero-padded strings of months
         (e.g. ['01', '02',..., '12'])."""
+        # TODO make sure these docstrings are consistent with cli docs
         if period == 'monthly':
             self.days = None
         else:
@@ -112,6 +115,9 @@ class Fetch:
         self.prelimbe = prelimbe
         """bool: Whether to select from the ERA5 preliminary back
         extension which supports years from 1950 to 1978"""
+        self.land = land
+        """bool: Whether to download from the ERA5-Land
+        dataset."""
 
     def fetch(self, dryrun=False):
         """Split calls and fetch results.
