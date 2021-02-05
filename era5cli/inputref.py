@@ -366,7 +366,7 @@ ERA5_LAND_VARS = [
 REFDICT = {"levels": PLEVELS,
            "2Dvars": SLVARS,
            "3Dvars": PLVARS,
-           "ERA5land": ERA5_LAND_VARS
+           "land": ERA5_LAND_VARS
            }
 
 MISSING_MONTHLY_VARS = [
