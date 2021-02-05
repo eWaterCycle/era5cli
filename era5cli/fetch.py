@@ -223,9 +223,67 @@ class Fetch:
 
         return producttype
 
+    def _check_levels(self):
+        """Retrieve pressure level info for request"""
+        assert all(level in ref.PLEVELS for level in self.pressure_levels)(
+                "Invalid pressure levels. Allowed values are: {}"
+                .format(ref.PLEVELS))
+
+    def _check_variable(self, variable)
+        """Check variable available and compatible with other inputs."""
+        # if land then the variable must be in era5 land
+        if self.land:
+            if variable not in ref.ERA5_LAND_VARS:
+                raise ValueError(
+                    "Variable {} is not available in ERA5-Land.\n".format(variable)
+                    "Choose from {}".format(ref.ERA5_LAND_VARS)
+                )
+        elif variable in ref.PLVARS+ref.SLVARS:
+            if self.period == "monthly":
+                if variable in ref.MISSING_MONTHLY_VARS:
+                    header = ("There is no monthly data available for the "
+                            "following variables:\n")
+                    raise ValueError(era5cli.utils._print_multicolumn(
+                        header,
+                        ref.MISSING_MONTHLY_VARS))
+        else:
+            raise ValueError(
+            "Invalid variable name: {}".format(variable)
+        )
+
+    def _build_name(self, variable):
+        """Build up name of dataset to use"""
+
+        name = "reanalysis-era5"
+
+        if self.land:
+            name += "-land"
+        elif variable in ref.PLVARS:
+            name += "-pressure-levels"
+        elif variable in ref.SLVARS:
+            name += "-single-levels"
+        else:
+            raise ValueError(
+                "Invalid variable name: {}".format(variable)
+            )
+
+        if self.period == "monthly":
+            name += "-monthly-means"
+
+        if self.prelimbe:
+            if self.land:
+                raise ValueError(
+                    "Back extension not (yet) available for ERA5-Land."
+                )
+            name += "-preliminary-back-extension"
+        return name
+
     def _build_request(self, variable, years):
         """Build the download request for the retrieve method of cdsapi."""
-        name = "reanalysis-era5-"
+        _check_variable(self, variable)
+
+        name = _build_name(self, variable)
+
         request = {'variable': variable,
                    'year': years,
                    'product_type': self._product_type(),
@@ -233,42 +291,12 @@ class Fetch:
                    'time': self.hours,
                    'format': self.outputformat}
 
-        # variable is pressure level variable
-        if variable in ref.PLVARS:
-            try:
-                if all(level in ref.PLEVELS for level in self.pressure_levels):
-                    name += "pressure-levels"
-                    request["pressure_level"] = self.pressure_levels
-                else:
-                    raise ValueError(
-                        "Invalid pressure levels. Allowed values are: {}"
-                        .format(ref.PLEVELS))
-            except TypeError:
-                raise ValueError(
-                    "Invalid pressure levels. Allowed values are: {}"
-                    .format(ref.PLEVELS))
-        # variable is single level variable
-        elif variable in ref.SLVARS:
-            name += "single-levels"
-        # variable is unknown
-        else:
-            raise ValueError('Invalid variable name: {}'.format(variable))
+        if "pressure-levels" in name:
+            _check_levels(self)
+            request["pressure_level"] = self.pressure_levels
 
-        if self.period == "monthly":
-            name += "-monthly-means"
-            if variable in ref.MISSING_MONTHLY_VARS:
-                header = ("There is no monthly data available for the "
-                          "following variables:\n")
-                raise ValueError(era5cli.utils._print_multicolumn(
-                    header,
-                    ref.MISSING_MONTHLY_VARS))
-        elif self.period == "hourly":
-            # Add day list to request if applicable
-            if self.days:
-                request["day"] = self.days
-
-        if self.prelimbe:
-            name += "-preliminary-back-extension"
+        if self.period == "hourly":
+            request["days"] = self.days
 
         return(name, request)
 
