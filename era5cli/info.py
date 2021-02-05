@@ -63,6 +63,6 @@ class Info:
             'levels': 'pressure levels',
             '2Dvars': '2D variables',
             '3Dvars': '3D variables',
-            'ERA5land': 'ERA5-land variables'
+            'land': 'ERA5-land variables'
         }
         self.header = "Available {}:".format(hdict[self.infoname])
