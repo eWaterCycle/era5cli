@@ -139,7 +139,22 @@ def _build_parser():
                              downloads data from the preliminary back
                              extension. Note that when "--prelimbe" is used,
                              "--startyear" and "--endyear" should be set
-                             between 1950 and 1978.
+                             between 1950 and 1978. --prelimbe is incompatible
+                             with --land.
+
+                             ''')
+    )
+
+    common.add_argument(
+        "--land", action="store_true", default=False,
+        help=textwrap.dedent('''\
+                             Download data from ERA5-Land. 
+                             Providing the "--land" argument
+                             downloads data from the ERA5-Land dataset.
+                             Note that the ERA5-Land dataset starts in
+                             1981.
+                             --land is incompatible with the use of
+                             --prelimbe and --ensemble.
 
                              ''')
     )
@@ -261,8 +276,8 @@ def _build_parser():
                              "2Dvars" for all available single level or 2D
                              variables \n
                              "3Dvars" for all available 3D variables \n
-                             "ERA5land" for all available variables in \n
-                             ERA5 land
+                             "land" for all available variables in
+                             ERA5-land \n
                              Enter variable name (e.g. "total_precipitation")
                              or pressure level (e.g. "825") to show if the
                              variable or level is available and in which list.
@@ -302,6 +317,10 @@ def _construct_year_list(args):
             assert 1950 <= year <= 1978, (
                 'year should be between 1950 and 1978'
             )
+        elif args.land:
+            assert 1981 <= year <= datetime.now().year,(
+                'for ERA5-Land, year should be between 1981 and present'
+            ) 
         else:
             assert 1979 <= year <= datetime.now().year, (
                 'year should be between 1979 and present'
@@ -374,6 +393,7 @@ def _execute(args):
             threads=args.threads,
             merge=args.merge,
             prelimbe=args.prelimbe,
+            land=args.land
         )
         era5.fetch(dryrun=args.dryrun)
         return True
