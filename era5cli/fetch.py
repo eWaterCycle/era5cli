@@ -196,6 +196,15 @@ class Fetch:
         """Construct the product type name from the options."""
         producttype = ""
 
+        if self.land:
+            if self.period == "hourly":
+                return None
+            elif self.period == "monthly":
+                producttype = "monthly_averaged_reanalysis"
+            if self.synoptic:
+                producttype += "_by_hour_of_day"
+            return producttype
+
         if self.ensemble:
             producttype += "ensemble_members"
         elif not self.ensemble:
@@ -229,14 +238,14 @@ class Fetch:
                 "Invalid pressure levels. Allowed values are: {}"
                 .format(ref.PLEVELS))
 
-    def _check_variable(self, variable)
+    def _check_variable(self, variable):
         """Check variable available and compatible with other inputs."""
         # if land then the variable must be in era5 land
         if self.land:
             if variable not in ref.ERA5_LAND_VARS:
                 raise ValueError(
-                    "Variable {} is not available in ERA5-Land.\n".format(variable)
-                    "Choose from {}".format(ref.ERA5_LAND_VARS)
+                    f"Variable {variable} is not available in ERA5-Land.\n"
+                    f"Choose from {ref.ERA5_LAND_VARS}"
                 )
         elif variable in ref.PLVARS+ref.SLVARS:
             if self.period == "monthly":
@@ -280,13 +289,12 @@ class Fetch:
 
     def _build_request(self, variable, years):
         """Build the download request for the retrieve method of cdsapi."""
-        _check_variable(self, variable)
+        self._check_variable(variable)
 
-        name = _build_name(self, variable)
+        name = self._build_name(variable)
 
         request = {'variable': variable,
                    'year': years,
-                   'product_type': self._product_type(),
                    'month': self.months,
                    'time': self.hours,
                    'format': self.outputformat}
@@ -294,6 +302,10 @@ class Fetch:
         if "pressure-levels" in name:
             _check_levels(self)
             request["pressure_level"] = self.pressure_levels
+
+        product_type = self._product_type()
+        if product_type is not None:
+            request["product_type"] = product_type
 
         if self.period == "hourly":
             request["days"] = self.days
