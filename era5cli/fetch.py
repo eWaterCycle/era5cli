@@ -234,9 +234,15 @@ class Fetch:
 
     def _check_levels(self):
         """Retrieve pressure level info for request"""
-        assert all(level in ref.PLEVELS for level in self.pressure_levels)(
-                "Invalid pressure levels. Allowed values are: {}"
-                .format(ref.PLEVELS))
+        if not self.pressure_levels:
+            raise ValueError(
+                "Requested 3D variable(s), but no pressure levels specified."
+                "Aborting."
+            )           
+        if not all(level in ref.PLEVELS for level in self.pressure_levels):
+            raise ValueError(
+                f"Invalid pressure levels. Allowed values are: {ref.PLEVELS}"
+            )
 
     def _check_variable(self, variable):
         """Check variable available and compatible with other inputs."""
@@ -300,7 +306,7 @@ class Fetch:
                    'format': self.outputformat}
 
         if "pressure-levels" in name:
-            _check_levels(self)
+            self._check_levels()
             request["pressure_level"] = self.pressure_levels
 
         product_type = self._product_type()
@@ -308,7 +314,7 @@ class Fetch:
             request["product_type"] = product_type
 
         if self.period == "hourly":
-            request["days"] = self.days
+            request["day"] = self.days
 
         return(name, request)
 

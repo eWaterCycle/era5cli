@@ -123,14 +123,14 @@ def test_fetch_nodryrun(cds, era5cli_utils_append_history):
                       threads=None, pressurelevels=[1, 2, 9],
                       variables=['temperature'])
     with pytest.raises(ValueError):
-        assert era5.fetch() is None
+        assert era5.fetch()
 
     # invalid variable name should raise ValueError
     era5 = initialize(outputformat='grib', merge=True,
                       threads=None,
                       variables=['unknown'])
     with pytest.raises(ValueError):
-        assert era5.fetch() is None
+        assert era5.fetch()
 
     # check check against monthly unavailable data raise ValueError
     era5 = initialize(outputformat='grib', merge=True,

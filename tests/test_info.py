@@ -4,7 +4,7 @@ import pytest
 from era5cli import info
 
 
-INFO_PARAMS = ['levels', '2Dvars', '3Dvars', 'ERA5land',
+INFO_PARAMS = ['levels', '2Dvars', '3Dvars', 'land',
                'total_precipitation', 'temperature']
 
 
@@ -15,7 +15,7 @@ def test_init(arg):
     assert isinstance(era5info.infolist, list)
 
 
-@pytest.mark.parametrize('arg', ['levels', '2Dvars', '3Dvars', 'ERA5land'])
+@pytest.mark.parametrize('arg', ['levels', '2Dvars', '3Dvars', 'land'])
 def test_define_table_header(arg):
     """Test _define_table_header function of Info class."""
     era5info = info.Info(arg)
@@ -23,7 +23,7 @@ def test_define_table_header(arg):
     assert isinstance(era5info.header, str)
 
 
-@pytest.mark.parametrize('arg', ['levels', '2Dvars', '3Dvars', 'ERA5land'])
+@pytest.mark.parametrize('arg', ['levels', '2Dvars', '3Dvars', 'land'])
 def test_list(arg):
     """Test list function of Info class."""
     era5info = info.Info(arg)
