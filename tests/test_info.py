@@ -36,11 +36,13 @@ def test_vars(capsys):
     era5info = info.Info('total_precipitation')
     era5info.vars()
     captured = capsys.readouterr()
-    assert captured.out.split(' ')[-1].strip() == '2Dvars'
+    assert '2Dvars' in captured.out
+    assert 'land' in captured.out
+    assert not '3Dvars' in captured.out
     del era5info, captured
 
     era5info = info.Info(850)
     era5info.vars()
     captured = capsys.readouterr()
-    assert captured.out.split(' ')[-1].strip() == 'levels'
+    assert 'levels' in captured.out
     del era5info, captured
