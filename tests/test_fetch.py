@@ -10,7 +10,7 @@ def initialize(outputformat='netcdf', merge=False, statistics=None,
                threads=2, period='hourly', variables=['total_precipitation'],
                years=[2008, 2009], months=list(range(1, 13)),
                days=list(range(1, 32)), hours=list(range(0, 24)),
-               prelimbe=False):
+               prelimbe=False, land=False):
     """Initializer of the class."""
     era5 = fetch.Fetch(years=years,
                        months=months,
@@ -26,7 +26,8 @@ def initialize(outputformat='netcdf', merge=False, statistics=None,
                        pressurelevels=pressurelevels,
                        merge=merge,
                        threads=threads,
-                       prelimbe=prelimbe)
+                       prelimbe=prelimbe,
+                       land=land)
     return era5
 
 
@@ -334,6 +335,24 @@ def test_build_request():
                     '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
                     '12:00', '13:00', '14:00', '15:00', '16:00', '17:00',
                     '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
+           'format': 'netcdf'}
+    assert request == req
+
+    # land
+    era5 = initialize(period='monthly',
+                      variables=['snow_cover'],
+                      hours=[0],
+                      land=True)
+
+    (name, request) = era5._build_request('snow_cover', [2008])
+    assert name == (
+        "reanalysis-era5-land-monthly-means"
+    )
+    req = {'variable': 'snow_cover', 'year': [2008],
+           'product_type': 'monthly_averaged_reanalysis',
+           'month': ['01', '02', '03', '04', '05', '06',
+                     '07', '08', '09', '10', '11', '12'],
+           'time': ['00:00'],
            'format': 'netcdf'}
     assert request == req
 
