@@ -202,39 +202,39 @@ def test_number_outputfiles(capsys):
                       years=[2007, 2008, 2009], merge=False)
     era5.fetch(dryrun=True)
     captured = capsys.readouterr()
-    outputlenght = len(captured.out.split('\n')) - 1
+    outputlength = len(captured.out.split('\n')) - 1
     if not era5.merge:
         # No. of outputs is 2*3 = 6 if merge = False
-        assert outputlenght == len(era5.years) * len(era5.variables)
+        assert outputlength == len(era5.years) * len(era5.variables)
     else:
         # No. of outputs is 2*1 = 2 if merge = True
-        assert outputlenght == len(era5.variables)
+        assert outputlength == len(era5.variables)
 
     # one variable and three years
     era5 = initialize(variables=['total_precipitation'],
                       years=[2007, 2008, 2009], merge=False)
     era5.fetch(dryrun=True)
     captured = capsys.readouterr()
-    outputlenght = len(captured.out.split('\n')) - 1
+    outputlength = len(captured.out.split('\n')) - 1
     if not era5.merge:
         # No. of outputs is 1*3 = 3 if merge = False
-        assert outputlenght == len(era5.years) * len(era5.variables)
+        assert outputlength == len(era5.years) * len(era5.variables)
     else:
         # No. of outputs is 1 if merge = True
-        assert outputlenght == len(era5.variables)
+        assert outputlength == len(era5.variables)
 
     # two variables and one year
     era5 = initialize(variables=['total_precipitation', 'runoff'],
                       years=[2007], merge=False)
     era5.fetch(dryrun=True)
     captured = capsys.readouterr()
-    outputlenght = len(captured.out.split('\n')) - 1
+    outputlength = len(captured.out.split('\n')) - 1
     if not era5.merge:
         # No. of outputs is 2*1 = 2 if merge = False
-        assert outputlenght == len(era5.years) * len(era5.variables)
+        assert outputlength == len(era5.years) * len(era5.variables)
     else:
         # No. of outputs is 2 if merge = True
-        assert outputlenght == len(era5.variables)
+        assert outputlength == len(era5.variables)
     del era5, captured
 
 
