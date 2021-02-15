@@ -148,7 +148,7 @@ def _build_parser():
     common.add_argument(
         "--land", action="store_true", default=False,
         help=textwrap.dedent('''\
-                             Download data from ERA5-Land. 
+                             Download data from ERA5-Land.
                              Providing the "--land" argument
                              downloads data from the ERA5-Land dataset.
                              Note that the ERA5-Land dataset starts in
@@ -318,9 +318,9 @@ def _construct_year_list(args):
                 'year should be between 1950 and 1978'
             )
         elif args.land:
-            assert 1981 <= year <= datetime.now().year,(
+            assert 1981 <= year <= datetime.now().year, (
                 'for ERA5-Land, year should be between 1981 and present'
-            ) 
+            )
         else:
             assert 1979 <= year <= datetime.now().year, (
                 'year should be between 1979 and present'
@@ -356,7 +356,7 @@ def _set_period_args(args):
             assert args.ensemble, (
                 "Statistics can only be computed over an ensemble, "
                 "add --ensemble or remove --statistics."
-                )
+            )
         days = args.days
         hours = args.hours
     else:

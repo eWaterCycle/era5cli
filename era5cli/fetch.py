@@ -60,7 +60,7 @@ class Fetch:
         prelimbe: bool
             Whether to download the preliminary back extension (1950-1978).
         land: bool
-            Whether to download ERA5-Land data. 
+            Whether to download ERA5-Land data.
     """
 
     def __init__(self, years: list, months: list, days: list,
@@ -154,7 +154,8 @@ class Fetch:
         """Define output filename."""
         start, end = years[0], years[-1]
 
-        prefix = f"{self.outputprefix}-land" if self.land else self.outputprefix
+        prefix = (f"{self.outputprefix}-land" if self.land
+                  else self.outputprefix)
         yearblock = f"{start}-{end}" if not start == end else f"{start}"
         fname = f"{prefix}_{var}_{yearblock}_{self.period}"
         if self.ensemble:
@@ -238,7 +239,7 @@ class Fetch:
             raise ValueError(
                 "Requested 3D variable(s), but no pressure levels specified."
                 "Aborting."
-            )           
+            )
         if not all(level in ref.PLEVELS for level in self.pressure_levels):
             raise ValueError(
                 f"Invalid pressure levels. Allowed values are: {ref.PLEVELS}"
@@ -257,14 +258,14 @@ class Fetch:
             if self.period == "monthly":
                 if variable in ref.MISSING_MONTHLY_VARS:
                     header = ("There is no monthly data available for the "
-                            "following variables:\n")
+                              "following variables:\n")
                     raise ValueError(era5cli.utils._print_multicolumn(
                         header,
                         ref.MISSING_MONTHLY_VARS))
         else:
             raise ValueError(
-            "Invalid variable name: {}".format(variable)
-        )
+                "Invalid variable name: {}".format(variable)
+            )
 
     def _build_name(self, variable):
         """Build up name of dataset to use"""
@@ -334,7 +335,7 @@ class Fetch:
                 "It can take some time before downloading starts, ",
                 "please do not kill this process in the meantime.",
                 os.linesep
-                )
+            )
             connection = cdsapi.Client()
             print("".join(queueing_message))  # print queueing message
             connection.retrieve(name, request, outputfile)

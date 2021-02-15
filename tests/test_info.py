@@ -38,7 +38,7 @@ def test_vars(capsys):
     captured = capsys.readouterr()
     assert '2Dvars' in captured.out
     assert 'land' in captured.out
-    assert not '3Dvars' in captured.out
+    assert '3Dvars' not in captured.out
     del era5info, captured
 
     era5info = info.Info(850)
