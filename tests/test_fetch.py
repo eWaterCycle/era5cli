@@ -194,6 +194,13 @@ def test_define_outputfilename():
     fn = 'era5_total_precipitation_2008-2009_hourly_ensemble_synoptic.grb'
     assert fname == fn
 
+    era5 = initialize(land=True, ensemble=False)
+    era5._extension()
+    fname = era5._define_outputfilename('total_precipitation', [2008])
+    fn = 'era5-land_total_precipitation_2008_hourly.nc'
+    assert fname == fn
+
+
 
 def test_number_outputfiles(capsys):
     """Test function for the number of outputs."""
