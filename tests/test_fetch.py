@@ -448,3 +448,21 @@ def test_build_request():
     era5 = initialize(variables=['temperature'], pressurelevels=None)
     with pytest.raises(ValueError):
         assert era5._build_request('temperature', [2008])
+
+
+def test_incompatible_options():
+    """Test that invalid combinations of arguments don't silently pass."""
+    era5 = initialize(land=True, prelimbe=True)
+    with pytest.raises(ValueError):
+        era5._build_request('total_precipitation', [2008])
+
+
+@pytest.mark.xfail
+def test_more_incompatible_options():
+    era5 = initialize(land=True, ensemble=True)
+    with pytest.raises(ValueError):
+        era5._build_request('total_precipitation', [2008])
+
+    era5 = initialize(statistics=True, ensemble=False)
+    with pytest.raises(ValueError):
+        era5._build_request('total_precipitation', [2008])
