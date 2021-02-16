@@ -329,6 +329,40 @@ def test_check_levels():
         era5._check_levels()
 
 
+def test_check_variable():
+    """Test _check_variable function of Fetch class."""
+    era5 = initialize()
+
+    land_only_variable = "snow_cover"
+    slev_only_variable = "vertical_integral_of_mass_tendency"
+    missing_monthly_var = "altimeter_wave_height"
+
+    # Invalid variables should raise
+    with pytest.raises(ValueError):
+        era5._check_variable("invalid_precipitation")
+
+    # Valid variable with invalid dataset option should raise
+    with pytest.raises(ValueError):
+        era5._check_variable(land_only_variable)
+
+    # But with the right dataset option it should pass
+    era5.land = True
+    era5._check_variable(land_only_variable)
+
+    # And variables incompatible with ERA5 land should fail
+    with pytest.raises(ValueError):
+        era5._check_variable(slev_only_variable)
+
+    # Missing monthly vars should pass if period is hourly
+    era5.land = False
+    era5._check_variable(missing_monthly_var)
+
+    # Missing monthly vars should fail if period is monthly
+    era5.period = 'monthly'
+    with pytest.raises(ValueError):
+        era5._check_variable(missing_monthly_var)
+
+
 def test_build_request():
     """Test _build_request function of Fetch class."""
     # hourly data
