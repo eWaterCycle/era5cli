@@ -309,6 +309,25 @@ def test_product_type():
     assert producttype is None
 
 
+def test_check_levels():
+    """Test _check_levels function of Fetch class"""
+    era5 = initialize()
+    era5.variables = "temperature"
+
+    # No levels should raise
+    with pytest.raises(ValueError) as e:
+        era5._check_levels()
+
+    # Valid levels should pass
+    era5.pressure_levels = [1000, 950]
+    era5._check_levels()
+
+    # Invalid levels should raise
+    era5.pressure_levels = [777]
+    with pytest.raises(ValueError):
+        era5._check_levels()
+
+
 def test_build_request():
     """Test _build_request function of Fetch class."""
     # hourly data
