@@ -201,7 +201,6 @@ def test_define_outputfilename():
     assert fname == fn
 
 
-
 def test_number_outputfiles(capsys):
     """Test function for the number of outputs."""
     # two variables and three years
@@ -254,7 +253,9 @@ def test_product_type():
 
     era5.statistics = True
     producttype = era5._product_type()
-    assert producttype == ['ensemble_members', 'ensemble_mean', 'ensemble_spread']
+    assert producttype == [
+        'ensemble_members', 'ensemble_mean', 'ensemble_spread'
+    ]
 
     era5.ensemble = False  # statistics will be ignored
     producttype = era5._product_type()
@@ -315,7 +316,7 @@ def test_check_levels():
     era5.variables = "temperature"
 
     # No levels should raise
-    with pytest.raises(ValueError) as e:
+    with pytest.raises(ValueError):
         era5._check_levels()
 
     # Valid levels should pass
