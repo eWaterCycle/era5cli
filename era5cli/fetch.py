@@ -195,42 +195,43 @@ class Fetch:
 
     def _product_type(self):
         """Construct the product type name from the options."""
-        producttype = ""
-
-        if self.land:
-            if self.period == "hourly":
-                return None
-            elif self.period == "monthly":
-                producttype = "monthly_averaged_reanalysis"
-            if self.synoptic:
-                producttype += "_by_hour_of_day"
-            return producttype
-
-        if self.ensemble:
-            producttype += "ensemble_members"
-        elif not self.ensemble:
-            producttype += "reanalysis"
-
-        if self.period == "monthly" and not self.prelimbe:
-            producttype = "monthly_averaged_" + producttype
-            if self.synoptic:
-                producttype += "_by_hour_of_day"
-        elif self.period == "monthly" and self.prelimbe:
-            if self.ensemble:
-                producttype = "members-"
-            elif not self.ensemble:
-                producttype = "reanalysis-"
-            if self.synoptic:
-                producttype += "synoptic-monthly-means"
-            elif not self.synoptic:
-                producttype += "monthly-means-of-daily-means"
-        elif self.period == "hourly" and self.ensemble and self.statistics:
-            producttype = [
+        if self.period == 'hourly' and self.ensemble and self.statistics:
+            # The only configuration to return a list
+            return [
                 "ensemble_members",
                 "ensemble_mean",
                 "ensemble_spread",
             ]
 
+        if self.land and self.period == "hourly":
+            # The only configuration to return None
+            return None
+
+        # Default flow
+        if self.ensemble:
+            producttype = "ensemble_members"
+        else:
+            producttype = "reanalysis"
+
+        if self.period == "hourly":
+            return producttype
+
+        producttype = "monthly_averaged_" + producttype
+        if self.synoptic:
+            producttype += "_by_hour_of_day"
+
+        if not self.prelimbe:
+            return producttype
+
+        # Prelimbe has deviating product types for monthly data
+        if self.ensemble:
+            producttype = "members-"
+        else:
+            producttype = "reanalysis-"
+        if self.synoptic:
+            producttype += "synoptic-monthly-means"
+        else:
+            producttype += "monthly-means-of-daily-means"
         return producttype
 
     def _check_levels(self):

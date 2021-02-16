@@ -375,7 +375,8 @@ def test_build_request():
     era5 = initialize(period='monthly',
                       variables=['snow_cover'],
                       hours=[0],
-                      land=True)
+                      land=True,
+                      ensemble=False)
 
     (name, request) = era5._build_request('snow_cover', [2008])
     assert name == (
