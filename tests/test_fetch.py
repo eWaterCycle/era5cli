@@ -247,40 +247,66 @@ def test_number_outputfiles(capsys):
 
 def test_product_type():
     """Test _product_type function of Fetch class."""
+    # Default hourly data
     era5 = initialize()
     producttype = era5._product_type()
     assert producttype == 'ensemble_members'
 
-    era5.ensemble = False
+    era5.statistics = True
+    producttype = era5._product_type()
+    assert producttype == ['ensemble_members', 'ensemble_mean', 'ensemble_spread']
+
+    era5.ensemble = False  # statistics will be ignored
     producttype = era5._product_type()
     assert producttype == 'reanalysis'
 
+    # Default monthly data
     era5.period = 'monthly'
     producttype = era5._product_type()
     assert producttype == 'monthly_averaged_reanalysis'
 
-    era5.prelimbe = True
-    producttype = era5._product_type()
-    assert producttype == 'reanalysis-monthly-means-of-daily-means'
-
-    era5.prelimbe = False
     era5.synoptic = True
     producttype = era5._product_type()
     assert producttype == 'monthly_averaged_reanalysis_by_hour_of_day'
 
+    era5.ensemble = True
+    producttype = era5._product_type()
+    assert producttype == 'monthly_averaged_ensemble_members_by_hour_of_day'
+
+    era5.synoptic = False
+    producttype = era5._product_type()
+    assert producttype == 'monthly_averaged_ensemble_members'
+
+    # Preliminary back extension monthly data have different names
     era5.prelimbe = True
     producttype = era5._product_type()
-    assert producttype == 'reanalysis-synoptic-monthly-means'
+    assert producttype == 'members-monthly-means-of-daily-means'
 
-    era5.ensemble = True
+    era5.synoptic = True
     producttype = era5._product_type()
     assert producttype == 'members-synoptic-monthly-means'
 
-    era5.prelimbe = False
     era5.ensemble = False
-    era5.statistics = True
+    producttype = era5._product_type()
+    assert producttype == 'reanalysis-synoptic-monthly-means'
+
+    era5.synoptic = False
+    producttype = era5._product_type()
+    assert producttype == 'reanalysis-monthly-means-of-daily-means'
+
+    # ERA5 land has more limited options
+    era5.land = True
+    era5.prelimbe = False
+    producttype = era5._product_type()
+    assert producttype == 'monthly_averaged_reanalysis'
+
+    era5.synoptic = True
     producttype = era5._product_type()
     assert producttype == 'monthly_averaged_reanalysis_by_hour_of_day'
+
+    era5.period = 'hourly'
+    producttype = era5._product_type()
+    assert producttype is None
 
 
 def test_build_request():
