@@ -456,6 +456,10 @@ def test_incompatible_options():
     with pytest.raises(ValueError):
         era5._build_request('total_precipitation', [2008])
 
+    era5 = initialize(land=False, variables=[''])
+    with pytest.raises(ValueError):
+        era5._build_request('snow_cover', [2008])
+
 
 @pytest.mark.xfail
 def test_more_incompatible_options():
