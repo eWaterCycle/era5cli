@@ -509,7 +509,7 @@ def test_incompatible_options():
         era5._build_request('snow_cover', [2008])
 
 
-@pytest.mark.xfail
+@pytest.mark.xfail(reason='https://github.com/eWaterCycle/era5cli/issues/68')
 def test_more_incompatible_options():
     era5 = initialize(land=True, ensemble=True)
     with pytest.raises(ValueError):
