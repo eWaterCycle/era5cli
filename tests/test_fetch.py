@@ -363,6 +363,54 @@ def test_check_variable():
         era5._check_variable(missing_monthly_var)
 
 
+def test_build_name():
+    """Test _build_name function of Fetch class."""
+    era5 = initialize()
+
+    name = era5._build_name('total_precipitation')
+    assert name == "reanalysis-era5-single-levels"
+
+    name = era5._build_name('temperature')
+    assert name == "reanalysis-era5-pressure-levels"
+
+    era5.period = "monthly"
+    name = era5._build_name('temperature')
+    assert name == "reanalysis-era5-pressure-levels-monthly-means"
+
+    name = era5._build_name('total_precipitation')
+    assert name == "reanalysis-era5-single-levels-monthly-means"
+
+    # Test names for back extension
+    era5.prelimbe = True
+    name = era5._build_name('temperature')
+    assert name == ("reanalysis-era5-pressure-levels-monthly-means"
+                    "-preliminary-back-extension")
+
+    name = era5._build_name('total_precipitation')
+    assert name == ("reanalysis-era5-single-levels-monthly-means"
+                    "-preliminary-back-extension")
+
+    era5.period = "hourly"
+    name = era5._build_name('temperature')
+    assert name == "reanalysis-era5-pressure-levels-preliminary-back-extension"
+
+    name = era5._build_name('total_precipitation')
+    assert name == "reanalysis-era5-single-levels-preliminary-back-extension"
+
+    # Tests for era5 land
+    era5.prelimbe = False
+    with pytest.raises(ValueError):
+        era5._build_name('snow_cover')
+
+    era5.land = True
+    name = era5._build_name('snow_cover')
+    assert name == "reanalysis-era5-land"
+
+    era5.period = "monthly"
+    name = era5._build_name('snow_cover')
+    assert name == "reanalysis-era5-land-monthly-means"
+
+
 def test_build_request():
     """Test _build_request function of Fetch class."""
     # hourly data
@@ -456,7 +504,7 @@ def test_incompatible_options():
     with pytest.raises(ValueError):
         era5._build_request('total_precipitation', [2008])
 
-    era5 = initialize(land=False, variables=[''])
+    era5 = initialize(land=False)
     with pytest.raises(ValueError):
         era5._build_request('snow_cover', [2008])
 
