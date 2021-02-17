@@ -26,6 +26,8 @@ class Fetch:
             hours to download data for.
         variables: list(str)
             List of variable names to download data for.
+        area: list(float)
+            Lon-lat values to download data for. (-180 and 180, -90 and 90)
         outputformat: str
             Type of file to download: 'netcdf' or 'grib'.
         outputprefix: str
@@ -64,7 +66,7 @@ class Fetch:
     """
 
     def __init__(self, years: list, months: list, days: list,
-                 hours: list, variables: list, outputformat: str,
+                 hours: list, variables: list, area: list, outputformat: str,
                  outputprefix: str, period: str, ensemble: bool,
                  statistics=None, synoptic=None, pressurelevels=None,
                  merge=False, threads=None, prelimbe=False, land=False):
@@ -87,6 +89,8 @@ class Fetch:
         """list(int): List of pressure levels."""
         self.variables = variables
         """list(str): List of variables."""
+        self.area = area
+        """list(int): List of coordinates"""
         self.outputformat = outputformat
         """str: File format of output file."""
         self.years = years

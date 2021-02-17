@@ -159,6 +159,20 @@ def _build_parser():
                              ''')
     )
 
+    rgn = argparse.ArgumentParser(add_help=False)
+
+    rgn.add_argument(
+        "--area", nargs='+',
+        required=False, type=float,
+        default=[90, -180, -90, 180],
+        help=textwrap.dedent('''
+                            Coordinates to download data for. Defaults to whole
+                            available region. For subregion extraction, provide coordinates 
+                            as {ymax,xmin,ymin,xmax}
+
+                            ''')
+    )
+
     mnth = argparse.ArgumentParser(add_help=False)
 
     mnth.add_argument(
@@ -202,7 +216,7 @@ def _build_parser():
     )
 
     hourly = subparsers.add_parser(
-        'hourly', parents=[common, mnth, day, hour],
+        'hourly', parents=[common, rgn, mnth, day, hour],
         description='Execute the data fetch process for hourly data.',
         prog=textwrap.dedent('''\
                              Use "era5cli hourly --help" for more information.
@@ -226,7 +240,7 @@ def _build_parser():
     )
 
     monthly = subparsers.add_parser(
-        'monthly', parents=[common, mnth],
+        'monthly', parents=[common, rgn, mnth],
         description='Execute the data fetch process for monthly data.',
         prog=textwrap.dedent('''\
                              Use "era5cli monthly --help" for more information.
@@ -383,6 +397,7 @@ def _execute(args):
             days=days,
             hours=hours,
             variables=args.variables,
+            area=args.area,
             outputformat=args.format,
             outputprefix=args.outputprefix,
             period=args.command,
