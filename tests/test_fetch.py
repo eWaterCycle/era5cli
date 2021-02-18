@@ -76,6 +76,7 @@ def test_init():
     assert not era5.merge
     assert era5.threads == 2
     assert not era5.prelimbe
+    assert not era5.land
 
     # initializing hourly variable with days=None should result in ValueError
     with pytest.raises(TypeError):
