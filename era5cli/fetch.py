@@ -275,6 +275,31 @@ class Fetch:
                 "Invalid variable name: {}".format(variable)
             )
 
+    def _check_area(self):
+        """Confirm that area parameters are correct."""
+        (N, W, S, E) = self.area
+        # breakpoint()
+        if not (-90 <= N <= 90
+                and -90 <= S <= 90
+                and -180 <= W <= 180
+                and -180 <= E <= 180
+                and N > S
+                and W != E
+                ):
+            raise ValueError(
+                "Provide coordinates as N W S E, or ymax xmin ymin xmax. "
+                "x must be in range -180,+180 and y must be in range -90,+90."
+            )
+
+    def _parse_area(self):
+        """Parse area parameters to accepted coordinates."""
+        self._check_area()
+        area = [round(coord, ndigits=2) for coord in self.area]
+        if self.area != area:
+            print(
+                f"NB: coordinates {self.area} rounded down to two decimals.\n")
+        return(area)
+
     def _build_name(self, variable):
         """Build up name of dataset to use"""
 
@@ -317,6 +342,9 @@ class Fetch:
         if "pressure-levels" in name:
             self._check_levels()
             request["pressure_level"] = self.pressure_levels
+
+        if self.area:
+            request["area"] = self._parse_area()
 
         product_type = self._product_type()
         if product_type is not None:

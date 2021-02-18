@@ -520,3 +520,53 @@ def test_more_incompatible_options():
     era5 = initialize(statistics=True, ensemble=False)
     with pytest.raises(ValueError):
         era5._build_request('total_precipitation', [2008])
+
+
+def test_area():
+    '''Test that area is parsed properly'''
+    era5 = initialize()
+    assert era5.area is None
+
+    era5 = initialize(area=[90, -180, -90, 180])
+    (name, request) = era5._build_request('total_precipitation', [2008])
+    assert era5.area == [90, -180, -90, 180]
+    assert request["area"] == [90, -180, -90, 180]
+
+    # Decimals are rounded down
+    era5 = initialize(area=[89.9999, -179.90, -90.0000, 179.012])
+    (name, request) = era5._build_request('total_precipitation', [2008])
+    assert request["area"] == [90.0, -179.90, -90.0, 179.01]
+
+    # North lower than South
+    with pytest.raises(ValueError):
+        era5 = initialize(area=[-10, -180, 10, 180])
+        era5._build_request('total_precipitation', [2008])
+
+    # North equals South
+    with pytest.raises(ValueError):
+        era5 = initialize(area=[0, -180, 0, 180])
+        era5._build_request('total_precipitation', [2008])
+
+    # East equals West
+    with pytest.raises(ValueError):
+        era5 = initialize(area=[90, 0, -90, 0])
+        era5._build_request('total_precipitation', [2008])
+
+    # North, West, South, East out of bounds
+    with pytest.raises(ValueError):
+        era5 = initialize(area=[1000, -180, -90, 180])
+        era5._build_request('total_precipitation', [2008])
+    with pytest.raises(ValueError):
+        era5 = initialize(area=[90, 1000, -90, 180])
+        era5._build_request('total_precipitation', [2008])
+    with pytest.raises(ValueError):
+        era5 = initialize(area=[90, -180, 1000, 180])
+        era5._build_request('total_precipitation', [2008])
+    with pytest.raises(ValueError):
+        era5 = initialize(area=[90, -180, -90, 1000])
+        era5._build_request('total_precipitation', [2008])
+
+    # Coordinate missing
+    with pytest.raises(ValueError):
+        era5 = initialize(area=[-180, 180, -90])
+        era5._build_request('total_precipitation', [2008])
