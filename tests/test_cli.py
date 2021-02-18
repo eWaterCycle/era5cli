@@ -27,6 +27,52 @@ def test_parse_args():
     assert args.statistics
     assert not args.threads
     assert args.variables == ['total_precipitation']
+    assert not args.area
+
+
+def test_area_values():
+    '''Test if correct area values are expected'''
+    # Test if area arguments are parsed correctly
+    argv = ['hourly', '--startyear', '2008',
+            '--variables', 'total_precipitation', '--statistics',
+            '--endyear', '2008', '--ensemble',
+            '--area', '90', '-180', '-90', '180']
+    args = cli._parse_args(argv)
+    assert args.area == [90, -180, -90, 180]
+
+    # missing the argument defaults to area None
+    argv = ['hourly', '--startyear', '2008',
+            '--variables', 'total_precipitation', '--statistics',
+            '--endyear', '2008', '--ensemble']
+    args = cli._parse_args(argv)
+    assert not args.area
+
+
+@pytest.mark.xfail(reason='I am not sure how to call the right error message')
+def test_area_values_xfail():
+    # Requires four values
+    with pytest.raises(ArgumentError):
+        argv = ['hourly', '--startyear', '2008',
+                '--variables', 'total_precipitation', '--statistics',
+                '--endyear', '2008', '--ensemble',
+                '--area', '90', '-180', '-90']
+        cli._parse_args(argv)
+
+    # A value cannot be missing
+    with pytest.raises(ArgumentError):
+        argv = ['hourly', '--startyear', '2008',
+                '--variables', 'total_precipitation', '--statistics',
+                '--endyear', '2008', '--ensemble',
+                '--area', '90', '-180', '-90', '']
+        cli._parse_args(argv)
+
+    # Values must be numeric
+    with pytest.raises(ArgumentError):
+        argv = ['hourly', '--startyear', '2008',
+                '--variables', 'total_precipitation', '--statistics',
+                '--endyear', '2008', '--ensemble',
+                '--area', '90', '-180', '-90', 'E']
+        cli._parse_args(argv)
 
 
 def test_period_args():
