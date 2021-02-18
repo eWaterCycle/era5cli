@@ -26,8 +26,10 @@ class Fetch:
             hours to download data for.
         variables: list(str)
             List of variable names to download data for.
-        area: list(float)
-            Lon-lat values to download data for. (-180 and 180, -90 and 90)
+        area: None, list(float)
+            Coordinates in case extraction of a subregion is requested.
+            Specified as [N, W, S, E] or [ymax, xmin, ymin, xmax], with x and y
+            in the range -180, +180 and -90, +90, respectively.
         outputformat: str
             Type of file to download: 'netcdf' or 'grib'.
         outputprefix: str
@@ -66,8 +68,8 @@ class Fetch:
     """
 
     def __init__(self, years: list, months: list, days: list,
-                 hours: list, variables: list, area: list, outputformat: str,
-                 outputprefix: str, period: str, ensemble: bool,
+                 hours: list, variables: list, outputformat: str,
+                 outputprefix: str, period: str, ensemble: bool, area=None,
                  statistics=None, synoptic=None, pressurelevels=None,
                  merge=False, threads=None, prelimbe=False, land=False):
         """Initialization of Fetch class."""
@@ -90,7 +92,8 @@ class Fetch:
         self.variables = variables
         """list(str): List of variables."""
         self.area = area
-        """list(int): List of coordinates"""
+        """list(float): Coordinates specifying the subregion that will be
+        extracted. Default is None for whole available area."""
         self.outputformat = outputformat
         """str: File format of output file."""
         self.years = years

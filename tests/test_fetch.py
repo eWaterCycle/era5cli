@@ -7,7 +7,8 @@ import unittest.mock as mock
 
 def initialize(outputformat='netcdf', merge=False, statistics=None,
                synoptic=None, ensemble=True, pressurelevels=None,
-               threads=2, period='hourly', variables=['total_precipitation'],
+               threads=2, period='hourly', area=None,
+               variables=['total_precipitation'],
                years=[2008, 2009], months=list(range(1, 13)),
                days=list(range(1, 32)), hours=list(range(0, 24)),
                prelimbe=False, land=False):
@@ -16,6 +17,7 @@ def initialize(outputformat='netcdf', merge=False, statistics=None,
                        months=months,
                        days=days,
                        hours=hours,
+                       area=area,
                        variables=variables,
                        outputformat=outputformat,
                        outputprefix='era5',

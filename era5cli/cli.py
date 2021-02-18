@@ -159,16 +159,16 @@ def _build_parser():
                              ''')
     )
 
-    rgn = argparse.ArgumentParser(add_help=False)
-
-    rgn.add_argument(
-        "--area", nargs='+',
-        required=False, type=float,
-        default=[90, -180, -90, 180],
+    common.add_argument(
+        "--area", nargs=4, type=float,
+        required=False,
         help=textwrap.dedent('''
-                            Coordinates to download data for. Defaults to whole
-                            available region. For subregion extraction, provide coordinates 
-                            as {ymax,xmin,ymin,xmax}
+                            Use this argument to specify a subregion for which
+                            to download the data. Coordinates should be given
+                            as a space separated list with ymax xmin ymin xmax
+                            (N W S E); e.g. --area 90 -180 -90 180.
+                            Without specification, the entire available area
+                            will be returned.
 
                             ''')
     )
@@ -216,7 +216,7 @@ def _build_parser():
     )
 
     hourly = subparsers.add_parser(
-        'hourly', parents=[common, rgn, mnth, day, hour],
+        'hourly', parents=[common, mnth, day, hour],
         description='Execute the data fetch process for hourly data.',
         prog=textwrap.dedent('''\
                              Use "era5cli hourly --help" for more information.
@@ -240,7 +240,7 @@ def _build_parser():
     )
 
     monthly = subparsers.add_parser(
-        'monthly', parents=[common, rgn, mnth],
+        'monthly', parents=[common, mnth],
         description='Execute the data fetch process for monthly data.',
         prog=textwrap.dedent('''\
                              Use "era5cli monthly --help" for more information.
