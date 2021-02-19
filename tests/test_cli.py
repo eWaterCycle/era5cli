@@ -47,11 +47,8 @@ def test_area_values():
     args = cli._parse_args(argv)
     assert not args.area
 
-
-@pytest.mark.xfail(reason='I am not sure how to call the right error message')
-def test_area_values_xfail():
     # Requires four values
-    with pytest.raises(ValueError):
+    with pytest.raises(SystemExit):
         argv = ['hourly', '--startyear', '2008',
                 '--variables', 'total_precipitation', '--statistics',
                 '--endyear', '2008', '--ensemble',
@@ -59,7 +56,7 @@ def test_area_values_xfail():
         cli._parse_args(argv)
 
     # A value cannot be missing
-    with pytest.raises(ValueError):
+    with pytest.raises(SystemExit):
         argv = ['hourly', '--startyear', '2008',
                 '--variables', 'total_precipitation', '--statistics',
                 '--endyear', '2008', '--ensemble',
@@ -67,7 +64,7 @@ def test_area_values_xfail():
         cli._parse_args(argv)
 
     # Values must be numeric
-    with pytest.raises(ValueError):
+    with pytest.raises(SystemExit):
         argv = ['hourly', '--startyear', '2008',
                 '--variables', 'total_precipitation', '--statistics',
                 '--endyear', '2008', '--ensemble',
