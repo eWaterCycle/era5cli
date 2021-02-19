@@ -78,7 +78,6 @@ class Fetch:
         self.months = era5cli.utils._zpad_months(months)
         """list(str): List of zero-padded strings of months
         (e.g. ['01', '02',..., '12'])."""
-        # TODO make sure these docstrings are consistent with cli docs
         if period == 'monthly':
             self.days = None
         else:

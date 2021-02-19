@@ -78,6 +78,7 @@ def test_init():
     assert not era5.merge
     assert era5.threads == 2
     assert not era5.prelimbe
+    assert not era5.land
 
     # initializing hourly variable with days=None should result in ValueError
     with pytest.raises(TypeError):
@@ -370,6 +371,7 @@ def test_check_variable():
         era5._check_variable(slev_only_variable)
 
     # Missing monthly vars should pass if period is hourly
+    era5.period = 'hourly'
     era5.land = False
     era5._check_variable(missing_monthly_var)
 
