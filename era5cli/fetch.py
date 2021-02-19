@@ -167,6 +167,10 @@ class Fetch:
                   else self.outputprefix)
         yearblock = f"{start}-{end}" if not start == end else f"{start}"
         fname = f"{prefix}_{var}_{yearblock}_{self.period}"
+        if self.area:
+            directions = ['N', 'W', 'S', 'E']
+            coords = [str(c) for c in self._round_area()]
+            fname += '_' + ''.join([d+c for d, c in zip(directions, coords)])
         if self.ensemble:
             fname += "_ensemble"
         if self.statistics:
@@ -293,14 +297,18 @@ class Fetch:
                 "x must be in range -180,+180 and y must be in range -90,+90."
             )
 
+    def _round_area(self):
+        area = [round(coord, ndigits=2) for coord in self.area]
+        return area
+
     def _parse_area(self):
         """Parse area parameters to accepted coordinates."""
         self._check_area()
-        area = [round(coord, ndigits=2) for coord in self.area]
+        area = self._round_area()
         if self.area != area:
             print(
                 f"NB: coordinates {self.area} rounded down to two decimals.\n")
-        return(area)
+        return area
 
     def _build_name(self, variable):
         """Build up name of dataset to use"""
