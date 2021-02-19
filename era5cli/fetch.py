@@ -59,13 +59,15 @@ class Fetch:
             be written to stdout.
         prelimbe: bool
             Whether to download the preliminary back extension (1950-1978).
+        land: bool
+            Whether to download ERA5-Land data.
     """
 
     def __init__(self, years: list, months: list, days: list,
                  hours: list, variables: list, outputformat: str,
                  outputprefix: str, period: str, ensemble: bool,
                  statistics=None, synoptic=None, pressurelevels=None,
-                 merge=False, threads=None, prelimbe=False):
+                 merge=False, threads=None, prelimbe=False, land=False):
         """Initialization of Fetch class."""
         self.months = era5cli.utils._zpad_months(months)
         """list(str): List of zero-padded strings of months
@@ -112,6 +114,9 @@ class Fetch:
         self.prelimbe = prelimbe
         """bool: Whether to select from the ERA5 preliminary back
         extension which supports years from 1950 to 1978"""
+        self.land = land
+        """bool: Whether to download from the ERA5-Land
+        dataset."""
 
     def fetch(self, dryrun=False):
         """Split calls and fetch results.
@@ -146,23 +151,19 @@ class Fetch:
 
     def _define_outputfilename(self, var, years):
         """Define output filename."""
-        start_year = years[0]
-        end_year = years[-1]
-        if not end_year or (end_year == start_year):
-            fname = ("{}_{}_{}_{}".format(
-                self.outputprefix, var,
-                start_year, self.period))
-        else:
-            fname = ("{}_{}_{}-{}_{}".format(
-                self.outputprefix, var,
-                start_year, end_year, self.period))
+        start, end = years[0], years[-1]
+
+        prefix = (f"{self.outputprefix}-land" if self.land
+                  else self.outputprefix)
+        yearblock = f"{start}-{end}" if not start == end else f"{start}"
+        fname = f"{prefix}_{var}_{yearblock}_{self.period}"
         if self.ensemble:
             fname += "_ensemble"
         if self.statistics:
             fname += "_statistics"
         if self.synoptic:
             fname += "_synoptic"
-        fname += ".{}".format(self.ext)
+        fname += f".{self.ext}"
         return fname
 
     def _split_variable(self):
@@ -193,81 +194,128 @@ class Fetch:
 
     def _product_type(self):
         """Construct the product type name from the options."""
-        producttype = ""
-
-        if self.ensemble:
-            producttype += "ensemble_members"
-        elif not self.ensemble:
-            producttype += "reanalysis"
-
-        if self.period == "monthly" and not self.prelimbe:
-            producttype = "monthly_averaged_" + producttype
-            if self.synoptic:
-                producttype += "_by_hour_of_day"
-        elif self.period == "monthly" and self.prelimbe:
-            if self.ensemble:
-                producttype = "members-"
-            elif not self.ensemble:
-                producttype = "reanalysis-"
-            if self.synoptic:
-                producttype += "synoptic-monthly-means"
-            elif not self.synoptic:
-                producttype += "monthly-means-of-daily-means"
-        elif self.period == "hourly" and self.ensemble and self.statistics:
-            producttype = [
+        if self.period == 'hourly' and self.ensemble and self.statistics:
+            # The only configuration to return a list
+            return [
                 "ensemble_members",
                 "ensemble_mean",
                 "ensemble_spread",
             ]
 
+        if self.land and self.period == "hourly":
+            # The only configuration to return None
+            return None
+
+        # Default flow
+        if self.ensemble:
+            producttype = "ensemble_members"
+        else:
+            producttype = "reanalysis"
+
+        if self.period == "hourly":
+            return producttype
+
+        producttype = "monthly_averaged_" + producttype
+        if self.synoptic:
+            producttype += "_by_hour_of_day"
+
+        if not self.prelimbe:
+            return producttype
+
+        # Prelimbe has deviating product types for monthly data
+        if self.ensemble:
+            producttype = "members-"
+        else:
+            producttype = "reanalysis-"
+        if self.synoptic:
+            producttype += "synoptic-monthly-means"
+        else:
+            producttype += "monthly-means-of-daily-means"
         return producttype
+
+    def _check_levels(self):
+        """Retrieve pressure level info for request"""
+        if not self.pressure_levels:
+            raise ValueError(
+                "Requested 3D variable(s), but no pressure levels specified."
+                "Aborting."
+            )
+        if not all(level in ref.PLEVELS for level in self.pressure_levels):
+            raise ValueError(
+                f"Invalid pressure levels. Allowed values are: {ref.PLEVELS}"
+            )
+
+    def _check_variable(self, variable):
+        """Check variable available and compatible with other inputs."""
+        # if land then the variable must be in era5 land
+        if self.land:
+            if variable not in ref.ERA5_LAND_VARS:
+                raise ValueError(
+                    f"Variable {variable} is not available in ERA5-Land.\n"
+                    f"Choose from {ref.ERA5_LAND_VARS}"
+                )
+        elif variable in ref.PLVARS+ref.SLVARS:
+            if self.period == "monthly":
+                if variable in ref.MISSING_MONTHLY_VARS:
+                    header = ("There is no monthly data available for the "
+                              "following variables:\n")
+                    raise ValueError(era5cli.utils._print_multicolumn(
+                        header,
+                        ref.MISSING_MONTHLY_VARS))
+        else:
+            raise ValueError(
+                "Invalid variable name: {}".format(variable)
+            )
+
+    def _build_name(self, variable):
+        """Build up name of dataset to use"""
+
+        name = "reanalysis-era5"
+
+        if self.land:
+            name += "-land"
+        elif variable in ref.PLVARS:
+            name += "-pressure-levels"
+        elif variable in ref.SLVARS:
+            name += "-single-levels"
+        else:
+            raise ValueError(
+                "Invalid variable name: {}".format(variable)
+            )
+
+        if self.period == "monthly":
+            name += "-monthly-means"
+
+        if self.prelimbe:
+            if self.land:
+                raise ValueError(
+                    "Back extension not (yet) available for ERA5-Land."
+                )
+            name += "-preliminary-back-extension"
+        return name
 
     def _build_request(self, variable, years):
         """Build the download request for the retrieve method of cdsapi."""
-        name = "reanalysis-era5-"
+        self._check_variable(variable)
+
+        name = self._build_name(variable)
+
         request = {'variable': variable,
                    'year': years,
-                   'product_type': self._product_type(),
                    'month': self.months,
                    'time': self.hours,
                    'format': self.outputformat}
 
-        # variable is pressure level variable
-        if variable in ref.PLVARS:
-            try:
-                if all(level in ref.PLEVELS for level in self.pressure_levels):
-                    name += "pressure-levels"
-                    request["pressure_level"] = self.pressure_levels
-                else:
-                    raise ValueError(
-                        "Invalid pressure levels. Allowed values are: {}"
-                        .format(ref.PLEVELS))
-            except TypeError:
-                raise ValueError(
-                    "Invalid pressure levels. Allowed values are: {}"
-                    .format(ref.PLEVELS))
-        # variable is single level variable
-        elif variable in ref.SLVARS:
-            name += "single-levels"
-        # variable is unknown
-        else:
-            raise ValueError('Invalid variable name: {}'.format(variable))
+        if "pressure-levels" in name:
+            self._check_levels()
+            request["pressure_level"] = self.pressure_levels
 
-        if self.period == "monthly":
-            name += "-monthly-means"
-            if variable in ref.MISSING_MONTHLY_VARS:
-                header = ("There is no monthly data available for the "
-                          "following variables:\n")
-                raise ValueError(era5cli.utils._print_multicolumn(
-                    header,
-                    ref.MISSING_MONTHLY_VARS))
-        elif self.period == "hourly":
-            # Add day list to request if applicable
-            if self.days:
-                request["day"] = self.days
+        product_type = self._product_type()
+        if product_type is not None:
+            request["product_type"] = product_type
 
-        if self.prelimbe:
-            name += "-preliminary-back-extension"
+        if self.period == "hourly":
+            request["day"] = self.days
 
         return(name, request)
 
@@ -287,7 +335,7 @@ class Fetch:
                 "It can take some time before downloading starts, ",
                 "please do not kill this process in the meantime.",
                 os.linesep
-                )
+            )
             connection = cdsapi.Client()
             print("".join(queueing_message))  # print queueing message
             connection.retrieve(name, request, outputfile)

@@ -11,7 +11,7 @@ def test_parse_args():
     """Test argument parser of cli."""
     argv = ['hourly', '--startyear', '2008',
             '--variables', 'total_precipitation', '--statistics',
-            '--endyear', '2008', '--ensemble']
+            '--endyear', '2008', '--ensemble', '--land']
     args = cli._parse_args(argv)
     assert args.command == 'hourly'
     assert args.days == list(range(1, 32))
@@ -27,6 +27,7 @@ def test_parse_args():
     assert args.statistics
     assert not args.threads
     assert args.variables == ['total_precipitation']
+    assert args.land
 
 
 def test_period_args():
@@ -101,6 +102,14 @@ def test_main_fetch(fetch):
             '--ensemble']
     args = cli._parse_args(argv)
     cli._execute(args)
+
+    # no land available for back extension
+    argv = ['monthly', '--startyear', '1980', '--endyear', '1980',
+            '--variables', 'total_precipitation', '--synoptic',
+            '--ensemble', '--land']
+    args = cli._parse_args(argv)
+    with pytest.raises(AssertionError):
+        cli._execute(args)
 
 
 @mock.patch("era5cli.info.Info", autospec=True)
