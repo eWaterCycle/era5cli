@@ -202,6 +202,20 @@ def test_define_outputfilename():
     fn = 'era5-land_total_precipitation_2008_hourly.nc'
     assert fname == fn
 
+    era5.area = [90.0, -180.0, -90.0, 180.0]
+    fname = era5._define_outputfilename('total_precipitation', [2008])
+    fn = (
+        'era5-land_total_precipitation_2008_hourly_N90.0W-180.0S-90.0E180.0.nc'
+    )
+    assert fname == fn
+
+    era5.area = [90.0, -180.0, -80.999, 170.001]
+    fname = era5._define_outputfilename('total_precipitation', [2008])
+    fn = (
+        'era5-land_total_precipitation_2008_hourly_N90.0W-180.0S-81.0E170.0.nc'
+    )
+    assert fname == fn
+
 
 def test_number_outputfiles(capsys):
     """Test function for the number of outputs."""
