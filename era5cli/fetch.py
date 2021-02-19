@@ -284,7 +284,6 @@ class Fetch:
     def _check_area(self):
         """Confirm that area parameters are correct."""
         (N, W, S, E) = self.area
-        # breakpoint()
         if not (-90 <= N <= 90
                 and -90 <= S <= 90
                 and -180 <= W <= 180
