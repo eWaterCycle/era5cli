@@ -162,12 +162,14 @@ def _build_parser():
     common.add_argument(
         "--area", nargs=4, type=float,
         required=False,
-        help=textwrap.dedent('''
-                            Use this argument to specify a subregion for which
-                            to download the data. Coordinates should be given
-                            as a space separated list with ymax xmin ymin xmax
-                            (N W S E); e.g. --area 90 -180 -90 180.
-                            Without specification, the entire available area
+        help=textwrap.dedent('''\
+                            Coordinates in case extraction of a subregion is
+                            requested. Specified as N W S E or
+                            ymax xmin ymin xmax with x and y in the
+                            range -180, +180 and -90, +90, respectively
+                            e.g. --area 90 -180 -90 180.
+                            Requests are rounded down to two decimals.
+                            Without specification, the whole available area
                             will be returned.
 
                             ''')

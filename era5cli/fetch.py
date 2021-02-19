@@ -29,7 +29,9 @@ class Fetch:
         area: None, list(float)
             Coordinates in case extraction of a subregion is requested.
             Specified as [N, W, S, E] or [ymax, xmin, ymin, xmax], with x and y
-            in the range -180, +180 and -90, +90, respectively.
+            in the range -180, +180 and -90, +90, respectively. Requests are
+            rounded down to two decimals. Without specification, the whole
+            available area will be returned.
         outputformat: str
             Type of file to download: 'netcdf' or 'grib'.
         outputprefix: str
