@@ -31,7 +31,7 @@ def test_parse_args():
     assert not args.area
 
 
-def test_area_values():
+def test_area_argument():
     """Test if area argument is parsed correctly."""
     # Test if area arguments are parsed correctly
     argv = ['hourly', '--startyear', '2008',
