@@ -32,7 +32,7 @@ def test_parse_args():
 
 
 def test_area_values():
-    '''Test if correct area values are expected'''
+    """Test if area argument is parsed correctly."""
     # Test if area arguments are parsed correctly
     argv = ['hourly', '--startyear', '2008',
             '--variables', 'total_precipitation', '--statistics',
