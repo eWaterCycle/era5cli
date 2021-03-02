@@ -206,14 +206,14 @@ def test_define_outputfilename():
     era5.area = [90.0, -180.0, -90.0, 180.0]
     fname = era5._define_outputfilename('total_precipitation', [2008])
     fn = (
-        'era5-land_total_precipitation_2008_hourly_N90.0W-180.0S-90.0E180.0.nc'
+        'era5-land_total_precipitation_2008_hourly_[90][-180][-90][180].nc'
     )
     assert fname == fn
 
     era5.area = [90.0, -180.0, -80.999, 170.001]
     fname = era5._define_outputfilename('total_precipitation', [2008])
     fn = (
-        'era5-land_total_precipitation_2008_hourly_N90.0W-180.0S-81.0E170.0.nc'
+        'era5-land_total_precipitation_2008_hourly_[90][-180][-80][170].nc'
     )
     assert fname == fn
 
@@ -553,22 +553,27 @@ def test_area():
     (name, request) = era5._build_request('total_precipitation', [2008])
     assert request["area"] == [90.0, -179.90, -90.0, 179.01]
 
-    # North lower than South
+    # ymax may not be lower than ymin
     with pytest.raises(ValueError):
         era5 = initialize(area=[-10, -180, 10, 180])
         era5._build_request('total_precipitation', [2008])
 
-    # North equals South
+    # xmin higher than xmax should be ok
+    era5 = initialize(area=[90, 120, -90, -120])
+    (name, request) = era5._build_request('total_precipitation', [2008])
+    assert request["area"] == [90.0, 120.0, -90.0, -120.0]
+
+    # ymax may not equal ymin
     with pytest.raises(ValueError):
         era5 = initialize(area=[0, -180, 0, 180])
         era5._build_request('total_precipitation', [2008])
 
-    # East equals West
+    # xmin may not equal xmax
     with pytest.raises(ValueError):
         era5 = initialize(area=[90, 0, -90, 0])
         era5._build_request('total_precipitation', [2008])
 
-    # North, West, South, East out of bounds
+    # ymax, xmin, ymin, xmax may not be out of bounds
     with pytest.raises(ValueError):
         era5 = initialize(area=[1000, -180, -90, 180])
         era5._build_request('total_precipitation', [2008])

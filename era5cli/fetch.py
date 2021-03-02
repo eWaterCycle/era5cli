@@ -28,7 +28,7 @@ class Fetch:
             List of variable names to download data for.
         area: None, list(float)
             Coordinates in case extraction of a subregion is requested.
-            Specified as [N, W, S, E] or [ymax, xmin, ymin, xmax], with x and y
+            Specified as [ymax, xmin, ymin, xmax], with x and y
             in the range -180, +180 and -90, +90, respectively. Requests are
             rounded down to two decimals. Without specification, the whole
             available area will be returned.
@@ -167,9 +167,8 @@ class Fetch:
         yearblock = f"{start}-{end}" if not start == end else f"{start}"
         fname = f"{prefix}_{var}_{yearblock}_{self.period}"
         if self.area:
-            directions = ['N', 'W', 'S', 'E']
-            coords = [str(c) for c in self._round_area()]
-            fname += '_' + ''.join([d+c for d, c in zip(directions, coords)])
+            coords = [str(int(c)) for c in self.area]
+            fname += '_[' + ']['.join(coords) + ']'
         if self.ensemble:
             fname += "_ensemble"
         if self.statistics:
@@ -282,27 +281,23 @@ class Fetch:
 
     def _check_area(self):
         """Confirm that area parameters are correct."""
-        (N, W, S, E) = self.area
-        if not (-90 <= N <= 90
-                and -90 <= S <= 90
-                and -180 <= W <= 180
-                and -180 <= E <= 180
-                and N > S
-                and W != E
+        (ymax, xmin, ymin, xmax) = self.area
+        if not (-90 <= ymax <= 90
+                and -90 <= ymin <= 90
+                and -180 <= xmin <= 180
+                and -180 <= xmax <= 180
+                and ymax > ymin
+                and xmax != xmin
                 ):
             raise ValueError(
-                "Provide coordinates as N W S E, or ymax xmin ymin xmax. "
+                "Provide coordinates as ymax xmin ymin xmax. "
                 "x must be in range -180,+180 and y must be in range -90,+90."
             )
-
-    def _round_area(self):
-        area = [round(coord, ndigits=2) for coord in self.area]
-        return area
 
     def _parse_area(self):
         """Parse area parameters to accepted coordinates."""
         self._check_area()
-        area = self._round_area()
+        area = [round(coord, ndigits=2) for coord in self.area]
         if self.area != area:
             print(
                 f"NB: coordinates {self.area} rounded down to two decimals.\n")

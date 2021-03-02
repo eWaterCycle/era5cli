@@ -164,7 +164,7 @@ def _build_parser():
         required=False,
         help=textwrap.dedent('''\
                             Coordinates in case extraction of a subregion is
-                            requested. Specified as N W S E or
+                            requested. Specified as
                             ymax xmin ymin xmax with x and y in the
                             range -180, +180 and -90, +90, respectively
                             e.g. --area 90 -180 -90 180.
