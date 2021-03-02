@@ -539,7 +539,7 @@ def test_more_incompatible_options():
 
 
 def test_area():
-    '''Test that area is parsed properly'''
+    """Test that area is parsed properly."""
     era5 = initialize()
     assert era5.area is None
 
