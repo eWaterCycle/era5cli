@@ -41,7 +41,7 @@ def test_area_values():
     args = cli._parse_args(argv)
     assert args.area == [90, -180, -90, 180]
 
-    # missing the argument defaults to area None
+    # Check that area defaults to None
     argv = ['hourly', '--startyear', '2008',
             '--variables', 'total_precipitation', '--statistics',
             '--endyear', '2008', '--ensemble']
