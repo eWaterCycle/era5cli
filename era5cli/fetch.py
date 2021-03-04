@@ -158,6 +158,13 @@ class Fetch:
             raise ValueError('Unknown outputformat: {}'.format(
                 self.outputformat))
 
+    def _process_areaname(self):
+        (ymax,xmin,ymin,xmax) = [round(c) for c in self.area]
+        lon = lambda x: f"{x}E" if x>0 else(f"{abs(x)}W" if x<0 else 0)
+        lat = lambda y:  f"{y}N" if y>0 else(f"{abs(y)}S" if y<0 else 0)
+        name = f"_{lon(xmin)}-{lon(xmax)}_{lat(ymin)}-{lat(ymax)}"
+        return name
+
     def _define_outputfilename(self, var, years):
         """Define output filename."""
         start, end = years[0], years[-1]
@@ -167,8 +174,7 @@ class Fetch:
         yearblock = f"{start}-{end}" if not start == end else f"{start}"
         fname = f"{prefix}_{var}_{yearblock}_{self.period}"
         if self.area:
-            coords = [str(int(c)) for c in self.area]
-            fname += '_[' + ']['.join(coords) + ']'
+            fname += self._process_areaname()
         if self.ensemble:
             fname += "_ensemble"
         if self.statistics:

@@ -206,14 +206,21 @@ def test_define_outputfilename():
     era5.area = [90.0, -180.0, -90.0, 180.0]
     fname = era5._define_outputfilename('total_precipitation', [2008])
     fn = (
-        'era5-land_total_precipitation_2008_hourly_[90][-180][-90][180].nc'
+        'era5-land_total_precipitation_2008_hourly_180W-180E_90S-90N.nc'
     )
     assert fname == fn
 
     era5.area = [90.0, -180.0, -80.999, 170.001]
     fname = era5._define_outputfilename('total_precipitation', [2008])
     fn = (
-        'era5-land_total_precipitation_2008_hourly_[90][-180][-80][170].nc'
+        'era5-land_total_precipitation_2008_hourly_180W-170E_81S-90N.nc'
+    )
+    assert fname == fn
+
+    era5.area = [0, 120, -90, 180]
+    fname = era5._define_outputfilename('total_precipitation', [2008])
+    fn = (
+        'era5-land_total_precipitation_2008_hourly_120E-180E_90S-0.nc'
     )
     assert fname == fn
 
