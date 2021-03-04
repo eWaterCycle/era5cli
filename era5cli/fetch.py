@@ -26,6 +26,12 @@ class Fetch:
             hours to download data for.
         variables: list(str)
             List of variable names to download data for.
+        area: None, list(float)
+            Coordinates in case extraction of a subregion is requested.
+            Specified as [ymax, xmin, ymin, xmax], with x and y
+            in the range -180, +180 and -90, +90, respectively. Requests are
+            rounded down to two decimals. Without specification, the whole
+            available area will be returned.
         outputformat: str
             Type of file to download: 'netcdf' or 'grib'.
         outputprefix: str
@@ -65,7 +71,7 @@ class Fetch:
 
     def __init__(self, years: list, months: list, days: list,
                  hours: list, variables: list, outputformat: str,
-                 outputprefix: str, period: str, ensemble: bool,
+                 outputprefix: str, period: str, ensemble: bool, area=None,
                  statistics=None, synoptic=None, pressurelevels=None,
                  merge=False, threads=None, prelimbe=False, land=False):
         """Initialization of Fetch class."""
@@ -86,6 +92,9 @@ class Fetch:
         """list(int): List of pressure levels."""
         self.variables = variables
         """list(str): List of variables."""
+        self.area = area
+        """list(float): Coordinates specifying the subregion that will be
+        extracted. Default is None for whole available area."""
         self.outputformat = outputformat
         """str: File format of output file."""
         self.years = years
@@ -149,6 +158,13 @@ class Fetch:
             raise ValueError('Unknown outputformat: {}'.format(
                 self.outputformat))
 
+    def _process_areaname(self):
+        (ymax, xmin, ymin, xmax) = [round(c) for c in self.area]
+        def lon(x): return f"{x}E" if x >= 0 else f"{abs(x)}W"
+        def lat(y): return f"{y}N" if y >= 0 else f"{abs(y)}S"
+        name = f"_{lon(xmin)}-{lon(xmax)}_{lat(ymin)}-{lat(ymax)}"
+        return name
+
     def _define_outputfilename(self, var, years):
         """Define output filename."""
         start, end = years[0], years[-1]
@@ -157,6 +173,8 @@ class Fetch:
                   else self.outputprefix)
         yearblock = f"{start}-{end}" if not start == end else f"{start}"
         fname = f"{prefix}_{var}_{yearblock}_{self.period}"
+        if self.area:
+            fname += self._process_areaname()
         if self.ensemble:
             fname += "_ensemble"
         if self.statistics:
@@ -267,6 +285,30 @@ class Fetch:
                 "Invalid variable name: {}".format(variable)
             )
 
+    def _check_area(self):
+        """Confirm that area parameters are correct."""
+        (ymax, xmin, ymin, xmax) = self.area
+        if not (-90 <= ymax <= 90
+                and -90 <= ymin <= 90
+                and -180 <= xmin <= 180
+                and -180 <= xmax <= 180
+                and ymax > ymin
+                and xmax != xmin
+                ):
+            raise ValueError(
+                "Provide coordinates as ymax xmin ymin xmax. "
+                "x must be in range -180,+180 and y must be in range -90,+90."
+            )
+
+    def _parse_area(self):
+        """Parse area parameters to accepted coordinates."""
+        self._check_area()
+        area = [round(coord, ndigits=2) for coord in self.area]
+        if self.area != area:
+            print(
+                f"NB: coordinates {self.area} rounded down to two decimals.\n")
+        return area
+
     def _build_name(self, variable):
         """Build up name of dataset to use"""
 
@@ -309,6 +351,9 @@ class Fetch:
         if "pressure-levels" in name:
             self._check_levels()
             request["pressure_level"] = self.pressure_levels
+
+        if self.area:
+            request["area"] = self._parse_area()
 
         product_type = self._product_type()
         if product_type is not None:

@@ -33,9 +33,10 @@ With era5cli you can: ​
 - select multiple variables for several months and years
 - split outputs by years, producing a separate file for every year instead of merging them in one file
 - download multiple files at once
+- extract data for a sub-region of the globe
 - download ERA5 back extension (preliminary version)
 
 .. inclusion-marker-end-do-not-remove
 
-| Free software: Apache Software License 2.0 
+| Free software: Apache Software License 2.0
 | Documentation: https://era5cli.readthedocs.io
