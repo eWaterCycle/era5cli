@@ -159,9 +159,9 @@ class Fetch:
                 self.outputformat))
 
     def _process_areaname(self):
-        (ymax,xmin,ymin,xmax) = [round(c) for c in self.area]
-        lon = lambda x: f"{x}E" if x>0 else(f"{abs(x)}W" if x<0 else 0)
-        lat = lambda y:  f"{y}N" if y>0 else(f"{abs(y)}S" if y<0 else 0)
+        (ymax, xmin, ymin, xmax) = [round(c) for c in self.area]
+        def lon(x): return f"{x}E" if x > 0 else(f"{abs(x)}W" if x < 0 else 0)
+        def lat(y): return f"{y}N" if y > 0 else(f"{abs(y)}S" if y < 0 else 0)
         name = f"_{lon(xmin)}-{lon(xmax)}_{lat(ymin)}-{lat(ymax)}"
         return name
 
