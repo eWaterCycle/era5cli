@@ -220,7 +220,7 @@ def test_define_outputfilename():
     era5.area = [0, 120, -90, 180]
     fname = era5._define_outputfilename('total_precipitation', [2008])
     fn = (
-        'era5-land_total_precipitation_2008_hourly_120E-180E_90S-0.nc'
+        'era5-land_total_precipitation_2008_hourly_120E-180E_90S-0N.nc'
     )
     assert fname == fn
 
