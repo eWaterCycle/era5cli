@@ -161,16 +161,17 @@ def _build_parser():
 
     common.add_argument(
         "--area", nargs=4, type=float,
+        metavar=('LAT_MAX', 'LON_MIN', 'LAT_MIN', 'LON_MAX'),
         required=False,
         help=textwrap.dedent('''\
                             Coordinates in case extraction of a subregion is
-                            requested. Specified as
-                            ymax xmin ymin xmax with x and y in the
-                            range -180, +180 and -90, +90, respectively
-                            e.g. --area 90 -180 -90 180.
-                            Requests are rounded down to two decimals.
-                            Without specification, the whole available area
-                            will be returned.
+                            requested. Specified as lat_max lon_min lat_min lon_max
+                            (counterclockwise coordinates, starting at the top)
+                            with longitude and latitude in the range
+                            -180, +180 and -90, +90, respectively e.g.
+                            --area 90 -180 -90 180. Requests are rounded down to two
+                            decimals. Without specification, the whole available
+                            area will be returned.
 
                             ''')
     )
