@@ -1,0 +1,28 @@
+name: CI tests
+
+on:
+  push:
+    branches:
+      - master
+      - github_actions
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+      fail-fast: false
+    name: Run tests in conda environment ${{ matrix.python-version }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install package
+      shell: bash -l {0}
+      run: |
+        pip3 install -e .
+    - name: Test with pytest
+      run: pytest
+      shell: bash -l {0}
