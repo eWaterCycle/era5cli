@@ -575,11 +575,6 @@ def test_area():
         era5 = initialize(area=[0, -180, 0, 180])
         era5._build_request('total_precipitation', [2008])
 
-    # ymax may not equal ymin # this is a mock test added to check codecov
-    with pytest.raises(ValueError):
-        era5 = initialize(area=[0, -180, 0, 180])
-        era5._build_request('total_precipitation', [2010])
-
     # xmin may not equal xmax
     with pytest.raises(ValueError):
         era5 = initialize(area=[90, 0, -90, 0])
