@@ -23,7 +23,6 @@ jobs:
         pip install -r requirements.txt
         pip install -r requirements-dev.txt
         pip install -e .
-#        pytest --cov=./ --cov-report=xml
         py.test --cov=era5cli --cov-report term --cov-report xml:cov.sml tests/
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
