@@ -482,7 +482,6 @@ def test_build_request():
                       years=[1970],
                       prelimbe=True)
     (name, request) = era5._build_request('total_precipitation', [1970])
-    print(request)
     assert name == (
         "reanalysis-era5-single-levels-monthly"
         "-means-preliminary-back-extension"
