@@ -1,4 +1,4 @@
-name: codecov coverage test
+name: CI test and coverage
 
 on:
   pull_request
