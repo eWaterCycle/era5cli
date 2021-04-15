@@ -35,5 +35,4 @@ jobs:
       run: py.test --cov=era5cli --cov-report term --cov-report xml:cov.sml tests/
     - name: Flake8
       run: flake8
-      shell: bash -l {0}
       shell: bash <(curl -s https://codecov.io/bash)
