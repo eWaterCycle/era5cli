@@ -23,6 +23,10 @@ jobs:
         pip install -r requirements.txt
         pip install -r requirements-dev.txt
         pip install -e .
+    - name: Test with pytest
+      run: pytest
+    - name: Flake8
+      run: flake8
     - name: Test coverage
       run: |
         py.test --cov=era5cli --cov-report term --cov-report xml:cov.sml tests/
