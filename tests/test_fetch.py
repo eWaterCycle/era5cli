@@ -431,11 +431,6 @@ def test_build_name():
     name = era5._build_name('snow_cover')
     assert name == "reanalysis-era5-land"
 
-    # failing test added to check workflow
-    era5.land = False
-    name = era5._build_name('snow_cover')
-    assert name == "reanalysis-era5-land"
-
     era5.period = "monthly"
     name = era5._build_name('snow_cover')
     assert name == "reanalysis-era5-land-monthly-means"
