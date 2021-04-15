@@ -27,7 +27,8 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip3 install -e .
+        pip install pytest
+        pip install -e .
     - name: Test with pytest
       run: pytest
       shell: bash -l {0}
