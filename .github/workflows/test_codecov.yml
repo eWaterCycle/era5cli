@@ -29,7 +29,7 @@ jobs:
       run: flake8
     - name: Test coverage
       run: |
-        py.test --cov=era5cli --cov-report term --cov-report xml:cov.sml tests/
+        pytest --cov=era5cli --cov-report term --cov-report xml:cov.sml tests/
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1.3.2
       with:
