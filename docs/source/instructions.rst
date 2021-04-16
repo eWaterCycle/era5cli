@@ -60,6 +60,19 @@ Info on available variables
    :prog: era5cli
    :path: info
 
+Tip: search in variables
+########################
+
+To quickly search the list of variables for a specific word, you can use the
+built-in ``grep`` command. For example:
+
+::
+
+   era5cli info "2Dvars" | grep temperature
+
+
+should list all single level variables that contain the word 'temperature', so
+they can be easily identified for an era5cli request.
 
 Running era5cli from the command line
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
