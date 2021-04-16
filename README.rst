@@ -8,9 +8,9 @@ era5cli
    :target: http://era5cli.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
-.. image:: https://travis-ci.com/eWaterCycle/era5cli.svg?branch=master
-   :target: https://travis-ci.com/eWaterCycle/era5cli
-   :alt: Travis Build
+.. image:: https://github.com/eWaterCycle/era5cli/actions/workflows/test_codecov.yml/badge.svg
+   :target: actions/workflows/test_codecov.yml
+   :alt: Github Actions
 
 .. image:: https://codecov.io/gh/eWaterCycle/era5cli/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/eWaterCycle/era5cli
