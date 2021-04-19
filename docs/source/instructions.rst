@@ -75,7 +75,7 @@ should list all single level variables that contain the word 'temperature', so
 they can be easily identified for an era5cli request.
 
 Running era5cli from the command line
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 era5cli can be used to fetch both hourly data and monthly averaged data.
 
 Fetching hourly data
