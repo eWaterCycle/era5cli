@@ -139,7 +139,8 @@ def test_fetch_nodryrun(cds, era5cli_utils_append_history):
     # check check against monthly unavailable data raise ValueError
     era5 = initialize(outputformat='grib', merge=True,
                       threads=None,
-                      variables=['wave_spectral_skewness'],
+                      variables=[
+                          '10m_wind_gust_since_previous_post_processing'],
                       period='monthly')
     with pytest.raises(ValueError):
         assert era5.fetch()
@@ -359,7 +360,7 @@ def test_check_variable():
 
     land_only_variable = "snow_cover"
     slev_only_variable = "vertical_integral_of_mass_tendency"
-    missing_monthly_var = "altimeter_wave_height"
+    missing_monthly_var = "10m_wind_gust_since_previous_post_processing"
 
     # Invalid variables should raise
     with pytest.raises(ValueError):
