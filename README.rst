@@ -9,7 +9,7 @@ era5cli
    :alt: Documentation Status
 
 .. image:: https://github.com/eWaterCycle/era5cli/actions/workflows/test_codecov.yml/badge.svg
-   :target: actions/workflows/test_codecov.yml
+   :target: https://github.com/eWaterCycle/era5cli/actions/workflows/test_codecov.yml
    :alt: Github Actions
 
 .. image:: https://codecov.io/gh/eWaterCycle/era5cli/branch/master/graph/badge.svg
