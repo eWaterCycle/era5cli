@@ -23,23 +23,23 @@ PLEVELS = [
 # All links below prefaced with:
 # https://cds.climate.copernicus.eu/cdsapp#!/dataset/
 
-### Direct links to all datasets used: ###
+# Direct links to all datasets used:
 
-## Single levels (hourly) variables via:
+# Single levels (hourly) variables via:
 # reanalysis-era5-single-levels
 # reanalysis-era5-single-levels-preliminary-back-extension
 
-## Single levels (monthly) variables via:
+# Single levels (monthly) variables via:
 # reanalysis-era5-single-levels-monthly-means
 # reanalysis-era5-single-levels-monthly-means-preliminary-back-extension
 
-## Pressure levels variables via:
+# Pressure levels variables via:
 # reanalysis-era5-pressure-levels
 # reanalysis-era5-pressure-levels-monthly-means
 # reanalysis-era5-pressure-levels-preliminary-back-extension
 # reanalysis-era5-pressure-levels-monthly-means-preliminary-back-extension
 
-## ERA5-land variables via:
+# ERA5-land variables via:
 # reanalysis-era5-land
 # reanalysis-era5-land-monthly-means
 
