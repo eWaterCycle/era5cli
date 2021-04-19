@@ -17,8 +17,32 @@ PLEVELS = [
     1000
 ]
 
-# The pressure level variables to be downloaded from
-# https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels
+# Documentation resources via
+# https://cds.climate.copernicus.eu/
+
+# All links below prefaced with:
+# https://cds.climate.copernicus.eu/cdsapp#!/dataset/
+
+### Direct links to all datasets used: ###
+
+## Single levels (hourly) variables via:
+# reanalysis-era5-single-levels
+# reanalysis-era5-single-levels-preliminary-back-extension
+
+## Single levels (monthly) variables via:
+# reanalysis-era5-single-levels-monthly-means
+# reanalysis-era5-single-levels-monthly-means-preliminary-back-extension
+
+## Pressure levels variables via:
+# reanalysis-era5-pressure-levels
+# reanalysis-era5-pressure-levels-monthly-means
+# reanalysis-era5-pressure-levels-preliminary-back-extension
+# reanalysis-era5-pressure-levels-monthly-means-preliminary-back-extension
+
+## ERA5-land variables via:
+# reanalysis-era5-land
+# reanalysis-era5-land-monthly-means
+
 PLVARS = [
     'divergence',
     'fraction_of_cloud_cover',
@@ -38,8 +62,6 @@ PLVARS = [
     'vorticity',
 ]
 
-# The single level variables to be downloaded from
-# https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels
 SLVARS = [
     '100m_u_component_of_wind',
     '100m_v_component_of_wind',
