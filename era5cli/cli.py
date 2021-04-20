@@ -171,7 +171,7 @@ def _build_parser():
                             with longitude and latitude in the range
                             -180, +180 and -90, +90, respectively e.g.
                             --area 90 -180 -90 180. Requests are rounded down
-                            to two decimals. Without specification, the whole
+                            to two decimals. By default, the entire
                             available area will be returned.
 
                             ''')
