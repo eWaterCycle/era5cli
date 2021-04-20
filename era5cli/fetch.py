@@ -298,7 +298,7 @@ class Fetch:
                 ):
             raise ValueError(
                 "Provide coordinates as lat_max lon_min lat_min lon_max. "
-                "x must be in range -180,+180 and y must be in range -90,+90."
+                "`lat_min`/`lat_max` must be in range -180,+180 and `lon_min`/`lon_max` must be in range -90,+90."
             )
 
     def _parse_area(self):
