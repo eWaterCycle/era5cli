@@ -1,8 +1,8 @@
 # YAML 1.2
---- 
+---
 abstract: |
   A command line interface to download ERA5 data from the Climate Data Store.
-authors: 
+authors:
   -
     affiliation: "Netherlands eScience Center"
     family-names: Haren
@@ -12,6 +12,7 @@ authors:
     affiliation: "Netherlands eScience Center"
     family-names: Camphuijsen
     given-names: Jaro
+    orcid: 0000-0002-8928-7831
   -
     affiliation: "Netherlands eScience Center"
     family-names: Dzigan
@@ -20,35 +21,56 @@ authors:
     affiliation: "Netherlands eScience Center"
     family-names: Drost
     given-names: Niels
+    orcid: 0000-0001-9795-7981
   -
     affiliation: "Netherlands eScience Center"
     family-names: Alidoost
     given-names: Fakhereh
+    orcid: 0000-0001-8407-6472
   -
     affiliation: "Netherlands eScience Center"
     family-names: Andela
     given-names: Bouwe
-  - 
+    orcid: 0000-0001-9005-8940
+  -
     affiliation: "TU Delft"
     family-names: Aerts
     given-names: Jerom
+    orcid: 0000-0003-0157-4818
   -
     affiliation: "Netherlands eScience Center"
     family-names: Weel
     given-names: Berend
-  - 
+    orcid: 0000-0002-9693-9332
+  -
     affiliation: "TU Delft"
     family-names: Hut
     given-names: Rolf
-  - 
+    orcid: 0000-0002-5697-5697
+  -
     affiliation: "Swedish Meteorological and Hydrological Institute"
     family-names: Zimmermann
     given-names: Klaus
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Kalverla
+    given-names: Peter
+    orcid: 0000-0002-5025-7862
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Vreede
+    given-names: Barbara
+    orcid: 0000-0002-5023-4601
+  -
+    affiliation: "German Aerospace Center"
+    family-names: Paçal
+    given-names: Aytaç
+    orcid: 0000-0002-1324-2389
 
 cff-version: "1.0.3"
 date-released: 2020-12-14
 doi: 10.5281/zenodo.3252665
-keywords: 
+keywords:
   - "ERA5"
 license: Apache-2.0
 message: "If you use this software, please cite it using these metadata."
