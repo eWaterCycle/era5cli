@@ -28,10 +28,11 @@ class Fetch:
             List of variable names to download data for.
         area: None, list(float)
             Coordinates in case extraction of a subregion is requested.
-            Specified as [ymax, xmin, ymin, xmax], with x and y
-            in the range -180, +180 and -90, +90, respectively. Requests are
-            rounded down to two decimals. Without specification, the whole
-            available area will be returned.
+            Specified as [lat_max, lon_min, lat_min, lon_max]
+            (counterclockwise coordinates, starting at the top),
+            with longitude and latitude in the range -180, +180 and -90, +90,
+            respectively. Requests are rounded down to two decimals. By
+            default, the entire available area will be returned.
         outputformat: str
             Type of file to download: 'netcdf' or 'grib'.
         outputprefix: str
@@ -159,10 +160,10 @@ class Fetch:
                 self.outputformat))
 
     def _process_areaname(self):
-        (ymax, xmin, ymin, xmax) = [round(c) for c in self.area]
+        (lat_max, lon_min, lat_min, lon_max) = [round(c) for c in self.area]
         def lon(x): return f"{x}E" if x >= 0 else f"{abs(x)}W"
         def lat(y): return f"{y}N" if y >= 0 else f"{abs(y)}S"
-        name = f"_{lon(xmin)}-{lon(xmax)}_{lat(ymin)}-{lat(ymax)}"
+        name = f"_{lon(lon_min)}-{lon(lon_max)}_{lat(lat_min)}-{lat(lat_max)}"
         return name
 
     def _define_outputfilename(self, var, years):
@@ -287,17 +288,18 @@ class Fetch:
 
     def _check_area(self):
         """Confirm that area parameters are correct."""
-        (ymax, xmin, ymin, xmax) = self.area
-        if not (-90 <= ymax <= 90
-                and -90 <= ymin <= 90
-                and -180 <= xmin <= 180
-                and -180 <= xmax <= 180
-                and ymax > ymin
-                and xmax != xmin
+        (lat_max, lon_min, lat_min, lon_max) = self.area
+        if not (-90 <= lat_max <= 90
+                and -90 <= lat_min <= 90
+                and -180 <= lon_min <= 180
+                and -180 <= lon_max <= 180
+                and lat_max > lat_min
+                and lon_max != lon_min
                 ):
             raise ValueError(
-                "Provide coordinates as ymax xmin ymin xmax. "
-                "x must be in range -180,+180 and y must be in range -90,+90."
+                "Provide coordinates as lat_max lon_min lat_min lon_max."
+                "Latitude must be in range -180,+180 and"
+                "longitude must be in range -90,+90."
             )
 
     def _parse_area(self):

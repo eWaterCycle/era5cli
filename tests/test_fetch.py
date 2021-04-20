@@ -482,7 +482,6 @@ def test_build_request():
                       years=[1970],
                       prelimbe=True)
     (name, request) = era5._build_request('total_precipitation', [1970])
-    print(request)
     assert name == (
         "reanalysis-era5-single-levels-monthly"
         "-means-preliminary-back-extension"
@@ -560,27 +559,27 @@ def test_area():
     (name, request) = era5._build_request('total_precipitation', [2008])
     assert request["area"] == [90.0, -179.90, -90.0, 179.01]
 
-    # ymax may not be lower than ymin
+    # lat_max may not be lower than lat_min
     with pytest.raises(ValueError):
         era5 = initialize(area=[-10, -180, 10, 180])
         era5._build_request('total_precipitation', [2008])
 
-    # xmin higher than xmax should be ok
+    # lon_min higher than lon_max should be ok
     era5 = initialize(area=[90, 120, -90, -120])
     (name, request) = era5._build_request('total_precipitation', [2008])
     assert request["area"] == [90.0, 120.0, -90.0, -120.0]
 
-    # ymax may not equal ymin
+    # lat_max may not equal lat_min
     with pytest.raises(ValueError):
         era5 = initialize(area=[0, -180, 0, 180])
         era5._build_request('total_precipitation', [2008])
 
-    # xmin may not equal xmax
+    # lon_min may not equal lon_max
     with pytest.raises(ValueError):
         era5 = initialize(area=[90, 0, -90, 0])
         era5._build_request('total_precipitation', [2008])
 
-    # ymax, xmin, ymin, xmax may not be out of bounds
+    # lat_max, lon_min, lat_min, lon_max may not be out of bounds
     with pytest.raises(ValueError):
         era5 = initialize(area=[1000, -180, -90, 180])
         era5._build_request('total_precipitation', [2008])
