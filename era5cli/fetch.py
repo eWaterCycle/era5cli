@@ -31,8 +31,8 @@ class Fetch:
             Specified as [lat_max, lon_min, lat_min, lon_max]
             (counterclockwise coordinates, starting at the top),
             with longitude and latitude in the range -180, +180 and -90, +90,
-            respectively. Requests are rounded down to two decimals. Without
-            specification, the whole available area will be returned.
+            respectively. Requests are rounded down to two decimals. By
+            default, the entire available area will be returned.
         outputformat: str
             Type of file to download: 'netcdf' or 'grib'.
         outputprefix: str
@@ -297,8 +297,9 @@ class Fetch:
                 and lon_max != lon_min
                 ):
             raise ValueError(
-                "Provide coordinates as lat_max lon_min lat_min lon_max. "
-                "`lat_min`/`lat_max` must be in range -180,+180 and `lon_min`/`lon_max` must be in range -90,+90."
+                "Provide coordinates as lat_max lon_min lat_min lon_max."
+                "Latitude must be in range -180,+180 and"
+                "longitude must be in range -90,+90."
             )
 
     def _parse_area(self):
