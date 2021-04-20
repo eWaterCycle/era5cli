@@ -1,5 +1,39 @@
 """Lists of ERA-5 variables and pressure levels."""
 
+"""
+Documentation resources via
+https://cds.climate.copernicus.eu/
+
+All links below prefaced with:
+https://cds.climate.copernicus.eu/cdsapp#!/dataset/
+
+Datasets used
+-------------
+
+Single levels (hourly) variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* reanalysis-era5-single-levels
+* reanalysis-era5-single-levels-preliminary-back-extension
+
+Single levels (monthly) variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* reanalysis-era5-single-levels-monthly-means
+* reanalysis-era5-single-levels-monthly-means-preliminary-back-extension
+
+Pressure levels variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* reanalysis-era5-pressure-levels
+* reanalysis-era5-pressure-levels-monthly-means
+* reanalysis-era5-pressure-levels-preliminary-back-extension
+* reanalysis-era5-pressure-levels-monthly-means-preliminary-back-extension
+
+ERA5-land variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* reanalysis-era5-land
+* reanalysis-era5-land-monthly-means
+"""
+
+
 # The available pressure levels in ERA-5
 PLEVELS = [
     1, 2, 3,
@@ -17,32 +51,8 @@ PLEVELS = [
     1000
 ]
 
-# Documentation resources via
-# https://cds.climate.copernicus.eu/
 
-# All links below prefaced with:
-# https://cds.climate.copernicus.eu/cdsapp#!/dataset/
-
-# Direct links to all datasets used:
-
-# Single levels (hourly) variables via:
-# reanalysis-era5-single-levels
-# reanalysis-era5-single-levels-preliminary-back-extension
-
-# Single levels (monthly) variables via:
-# reanalysis-era5-single-levels-monthly-means
-# reanalysis-era5-single-levels-monthly-means-preliminary-back-extension
-
-# Pressure levels variables via:
-# reanalysis-era5-pressure-levels
-# reanalysis-era5-pressure-levels-monthly-means
-# reanalysis-era5-pressure-levels-preliminary-back-extension
-# reanalysis-era5-pressure-levels-monthly-means-preliminary-back-extension
-
-# ERA5-land variables via:
-# reanalysis-era5-land
-# reanalysis-era5-land-monthly-means
-
+# The available pressure level variables
 PLVARS = [
     'divergence',
     'fraction_of_cloud_cover',
@@ -62,6 +72,8 @@ PLVARS = [
     'vorticity',
 ]
 
+
+# The available single level variables in both hourly and monthly data
 SLVARS = [
     '100m_u_component_of_wind',
     '100m_v_component_of_wind',
@@ -334,6 +346,7 @@ SLVARS = [
 ]
 
 
+# The available variables for ERA5-Land data
 ERA5_LAND_VARS = [
     '10m_u_component_of_wind',
     '10m_v_component_of_wind',
@@ -395,17 +408,21 @@ REFDICT = {"levels": PLEVELS,
            }
 
 
-MISSING_HOURLY_VARS = [
-    '10m_wind_speed',
-    'magnitude_of_turbulent_surface_stress',
-    'mean_magnitude_of_turbulent_surface_stress'
-]
-
-
+# Variables in SLVARS that are not found in Monthly datasets in CDS
 MISSING_MONTHLY_VARS = [
     '10m_wind_gust_since_previous_post_processing',
     'maximum_2m_temperature_since_previous_post_processing',
     'minimum_2m_temperature_since_previous_post_processing',
     'maximum_total_precipitation_rate_since_previous_post_processing',
     'minimum_total_precipitation_rate_since_previous_post_processing',
+]
+
+
+# Variables in SLVARS that are not found in Hourly datasets in CDS
+# This variable is for documentation only and is not used for validation.
+# See PR #84, and issue #85.
+MISSING_HOURLY_VARS = [
+    '10m_wind_speed',
+    'magnitude_of_turbulent_surface_stress',
+    'mean_magnitude_of_turbulent_surface_stress'
 ]
