@@ -62,6 +62,11 @@
             "affiliation": "German Aerospace Center",
             "name": "Paçal, Aytaç",
             "orcid": "0000-0002-1324-2389"
+        },
+        {
+            "affiliation": "Netherlands eScience Center",
+            "name": "Smeets, Stef",
+            "orcid": "0000-0002-5413-9038"
         }
     ],
     "description": "A command line interface to download ERA5 data from the Climate Data Store.\n",

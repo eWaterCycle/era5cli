@@ -67,6 +67,11 @@ authors:
     family-names: Paçal
     given-names: Aytaç
     orcid: 0000-0002-1324-2389
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Smeets
+    given-names: Stef
+    orcid: 0000-0002-5413-9038
 
 cff-version: "1.0.3"
 date-released: 2020-12-14
