@@ -6,42 +6,73 @@
         },
         {
             "affiliation": "Netherlands eScience Center",
-            "name": "Camphuijsen, Jaro"
+            "name": "Camphuijsen, Jaro",
+            "orcid": "0000-0002-8928-7831"
         },
         {
             "affiliation": "Netherlands eScience Center",
-            "name": "Dzigan, Yifat"
+            "name": "Dzigan, Yifat",
+            "orcid": "0000-0002-0935-0088"
         },
         {
             "affiliation": "Netherlands eScience Center",
-            "name": "Drost, Niels"
+            "name": "Drost, Niels",
+            "orcid": "0000-0001-9795-7981"
         },
         {
             "affiliation": "Netherlands eScience Center",
-            "name": "Alidoost, Fakhereh"
+            "name": "Alidoost, Fakhereh",
+            "orcid": "0000-0001-8407-6472"
         },
         {
             "affiliation": "Netherlands eScience Center",
-            "name": "Andela, Bouwe"
+            "name": "Andela, Bouwe",
+            "orcid": "0000-0001-9005-8940"
         },
         {
             "affiliation": "TU Delft",
-            "name": "Aerts, Jerom"
+            "name": "Aerts, Jerom",
+            "orcid": "0000-0003-0157-4818"
         },
         {
             "affiliation": "Netherlands eScience Center",
-            "name": "Weel, Berend"
+            "name": "Weel, Berend",
+            "orcid": "0000-0002-9693-9332"
         },
         {
             "affiliation": "TU Delft",
-            "name": "Hut, Rolf"
+            "name": "Hut, Rolf",
+            "orcid": "0000-0002-5697-5697"
         },
         {
             "affiliation": "Swedish Meteorological and Hydrological Institute",
             "name": "Zimmermann, Klaus"
+        },
+        {
+            "affiliation": "Netherlands eScience Center",
+            "name": "Kalverla, Peter",
+            "orcid": "0000-0002-5025-7862"
+        },
+        {
+            "affiliation": "Netherlands eScience Center",
+            "name": "Vreede, Barbara",
+            "orcid": "0000-0002-5023-4601"
+        },
+        {
+            "affiliation": "German Aerospace Center",
+            "name": "Paçal, Aytaç",
+            "orcid": "0000-0002-1324-2389"
+        },
+        {
+            "affiliation": "Netherlands eScience Center",
+            "name": "Smeets, Stef",
+            "orcid": "0000-0002-5413-9038"
         }
     ],
-    "description": "  A command line interface to download ERA5 data from the Climate Data Store.",
+    "description": "A command line interface to download ERA5 data from the Climate Data Store.\n",
+    "keywords": [
+        "ERA5"
+    ],
     "license": {
         "id": "Apache-2.0"
     },
