@@ -1,5 +1,39 @@
 """Lists of ERA-5 variables and pressure levels."""
 
+"""
+Documentation resources via
+https://cds.climate.copernicus.eu/
+
+All links below prefaced with:
+https://cds.climate.copernicus.eu/cdsapp#!/dataset/
+
+Datasets used
+-------------
+
+Single levels (hourly) variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* reanalysis-era5-single-levels
+* reanalysis-era5-single-levels-preliminary-back-extension
+
+Single levels (monthly) variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* reanalysis-era5-single-levels-monthly-means
+* reanalysis-era5-single-levels-monthly-means-preliminary-back-extension
+
+Pressure levels variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* reanalysis-era5-pressure-levels
+* reanalysis-era5-pressure-levels-monthly-means
+* reanalysis-era5-pressure-levels-preliminary-back-extension
+* reanalysis-era5-pressure-levels-monthly-means-preliminary-back-extension
+
+ERA5-land variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* reanalysis-era5-land
+* reanalysis-era5-land-monthly-means
+"""
+
+
 # The available pressure levels in ERA-5
 PLEVELS = [
     1, 2, 3,
@@ -17,8 +51,8 @@ PLEVELS = [
     1000
 ]
 
-# The pressure level variables to be downloaded from
-# https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels
+
+# The available pressure level variables
 PLVARS = [
     'divergence',
     'fraction_of_cloud_cover',
@@ -38,8 +72,8 @@ PLVARS = [
     'vorticity',
 ]
 
-# The single level variables to be downloaded from
-# https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels
+
+# The available single level variables in both hourly and monthly data
 SLVARS = [
     '100m_u_component_of_wind',
     '100m_v_component_of_wind',
@@ -48,6 +82,7 @@ SLVARS = [
     '10m_v_component_of_neutral_wind',
     '10m_v_component_of_wind',
     '10m_wind_gust_since_previous_post_processing',
+    '10m_wind_speed',
     '2m_dewpoint_temperature',
     '2m_temperature',
     'air_density_over_the_oceans',
@@ -112,6 +147,7 @@ SLVARS = [
     'leaf_area_index_low_vegetation',
     'low_cloud_cover',
     'low_vegetation_cover',
+    'magnitude_of_turbulent_surface_stress',
     'maximum_2m_temperature_since_previous_post_processing',
     'maximum_individual_wave_height',
     'maximum_total_precipitation_rate_since_previous_post_processing',
@@ -127,6 +163,7 @@ SLVARS = [
     'mean_large_scale_precipitation_fraction',
     'mean_large_scale_precipitation_rate',
     'mean_large_scale_snowfall_rate',
+    'mean_magnitude_of_turbulent_surface_stress',
     'mean_northward_gravity_wave_surface_stress',
     'mean_northward_turbulent_surface_stress',
     'mean_period_of_total_swell',
@@ -309,6 +346,7 @@ SLVARS = [
 ]
 
 
+# The available variables for ERA5-Land data
 ERA5_LAND_VARS = [
     '10m_u_component_of_wind',
     '10m_v_component_of_wind',
@@ -369,29 +407,22 @@ REFDICT = {"levels": PLEVELS,
            "land": ERA5_LAND_VARS
            }
 
+
+# Variables in SLVARS that are not found in Monthly datasets in CDS
 MISSING_MONTHLY_VARS = [
-    'uv_visible_albedo_for_direct_radiation',
-    'uv_visible_albedo_for_diffuse_radiation',
-    'near_ir_albedo_for_direct_radiation',
-    'near_ir_albedo_for_diffuse_radiation',
-    'eastward_turbulent_surface_stress',
-    'mean_eastward_turbulent_surface_stress',
-    'mean_northward_turbulent_surface_stress',
-    'northward_turbulent_surface_stress',
     '10m_wind_gust_since_previous_post_processing',
     'maximum_2m_temperature_since_previous_post_processing',
     'minimum_2m_temperature_since_previous_post_processing',
-    '10m_u_component_of_wind',
-    '10m_v_component_of_wind',
     'maximum_total_precipitation_rate_since_previous_post_processing',
     'minimum_total_precipitation_rate_since_previous_post_processing',
-    'altimeter_wave_height',
-    'altimeter_corrected_wave_height',
-    'altimeter_range_relative_correction',
-    'wave_spectral_directional_width',
-    'wave_spectral_directional_width_for_swell',
-    'wave_spectral_directional_width_for_wind_waves',
-    'wave_spectral_kurtosis',
-    'wave_spectral_peakedness',
-    'wave_spectral_skewness'
+]
+
+
+# Variables in SLVARS that are not found in Hourly datasets in CDS
+# This variable is for documentation only and is not used for validation.
+# See PR #84, and issue #85.
+MISSING_HOURLY_VARS = [
+    '10m_wind_speed',
+    'magnitude_of_turbulent_surface_stress',
+    'mean_magnitude_of_turbulent_surface_stress'
 ]
