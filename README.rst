@@ -22,7 +22,7 @@ era5cli
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3252665.svg
    :target: https://doi.org/10.5281/zenodo.3252665
 
-.. image:: https://img.shields.io/badge/rsd-matchms-00a3e3.svg
+.. image:: https://img.shields.io/badge/rsd-era5cli-00a3e3.svg
    :target: https://www.research-software.nl/software/era5cli
    :alt: Research Software Directory Badge
 
