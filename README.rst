@@ -28,13 +28,12 @@ A command line interface to download ERA5 data from the `Copernicus Climate Data
 
 With era5cli you can:
 
-- download meteorological data in GRIB/NetCDF
+- download meteorological data in GRIB/NetCDF, including ERA5 data from the preliminary back extension, and ERA5-Land data.
 - list and retrieve information on available variables and pressure levels
 - select multiple variables for several months and years
 - split outputs by years, producing a separate file for every year instead of merging them in one file
 - download multiple files at once
 - extract data for a sub-region of the globe
-- download ERA5 back extension (preliminary version)
 
 .. inclusion-marker-end-do-not-remove
 
