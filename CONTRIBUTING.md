@@ -9,6 +9,22 @@ guidelines on
 readthedocs](https://era5cli.readthedocs.io/en/latest/contribute.html).
 
 # Making a release
+
+## Author information
+Ensure all authors are present in:
+
+- .zenodo.json
+- CITATION.cff
+- era5cli/__version__.py
+
+## Confirm release info
+Ensure the right date and upcoming version number is set in:
+
+- CITATION.cff
+- era5cli/__version__.py
+
+
+## PyPI release workflow
 Publishing a new release in github triggers the github Action workflow that
 builds and publishes the package to test.PyPI and PyPI. Versions with "rc"
 (releasecandidate) in their version tag will only be published to test.PyPI.
