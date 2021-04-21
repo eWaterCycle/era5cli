@@ -25,10 +25,10 @@ def _build_parser():
     common.add_argument(
         "--variables", type=str, required=True, nargs="+",
         help=textwrap.dedent('''\
-                             The variables to be downloaded, can be a single
-                             or multiple variables. See the Copernicus Climate
-                             Data Store website or run "era5cli info -h" for
-                             available variables.
+                             The variables to download data for. This can be a
+                             single variable, or multiple. See the Copernicus
+                             Climate Data Store website or run "era5cli info -h"
+                             for available variables.
 
                              ''')
     )
@@ -38,8 +38,7 @@ def _build_parser():
         required=True,
         help=textwrap.dedent('''\
                              Single year or first year of range for which
-                             data should be downloaded (between 1979 -
-                             present).
+                             data should be downloaded.
                              Every year will be downloaded in a separate file
                              by default. Set "--split false" to change this.
 
@@ -51,7 +50,7 @@ def _build_parser():
         required=False, default=None,
         help=textwrap.dedent('''\
                              Last year of range for which data should be
-                             downloaded (between 1979 - present).
+                             downloaded.
                              If only a single year is needed, only
                              "--startyear" needs to be specified.
                              Every year will be downloaded in a separate file
@@ -64,10 +63,10 @@ def _build_parser():
         "--levels", nargs="+", type=int,
         required=False, default=ref.PLEVELS,
         help=textwrap.dedent('''\
-                             Pressure level(s) to download for three
-                             dimensional data. Default is all available
-                             levels. See the cds website or run "era5cli info
-                             -h" for available pressure levels.
+                             Pressure level(s) to download 3D variables for.
+                             Default is all available levels. See the Copernicus
+                             Climate Data Store website or run "era5cli info -h"
+                             for available pressure levels.
 
                              ''')
     )
@@ -75,8 +74,8 @@ def _build_parser():
     common.add_argument(
         "--outputprefix", type=str, default='era5',
         help=textwrap.dedent('''\
-                             Prefix of output filename. Default prefix is
-                             "era5".
+                             Prefix to be used for the output filename.
+                             Default prefix is "era5".
 
                              ''')
     )
@@ -104,7 +103,7 @@ def _build_parser():
         required=False, default=None,
         help=textwrap.dedent('''\
                              Number of parallel threads to use when
-                             downloading. Default is a single process.
+                             downloading. Defaults to a single process.
 
                              ''')
     )
@@ -116,6 +115,7 @@ def _build_parser():
                              (HRES) or a reduced resolution ten member ensemble
                              (EDA). Providing the "--ensemble" argument
                              downloads the reduced resolution ensemble.
+                             --ensemble is incompatible with --land.
 
                              ''')
     )
@@ -123,10 +123,11 @@ def _build_parser():
     common.add_argument(
         "--dryrun", action="store_true", default=False,
         help=textwrap.dedent('''\
-                             Whether to start downloading the request or just
-                             print information on the chosen parameters and
-                             output file names. Providing the "--dryrun"
-                             argument will print the information to stdout.
+                             Whether to print the cdsapi request to the screen,
+                             or make the request to start downloading the data.
+                             Providing the "--dryrun" argument will print the
+                             request to stdout. By default, the data will be
+                             downloaded.
 
                              ''')
     )
@@ -134,13 +135,11 @@ def _build_parser():
     common.add_argument(
         "--prelimbe", action="store_true", default=False,
         help=textwrap.dedent('''\
-                             Whether to download the preliminary back
-                             extension. Providing the "--prelimbe" argument
-                             downloads data from the preliminary back
-                             extension. Note that when "--prelimbe" is used,
-                             "--startyear" and "--endyear" should be set
-                             between 1950 and 1978. --prelimbe is incompatible
-                             with --land.
+                             Whether to download the preliminary back extension
+                             (1950-1978). Note that when "--prelimbe" is used,
+                             "--startyear" and "--endyear" should be set between
+                             1950 and 1978.
+                             --prelimbe is incompatible with --land.
 
                              ''')
     )
@@ -148,13 +147,11 @@ def _build_parser():
     common.add_argument(
         "--land", action="store_true", default=False,
         help=textwrap.dedent('''\
-                             Download data from ERA5-Land.
-                             Providing the "--land" argument
-                             downloads data from the ERA5-Land dataset.
-                             Note that the ERA5-Land dataset starts in
+                             Whether to download data from the ERA5-Land
+                             dataset. Note that the ERA5-Land dataset starts in
                              1981.
-                             --land is incompatible with the use of
-                             --prelimbe and --ensemble.
+                             --land is incompatible with the use of --prelimbe
+                             and --ensemble.
 
                              ''')
     )
