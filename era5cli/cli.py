@@ -165,8 +165,8 @@ def _build_parser():
                             requested.
                             Specified as LAT_MAX LON_MIN LAT_MIN LON_MAX
                             (counterclockwise coordinates, starting at the top)
-                            with longitude and latitude in the range
-                            -180, +180 and -90, +90, respectively e.g.
+                            with longitude in the range -180, +180
+                            and latitude in the range -90, +90. For example:
                             --area 90 -180 -90 180. Requests are rounded down
                             to two decimals. By default, the entire
                             available area will be returned.
