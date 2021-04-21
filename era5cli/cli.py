@@ -25,10 +25,10 @@ def _build_parser():
     common.add_argument(
         "--variables", type=str, required=True, nargs="+",
         help=textwrap.dedent('''\
-                             The variables to be downloaded, can be a single
-                             or multiple variables. See the Copernicus Climate
-                             Data Store website or run "era5cli info -h" for
-                             available variables.
+                             The variables to download data for. This can be a
+                             single variable, or multiple. See the Copernicus
+                             Climate Data Store website or run
+                             `era5cli info -h` for available variables.
 
                              ''')
     )
@@ -38,10 +38,9 @@ def _build_parser():
         required=True,
         help=textwrap.dedent('''\
                              Single year or first year of range for which
-                             data should be downloaded (between 1979 -
-                             present).
+                             data should be downloaded.
                              Every year will be downloaded in a separate file
-                             by default. Set "--split false" to change this.
+                             by default. Set `--split false` to change this.
 
                              ''')
     )
@@ -51,11 +50,11 @@ def _build_parser():
         required=False, default=None,
         help=textwrap.dedent('''\
                              Last year of range for which data should be
-                             downloaded (between 1979 - present).
+                             downloaded.
                              If only a single year is needed, only
-                             "--startyear" needs to be specified.
+                             `--startyear` needs to be specified.
                              Every year will be downloaded in a separate file
-                             by default. Set "--split false" to change this.
+                             by default. Set `--split false` to change this.
 
                              ''')
     )
@@ -64,10 +63,11 @@ def _build_parser():
         "--levels", nargs="+", type=int,
         required=False, default=ref.PLEVELS,
         help=textwrap.dedent('''\
-                             Pressure level(s) to download for three
-                             dimensional data. Default is all available
-                             levels. See the cds website or run "era5cli info
-                             -h" for available pressure levels.
+                             Pressure level(s) to download 3D variables for.
+                             Default is all available levels.
+                             See the Copernicus Climate Data Store website or
+                             run `era5cli info -h` for available pressure
+                             levels.
 
                              ''')
     )
@@ -75,8 +75,8 @@ def _build_parser():
     common.add_argument(
         "--outputprefix", type=str, default='era5',
         help=textwrap.dedent('''\
-                             Prefix of output filename. Default prefix is
-                             "era5".
+                             Prefix to be used for the output filename.
+                             Default prefix is `era5`.
 
                              ''')
     )
@@ -84,7 +84,7 @@ def _build_parser():
     common.add_argument(
         "--format", type=str, default="netcdf", choices=["netcdf", "grib"],
         help=textwrap.dedent('''\
-                             Output file type. Defaults to 'netcdf'."
+                             Output file type. Defaults to `netcdf`.
 
                              ''')
     )
@@ -104,7 +104,7 @@ def _build_parser():
         required=False, default=None,
         help=textwrap.dedent('''\
                              Number of parallel threads to use when
-                             downloading. Default is a single process.
+                             downloading. Defaults to a single process.
 
                              ''')
     )
@@ -114,8 +114,9 @@ def _build_parser():
         help=textwrap.dedent('''\
                              Whether to download high resolution realisation
                              (HRES) or a reduced resolution ten member ensemble
-                             (EDA). Providing the "--ensemble" argument
+                             (EDA). Providing the `--ensemble` argument
                              downloads the reduced resolution ensemble.
+                             `--ensemble` is incompatible with `--land`.
 
                              ''')
     )
@@ -123,10 +124,11 @@ def _build_parser():
     common.add_argument(
         "--dryrun", action="store_true", default=False,
         help=textwrap.dedent('''\
-                             Whether to start downloading the request or just
-                             print information on the chosen parameters and
-                             output file names. Providing the "--dryrun"
-                             argument will print the information to stdout.
+                             Whether to print the cdsapi request to the screen,
+                             or make the request to start downloading the data.
+                             Providing the `--dryrun` argument will print the
+                             request to stdout. By default, the data will be
+                             downloaded.
 
                              ''')
     )
@@ -134,13 +136,11 @@ def _build_parser():
     common.add_argument(
         "--prelimbe", action="store_true", default=False,
         help=textwrap.dedent('''\
-                             Whether to download the preliminary back
-                             extension. Providing the "--prelimbe" argument
-                             downloads data from the preliminary back
-                             extension. Note that when "--prelimbe" is used,
-                             "--startyear" and "--endyear" should be set
-                             between 1950 and 1978. --prelimbe is incompatible
-                             with --land.
+                             Whether to download the preliminary back extension
+                             (1950-1978). Note that when `--prelimbe` is used,
+                             `--startyear` and `--endyear` should be set
+                             between 1950 and 1978.
+                             `--prelimbe` is incompatible with `--land`.
 
                              ''')
     )
@@ -148,13 +148,11 @@ def _build_parser():
     common.add_argument(
         "--land", action="store_true", default=False,
         help=textwrap.dedent('''\
-                             Download data from ERA5-Land.
-                             Providing the "--land" argument
-                             downloads data from the ERA5-Land dataset.
-                             Note that the ERA5-Land dataset starts in
+                             Whether to download data from the ERA5-Land
+                             dataset. Note that the ERA5-Land dataset starts in
                              1981.
-                             --land is incompatible with the use of
-                             --prelimbe and --ensemble.
+                             `--land` is incompatible with the use of
+                             `--prelimbe` and `--ensemble`.
 
                              ''')
     )
@@ -166,11 +164,11 @@ def _build_parser():
         help=textwrap.dedent('''\
                             Coordinates in case extraction of a subregion is
                             requested.
-                            Specified as LAT_MAX LON_MIN LAT_MIN LON_MAX
+                            Specified as `LAT_MAX LON_MIN LAT_MIN LON_MAX`
                             (counterclockwise coordinates, starting at the top)
-                            with longitude and latitude in the range
-                            -180, +180 and -90, +90, respectively e.g.
-                            --area 90 -180 -90 180. Requests are rounded down
+                            with longitude in the range -180, +180
+                            and latitude in the range -90, +90. For example:
+                            `--area 90 -180 -90 180`. Requests are rounded down
                             to two decimals. By default, the entire
                             available area will be returned.
 
@@ -223,12 +221,12 @@ def _build_parser():
         'hourly', parents=[common, mnth, day, hour],
         description='Execute the data fetch process for hourly data.',
         prog=textwrap.dedent('''\
-                             Use "era5cli hourly --help" for more information.
+                             Use `era5cli hourly --help` for more information.
 
                              '''),
         help=textwrap.dedent('''\
                              Execute the data fetch process for hourly data.
-                             Use "era5cli hourly --help" for more information.
+                             Use `era5cli hourly --help` for more information.
 
                              '''),
         formatter_class=argparse.RawTextHelpFormatter)
@@ -237,7 +235,7 @@ def _build_parser():
         "--statistics", action="store_true",
         help=textwrap.dedent('''\
                              When downloading hourly ensemble data, provide
-                             the "--statistics" argument to download statistics
+                             the `--statistics` argument to download statistics
                              (ensemble mean and ensemble spread).
 
                              ''')
@@ -247,12 +245,12 @@ def _build_parser():
         'monthly', parents=[common, mnth],
         description='Execute the data fetch process for monthly data.',
         prog=textwrap.dedent('''\
-                             Use "era5cli monthly --help" for more information.
+                             Use `era5cli monthly --help` for more information.
 
                              '''),
         help=textwrap.dedent('''\
                              Execute the data fetch process for monthly data.
-                             Use "era5cli monthly --help" for more information.
+                             Use `era5cli monthly --help` for more information.
 
                              '''),
         formatter_class=argparse.RawTextHelpFormatter
@@ -263,9 +261,9 @@ def _build_parser():
         help=textwrap.dedent('''\
                              Time of day in hours to get the synoptic means
                              (monthly averaged by hour of day) for. For example
-                             "--synoptic 0 4 5 6 23". Give empty option
-                             "--synoptic" to download all hours (0-23).
-                             The option defaults to "None" in which case the
+                             `--synoptic 0 4 5 6 23`. Give empty option
+                             `--synoptic` to download all hours (0-23).
+                             The option defaults to `None` in which case the
                              monthly average of daily means is chosen.
 
                              ''')
@@ -275,12 +273,12 @@ def _build_parser():
         'info',
         description='Show information on available variables and levels.',
         prog=textwrap.dedent('''\
-                             Use "era5cli info --help" for more information.
+                             Use `era5cli info --help` for more information.
 
                              '''),
         help=textwrap.dedent('''\
                              Show information on available variables or levels.
-                             Use "era5cli info --help" for more information.
+                             Use `era5cli info --help` for more information.
 
                              '''),
         formatter_class=argparse.RawTextHelpFormatter
@@ -290,15 +288,15 @@ def _build_parser():
         "name", type=str,
         help=textwrap.dedent('''\
                              Enter list name to print info list: \n
-                             "levels" for all available pressure levels \n
-                             "2Dvars" for all available single level or 2D
+                             `levels` for all available pressure levels \n
+                             `2Dvars` for all available single level or 2D
                              variables \n
-                             "3Dvars" for all available 3D variables \n
-                             "land" for all available variables in
+                             `3Dvars` for all available 3D variables \n
+                             `land` for all available variables in
                              ERA5-land \n
-                             Enter variable name (e.g. "total_precipitation")
-                             or pressure level (e.g. "825") to show if the
-                             variable or level is available and in which list.
+                             Enter variable name (e.g. `total_precipitation`)
+                             or pressure level (e.g. `825`) to show if the
+                             variable or level is available, and in which list.
 
                              ''')
     )

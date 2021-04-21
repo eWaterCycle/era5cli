@@ -17,57 +17,70 @@ class Fetch:
         years: list(int)
             List of years to download data for.
         months: list(int)
-            List of month to download data for (1-12).
+            List of months to download data for (1-12).
         days: list(int), None
-            List of days of month to download data for (1-31).
+            List of days of the month to download data for (1-31).
         hours: list(int)
-            List of time in hours to download data for (0-23). When downloading
-            synoptic monthly data, this parameter is used to list the synoptic
-            hours to download data for.
+            List of time of day in hours to download data for (0-23).
+            When downloading synoptic monthly data, this parameter is used
+            to list the synoptic hours to download data for.
         variables: list(str)
-            List of variable names to download data for.
+            List of variable names to download data for. See the Copernicus
+            Climate Data Store website for available variables.
         area: None, list(float)
             Coordinates in case extraction of a subregion is requested.
             Specified as [lat_max, lon_min, lat_min, lon_max]
             (counterclockwise coordinates, starting at the top),
-            with longitude and latitude in the range -180, +180 and -90, +90,
-            respectively. Requests are rounded down to two decimals. By
-            default, the entire available area will be returned.
+            with longitude in the range -180, +180
+            and latitude in the range -90, +90. For example:
+            [90, -180, -90, 180]. Requests are rounded down to
+            two decimals. By default, the entire available area
+            will be returned.
         outputformat: str
-            Type of file to download: 'netcdf' or 'grib'.
+            Output file type: 'netcdf' or 'grib'.
         outputprefix: str
             Prefix to be used for the output filename.
         period: str
-            Frequency of the data to be downloaded: 'hourly' or 'monthly'.
+            Execute the data fetch process for this data type:
+            'hourly' or 'monthly'.
         ensemble: bool
             Whether to download high resolution realisation
             (HRES) or a reduced resolution ten member ensemble
             (EDA). If `True` the reduced resolution is fetched.
+            `ensemble = True` is incompatible with `land = True`.
         statistics: None, bool
             When downloading hourly ensemble data, choose
-            whether or not to download statistics (mean and
-            spread).
+            whether or not to download statistics (ensemble mean
+            and ensemble spread).
         synoptic: None, bool
             Whether to get monthly averaged by hour of day
-            (synoptic=True) or monthly means of daily means
-            (synoptic=False).
+            (`synoptic = True`) or monthly means of daily means
+            (`synoptic = False`).
         pressurelevels: None, list(int)
-            List of pressure levels to download 3D variables for.
+            List of pressure level(s) to download 3D variables for.
+            See the Copernicus Climate Data Store website for available
+            pressure levels.
         merge: bool
-            Merge yearly output files (merge=True), or split
+            Merge yearly output files (`merge = True`), or split
             output files into separate files for every year
-            (merge=False).
+            (`merge = False`).
         threads: None, int
-            Number of parallel calls to cdsapi. If `None` no
-            parallel calls are done.
+            Number of parallel threads to use when downloading.
+            Defaults to a single process.
         dryrun: bool
-            Indicating if files should be downloaded. By default
-            files will be downloaded. For a dryrun the cdsapi request will
-            be written to stdout.
+            Whether to print the cdsapi request to the screen,
+            or make the request to start downloading the data.
+            `dryrun = True` will print the request to stdout. By default,
+            the data will be downloaded.
         prelimbe: bool
             Whether to download the preliminary back extension (1950-1978).
+            Note that in this case, `years` nust be between 1950 and
+            1978. `prelimbe = True` is incompatible with `land = True`.
         land: bool
-            Whether to download ERA5-Land data.
+            Whether to download data from the ERA5-Land dataset.
+            Note that the ERA5-Land dataset starts in 1981.
+            `land = True` is incompatible with the use of
+            `prelimbe = True` and `ensemble = True`.
     """
 
     def __init__(self, years: list, months: list, days: list,
@@ -84,7 +97,7 @@ class Fetch:
         else:
             self.days = era5cli.utils._zpad_days(days)
             """list(str): List of zero-padded strings of days
-            (e.g. ['01', '02',..., '12'])."""
+            (e.g. ['01', '02',..., '31'])."""
 
         self.hours = era5cli.utils._format_hours(hours)
         """list(str): List of xx:00 formatted time strings
