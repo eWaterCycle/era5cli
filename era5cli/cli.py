@@ -27,8 +27,8 @@ def _build_parser():
         help=textwrap.dedent('''\
                              The variables to download data for. This can be a
                              single variable, or multiple. See the Copernicus
-                             Climate Data Store website or run "era5cli info -h"
-                             for available variables.
+                             Climate Data Store website or run
+                             "era5cli info -h" for available variables.
 
                              ''')
     )
@@ -64,9 +64,10 @@ def _build_parser():
         required=False, default=ref.PLEVELS,
         help=textwrap.dedent('''\
                              Pressure level(s) to download 3D variables for.
-                             Default is all available levels. See the Copernicus
-                             Climate Data Store website or run "era5cli info -h"
-                             for available pressure levels.
+                             Default is all available levels.
+                             See the Copernicus Climate Data Store website or
+                             run "era5cli info -h" for available pressure
+                             levels.
 
                              ''')
     )
@@ -137,8 +138,8 @@ def _build_parser():
         help=textwrap.dedent('''\
                              Whether to download the preliminary back extension
                              (1950-1978). Note that when "--prelimbe" is used,
-                             "--startyear" and "--endyear" should be set between
-                             1950 and 1978.
+                             "--startyear" and "--endyear" should be set
+                             between 1950 and 1978.
                              --prelimbe is incompatible with --land.
 
                              ''')
