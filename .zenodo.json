@@ -67,7 +67,11 @@
             "affiliation": "Netherlands eScience Center",
             "name": "Smeets, Stef",
             "orcid": "0000-0002-5413-9038"
-        }
+        },
+        {
+            "affiliation": "Netherlands eScience Center",
+            "name": "Verhoeven, Stefan",
+            "orcid": "0000-0002-5821-2060"        }
     ],
     "description": "A command line interface to download ERA5 data from the Climate Data Store.\n",
     "keywords": [

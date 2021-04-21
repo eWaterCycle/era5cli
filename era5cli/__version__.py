@@ -8,6 +8,8 @@
 
 __author__ = ('Ronald van Haren', 'Jaro Camphuijsen', 'Yifat Dzigan',
               'Niels Drost', 'Fakhereh Alidoost', 'Bouwe Andela',
-              'Jerom Aerts', 'Berend Weel', 'Rolf Hut', 'Klaus Zimmermann')
+              'Jerom Aerts', 'Berend Weel', 'Rolf Hut', 'Klaus Zimmermann',
+              'Peter Kalverla', 'Barbara Vreede', 'Aytaç Paçal', 'Stef Smeets',
+              'Stefan Verhoeven')
 __email__ = 'ewatercycle@esciencecenter.nl'
-__version__ = '1.1.1'
+__version__ = '1.2.0'

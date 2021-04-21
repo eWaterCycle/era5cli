@@ -72,6 +72,11 @@ authors:
     family-names: Smeets
     given-names: Stef
     orcid: 0000-0002-5413-9038
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Verhoeven
+    given-names: Stefan
+    orcid: 0000-0002-5821-2060
 
 cff-version: "1.0.3"
 date-released: 2020-12-14
