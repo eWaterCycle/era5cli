@@ -13,19 +13,19 @@ readthedocs](https://era5cli.readthedocs.io/en/latest/contribute.html).
 ## Author information
 Ensure all authors are present in:
 
-- .zenodo.json
-- CITATION.cff
-- era5cli/__version__.py
+- `.zenodo.json`
+- `CITATION.cff`
+- `era5cli/__version__.py`
 
 ## Confirm release info
 Ensure the right date and upcoming version number is set in:
 
-- CITATION.cff
-- era5cli/__version__.py
+- `CITATION.cff`
+- `era5cli/__version__.py`
 
 ## Update the changelog
-Update CHANGELOG.rst with new features and fixes in the upcoming version.
-Confirm that README.rst is up to date with new features as well.
+Update `CHANGELOG.rst` with new features and fixes in the upcoming version.
+Confirm that `README.rst` is up to date with new features as well.
 
 ## Release on GitHub
 Open [releases](https://github.com/eWaterCycle/era5cli/releases) and draft a new
