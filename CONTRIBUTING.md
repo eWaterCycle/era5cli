@@ -51,3 +51,7 @@ pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/
 
 ## Release on Zenodo
 Confirm the new release on [Zenodo](https://doi.org/10.5281/zenodo.3252665).
+
+## Release on the Research Software Directory
+Wait a few hours, then confirm the addition of a new release on the
+[RSD](https://www.research-software.nl/software/era5cli).

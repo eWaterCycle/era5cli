@@ -22,6 +22,10 @@ era5cli
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3252665.svg
    :target: https://doi.org/10.5281/zenodo.3252665
 
+.. image:: https://img.shields.io/badge/rsd-era5cli-00a3e3.svg
+   :target: https://www.research-software.nl/software/era5cli
+   :alt: Research Software Directory Badge
+
 .. inclusion-marker-start-do-not-remove
 
 A command line interface to download ERA5 data from the `Copernicus Climate Data Store <https://climate.copernicus.eu/>`_.
