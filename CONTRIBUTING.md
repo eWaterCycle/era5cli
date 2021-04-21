@@ -23,10 +23,14 @@ Ensure the right date and upcoming version number is set in:
 - CITATION.cff
 - era5cli/__version__.py
 
+## Update the changelog
+Update CHANGELOG.rst with new features and fixes in the upcoming version.
+Confirm that README.rst is up to date with new features as well.
+
 
 ## PyPI release workflow
 Publishing a new release in github triggers the github Action workflow that
 builds and publishes the package to test.PyPI and PyPI. Versions with "rc"
 (releasecandidate) in their version tag will only be published to test.PyPI.
 Other version tags will also trigger a PyPI release.
-Inspect `.github/workflows/pyproject.toml` for more information.
+Inspect `.github/workflows/publish-to-pypi.yml` for more information.
