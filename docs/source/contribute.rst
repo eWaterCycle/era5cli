@@ -42,6 +42,12 @@ Use pytest to run the test suite:
 
    pytest era5cli/
 
+Deactivate the environment with:
+::
+
+   deactivate
+
+
 Contribute to the documentation
 ===============================
 
