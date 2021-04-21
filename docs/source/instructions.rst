@@ -83,8 +83,12 @@ Fetching hourly data
 
 Fetch hourly data through an cdsapi call via command line. More information on the available data and options can be found on:
 
-| `Era5 hourly single levels download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels?tab=overview>`_.
-| `Era5 hourly pressure levels download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels?tab=overview>`_.
+| `Era5 hourly single levels download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels>`_.
+| `Era5 hourly pressure levels download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels>`_.
+| `Era5 hourly single levels preliminary back extension download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels-preliminary-back-extension>`_.
+| `Era5 hourly pressure levels preliminary back extension download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels-preliminary-back-extension>`_.
+| `Era5-Land hourly download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-land>`_.
+
 
 .. argparse::
    :module: era5cli.cli
@@ -98,10 +102,14 @@ Fetching monthly data
 
 Fetch monthly data through an cdsapi call via command line. More information on the available data and options can be found on:
 
-| `Era5 monthly single levels download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels-monthly-means?tab=overview>`_.
-| `Era5 monthly pressure levels download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels-monthly-means?tab=overview>`_.
+| `Era5 monthly single levels download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels-monthly-means>`_.
+| `Era5 monthly pressure levels download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels-monthly-means>`_.
+| `Era5 monthly single levels preliminary back extension download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels-monthly-means-preliminary-back-extension>`_.
+| `Era5 monthly pressure levels preliminary back extension download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels-monthly-means-preliminary-back-extension>`_.
+| `Era5-Land monthly download page <https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-land-monthly-means>`_.
 
-For the monthly data, some of the variables are not available. Exceptions on the single level data can be found in table 8 of 
+
+For the monthly data, some of the variables are not available. Exceptions on the single level data can be found in table 8 of
 `ERA5 parameter listings <https://confluence.ecmwf.int/display/CKB/ERA5+data+documentation#ERA5datadocumentation-Parameterlistings>`_
 
 .. argparse::
@@ -114,6 +122,6 @@ For the monthly data, some of the variables are not available. Exceptions on the
 Removing or canceling requests
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ERA-5 download requests will be saved in the `Your requests <https://cds.climate.copernicus.eu/cdsapp#!/yourrequests>`_ section in your profile on the Copernicus Climate Data Store. Here you can re-download the requested data, cancel active requests, or remove old requests. 
+ERA-5 download requests will be saved in the `Your requests <https://cds.climate.copernicus.eu/cdsapp#!/yourrequests>`_ section in your profile on the Copernicus Climate Data Store. Here you can re-download the requested data, cancel active requests, or remove old requests.
 
 Note that it is currently not possible to cancel active requests from the command line: Killing the process will not download the data to your local machine but still add it to your Copernicus account.
