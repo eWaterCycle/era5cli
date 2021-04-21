@@ -1,6 +1,10 @@
 Release Notes
 *************
 
+1.2.1 (2021-04-21)
+~~~~~~~~~~~~~~~~~~
+* Automatic PyPI release for 1.2.0 failed; updated github action workflow `#91 <https://github.com/eWaterCycle/era5cli/pull/91>`_
+
 1.2.0 (2021-04-21)
 ~~~~~~~~~~~~~~~~~~
 * Add support for ERA5-Land data `#67 <https://github.com/eWaterCycle/era5cli/pull/67>`_
