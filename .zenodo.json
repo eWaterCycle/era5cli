@@ -71,7 +71,8 @@
         {
             "affiliation": "Netherlands eScience Center",
             "name": "Verhoeven, Stefan",
-            "orcid": "0000-0002-5821-2060"        }
+            "orcid": "0000-0002-5821-2060"
+        }
     ],
     "description": "A command line interface to download ERA5 data from the Climate Data Store.\n",
     "keywords": [
