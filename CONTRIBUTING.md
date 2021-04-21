@@ -39,9 +39,9 @@ candidate release, and amend the version tag with `rc` and the candidate number.
 
 ## PyPI release workflow
 Publishing a new release in github triggers the github Action workflow that
-builds and publishes the package to test.PyPI and PyPI. Versions with "rc"
+builds and publishes the package to test.PyPI or PyPI. Versions with "rc"
 (releasecandidate) in their version tag will only be published to test.PyPI.
-Other version tags will also trigger a PyPI release.
+Other version tags will trigger a PyPI release.
 Inspect `.github/workflows/publish-to-pypi.yml` for more information.
 
 Confirm a pre-release on test.PyPI with:

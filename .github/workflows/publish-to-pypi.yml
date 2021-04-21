@@ -32,9 +32,9 @@ jobs:
         --wheel
         --outdir dist/
 
-    # Publish the package to test.pypi for every tagged version
+    # Publish the package to test.pypi for every rc version
     - name: Publish distribution to Test PyPI
-      if: startsWith(github.ref, 'refs/tags')
+      if: "startsWith(github.ref, 'refs/tags') && contains(github.ref, 'rc')"
       uses: pypa/gh-action-pypi-publish@master
       with:
         password: ${{ secrets.test_pypi_password }}
