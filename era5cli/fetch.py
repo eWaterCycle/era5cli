@@ -47,39 +47,40 @@ class Fetch:
             Whether to download high resolution realisation
             (HRES) or a reduced resolution ten member ensemble
             (EDA). If `True` the reduced resolution is fetched.
-            'ensemble' is incompatible with 'land'.
+            `ensemble = True` is incompatible with `land = True`.
         statistics: None, bool
             When downloading hourly ensemble data, choose
             whether or not to download statistics (ensemble mean
             and ensemble spread).
         synoptic: None, bool
             Whether to get monthly averaged by hour of day
-            (synoptic=True) or monthly means of daily means
-            (synoptic=False).
+            (`synoptic = True`) or monthly means of daily means
+            (`synoptic = False`).
         pressurelevels: None, list(int)
             List of pressure level(s) to download 3D variables for.
             See the Copernicus Climate Data Store website for available
             pressure levels.
         merge: bool
-            Merge yearly output files (merge=True), or split
+            Merge yearly output files (`merge = True`), or split
             output files into separate files for every year
-            (merge=False).
+            (`merge = False`).
         threads: None, int
             Number of parallel threads to use when downloading.
             Defaults to a single process.
         dryrun: bool
             Whether to print the cdsapi request to the screen,
             or make the request to start downloading the data.
-            A dryrun will print the request to stdout. By default,
+            `dryrun = True` will print the request to stdout. By default,
             the data will be downloaded.
         prelimbe: bool
             Whether to download the preliminary back extension (1950-1978).
-            Note that in this case, 'years' nust be between 1950 and
-            1978. 'prelimbe' is incompatible with 'land'.
+            Note that in this case, `years` nust be between 1950 and
+            1978. `prelimbe = True` is incompatible with `land = True`.
         land: bool
             Whether to download data from the ERA5-Land dataset.
             Note that the ERA5-Land dataset starts in 1981.
-            'land is incompatible with the use of 'prelimbe' and 'ensemble'.
+            `land = True` is incompatible with the use of
+            `prelimbe = True` and `ensemble = True`.
     """
 
     def __init__(self, years: list, months: list, days: list,
