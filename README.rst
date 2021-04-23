@@ -6,7 +6,11 @@ era5cli
 
 .. image:: https://img.shields.io/badge/docs-stable-brightgreen.svg
    :target: http://era5cli.readthedocs.io/en/stable/?badge=stable
-   :alt: Documentation Status
+   :alt: Stable Documentation
+
+.. image:: https://img.shields.io/badge/docs-latest-brightgreen.svg
+   :target: http://era5cli.readthedocs.io/en/latest/?badge=latest
+   :alt: Latest Documentation
 
 .. image:: https://github.com/eWaterCycle/era5cli/actions/workflows/test_codecov.yml/badge.svg
    :target: https://github.com/eWaterCycle/era5cli/actions/workflows/test_codecov.yml
