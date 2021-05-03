@@ -26,6 +26,9 @@ era5cli
    :target: https://www.research-software.nl/software/era5cli
    :alt: Research Software Directory Badge
 
+.. image:: https://img.shields.io/badge/fair--software.eu-%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8B-yellow
+   :target: https://fair-software.eu
+   
 .. inclusion-marker-start-do-not-remove
 
 A command line interface to download ERA5 data from the `Copernicus Climate Data Store <https://climate.copernicus.eu/>`_.
