@@ -56,7 +56,6 @@ PLEVELS = [
 PLVARS = [
     'divergence',
     'fraction_of_cloud_cover',
-    'geopotential',
     'ozone_mass_mixing_ratio',
     'potential_vorticity',
     'relative_humidity',
@@ -114,6 +113,7 @@ SLVARS = [
     'forecast_surface_roughness',
     'free_convective_velocity_over_the_oceans',
     'friction_velocity',
+    'geopotential',
     'gravity_wave_dissipation',
     'high_cloud_cover',
     'high_vegetation_cover',
@@ -226,7 +226,6 @@ SLVARS = [
     'northward_turbulent_surface_stress',
     'ocean_surface_stress_equivalent_10m_neutral_wind_direction',
     'ocean_surface_stress_equivalent_10m_neutral_wind_speed',
-    'orography',
     'peak_wave_period',
     'period_corresponding_to_maximum_individual_wave_height',
     'potential_evaporation',
