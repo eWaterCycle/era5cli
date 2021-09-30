@@ -56,6 +56,7 @@ PLEVELS = [
 PLVARS = [
     'divergence',
     'fraction_of_cloud_cover',
+    'geopotential',
     'ozone_mass_mixing_ratio',
     'potential_vorticity',
     'relative_humidity',
