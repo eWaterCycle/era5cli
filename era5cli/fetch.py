@@ -63,9 +63,9 @@ class Fetch:
         pressuredb: bool
             Indicator for the use of single level or pressure
             level variables. Default is `True`, to use the data
-            for pressure level variables. However, if an unequivocal single level
-            variable is given (i.e.: not existing as a pressure level variable),
-            the data for single level variables is used.
+            for pressure level variables. However, if an unequivocal single
+            level variable is given (i.e.: not existing as a pressure level
+            variable), the data for single level variables is used.
         merge: bool
             Merge yearly output files (`merge = True`), or split
             output files into separate files for every year
@@ -341,7 +341,7 @@ class Fetch:
 
         if self.land:
             name += "-land"
-        #TODO add option for orography
+        # TODO add option for orography
         elif variable in list(set(ref.PLVARS) & set(ref.SLVARS)):
             if self.pressuredb:
                 name += "-pressure-levels"
