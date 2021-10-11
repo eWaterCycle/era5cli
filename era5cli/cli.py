@@ -64,9 +64,10 @@ def _build_parser():
         help=textwrap.dedent('''\
                              Indicator for the use of single level or pressure
                              level variables. Default is True, to use the data
-                             for pressure level variables, though if a clear
-                             single level variable is given, the data for single
-                             level variables is used.
+                             for pressure level variables. However, if an
+                             unequivocal single level variable is given (i.e.:
+                             not existing as a pressure level variable), the
+                             data for single level variables is used.
                              ''')
     )
 
@@ -418,7 +419,7 @@ def _execute(args):
             synoptic=synoptic,
             statistics=statistics,
             pressurelevels=args.levels,
-            # pressuredb=args.pressure,
+            pressuredb=args.pressure,
             threads=args.threads,
             merge=args.merge,
             prelimbe=args.prelimbe,

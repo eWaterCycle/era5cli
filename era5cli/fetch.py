@@ -60,6 +60,12 @@ class Fetch:
             List of pressure level(s) to download 3D variables for.
             See the Copernicus Climate Data Store website for available
             pressure levels.
+        pressuredb: bool
+            Indicator for the use of single level or pressure
+            level variables. Default is `True`, to use the data
+            for pressure level variables. However, if an unequivocal single level
+            variable is given (i.e.: not existing as a pressure level variable),
+            the data for single level variables is used.
         merge: bool
             Merge yearly output files (`merge = True`), or split
             output files into separate files for every year
@@ -87,7 +93,8 @@ class Fetch:
                  hours: list, variables: list, outputformat: str,
                  outputprefix: str, period: str, ensemble: bool, area=None,
                  statistics=None, synoptic=None, pressurelevels=None,
-                 merge=False, threads=None, prelimbe=False, land=False):
+                 pressuredb=True, merge=False, threads=None, prelimbe=False,
+                 land=False):
         """Initialization of Fetch class."""
         self.months = era5cli.utils._zpad_months(months)
         """list(str): List of zero-padded strings of months
@@ -104,6 +111,9 @@ class Fetch:
         (e.g. ['00:00', '01:00', ..., '23:00'])."""
         self.pressure_levels = pressurelevels
         """list(int): List of pressure levels."""
+        self.pressuredb = pressuredb,
+        """bool: Whether to use single level variables (pressuredb=False) or
+        pressure level variables (pressuredb=True)."""
         self.variables = variables
         """list(str): List of variables."""
         self.area = area
@@ -331,6 +341,13 @@ class Fetch:
 
         if self.land:
             name += "-land"
+        #TODO add option for orography
+        elif variable in list(set(ref.PLVARS) & set(ref.SLVARS)):
+            if self.pressuredb:
+                name += "-pressure-levels"
+            else:
+                name += "-single-levels"
+            # report back to the user
         elif variable in ref.PLVARS:
             name += "-pressure-levels"
         elif variable in ref.SLVARS:
