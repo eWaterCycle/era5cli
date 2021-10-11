@@ -227,6 +227,7 @@ SLVARS = [
     'northward_turbulent_surface_stress',
     'ocean_surface_stress_equivalent_10m_neutral_wind_direction',
     'ocean_surface_stress_equivalent_10m_neutral_wind_speed',
+    'orography',
     'peak_wave_period',
     'period_corresponding_to_maximum_individual_wave_height',
     'potential_evaporation',

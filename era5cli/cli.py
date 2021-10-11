@@ -60,6 +60,17 @@ def _build_parser():
     )
 
     common.add_argument(
+        "--pressure", action="store_true", default=True,
+        help=textwrap.dedent('''\
+                             Indicator for the use of single level or pressure
+                             level variables. Default is True, to use the data
+                             for pressure level variables, though if a clear
+                             single level variable is given, the data for single
+                             level variables is used.
+                             ''')
+    )
+
+    common.add_argument(
         "--levels", nargs="+", type=int,
         required=False, default=ref.PLEVELS,
         help=textwrap.dedent('''\
@@ -407,6 +418,7 @@ def _execute(args):
             synoptic=synoptic,
             statistics=statistics,
             pressurelevels=args.levels,
+            # pressuredb=args.pressure,
             threads=args.threads,
             merge=args.merge,
             prelimbe=args.prelimbe,
