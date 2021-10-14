@@ -12,6 +12,14 @@ import era5cli.info as einfo
 import era5cli.fetch as efetch
 
 
+def _level_parse(level):
+    """Parse levels as integers, or the string 'surface'"""
+    if level == "surface":
+        return str(level)
+    else:
+        return int(level)
+
+
 def _build_parser():
     """Build the argument parser."""
     parser = argparse.ArgumentParser(
@@ -60,27 +68,16 @@ def _build_parser():
     )
 
     common.add_argument(
-        "--pressure", action="store_true", default=True,
-        help=textwrap.dedent('''\
-                             Indicator for the use of single level or pressure
-                             level variables. Default is True, to use the data
-                             for pressure level variables. However, if an
-                             unequivocal single level variable is given (i.e.:
-                             not existing as a pressure level variable), the
-                             data for single level variables is used.
-                             ''')
-    )
-
-    common.add_argument(
-        "--levels", nargs="+", type=int,
+        "--levels", nargs="+", type=_level_parse,
         required=False, default=ref.PLEVELS,
         help=textwrap.dedent('''\
-                             Pressure level(s) to download 3D variables for.
-                             Default is all available levels.
-                             See the Copernicus Climate Data Store website or
-                             run `era5cli info -h` for available pressure
-                             levels.
-
+                            Pressure level(s) to download 3D variables for.
+                            Default is all available levels. See the Copernicus
+                            Climate Data Store website or run `era5cli info -h`
+                            for available pressure levels. For geopotential,
+                            `--levels surface` can be used to request data from
+                            the single level dataset (previously called
+                            orography).
                              ''')
     )
 
@@ -419,7 +416,6 @@ def _execute(args):
             synoptic=synoptic,
             statistics=statistics,
             pressurelevels=args.levels,
-            pressuredb=args.pressure,
             threads=args.threads,
             merge=args.merge,
             prelimbe=args.prelimbe,
