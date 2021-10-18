@@ -335,11 +335,11 @@ class Fetch:
 
         # workaround for deprecated variable 'orography'
         if variable == "orography":
-            variable =  "geopotential"
+            variable = "geopotential"
             self.pressure_levels = ["surface"]
             logging.warn(
-                "The variable 'orography' has been deprecated by CDS. "
-                "Use `--variables geopotential --levels surface` going forward. "
+                "The variable 'orography' has been deprecated by CDS. Use "
+                "`--variables geopotential --levels surface` going forward. "
                 "The current query has been changed accordingly."
                 )
 
@@ -351,8 +351,8 @@ class Fetch:
                 "`levels=['surface']`.\n"
             )
             instruction_surface = (
-                "Getting variable from surface level data. To get the pressure "
-                "variable instead, omit `--levels surface` or "
+                "Getting variable from surface level data. To get the "
+                "pressure variable instead, omit `--levels surface` or "
                 "`levels=['surface']` from the request.\n"
             )
             if self.pressure_levels == ["surface"]:
