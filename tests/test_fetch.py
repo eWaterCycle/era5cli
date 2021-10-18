@@ -436,6 +436,20 @@ def test_build_name():
     name = era5._build_name('snow_cover')
     assert name == "reanalysis-era5-land-monthly-means"
 
+    # Test to interpret deprecated orography variable
+    era5 = initialize()
+    name = era5._build_name('orography')
+    assert name == "reanalysis-era5-single-levels"
+
+    era5 = initialize()
+    name = era5._build_name('geopotential')
+    assert name == "reanalysis-era5-pressure-levels"
+
+    era5 = initialize()
+    era5.pressure_levels = ['surface']
+    name = era5._build_name('geopotential')
+    assert name == "reanalysis-era5-single-levels"
+
 
 def test_build_request():
     """Test _build_request function of Fetch class."""

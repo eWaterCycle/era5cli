@@ -347,7 +347,7 @@ class Fetch:
         if variable == "orography":
             variable = "geopotential"
             self.pressure_levels = ["surface"]
-            logging.warn(
+            logging.warning(
                 "The variable 'orography' has been deprecated by CDS. Use "
                 "`--variables geopotential --levels surface` going forward. "
                 "The current query has been changed accordingly.")
@@ -366,8 +366,8 @@ class Fetch:
                 instruction = instruction_surface
             else:
                 instruction = instruction_pressure
-            logging.warn(f"The variable name '{variable}' is ambiguous. "
-                         f"{instruction}")
+            logging.warning(f"The variable name '{variable}' is ambiguous. "
+                            f"{instruction}")
 
         if self.land:
             name += "-land"
