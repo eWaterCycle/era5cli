@@ -1,6 +1,7 @@
 """Fetch ERA5 variables."""
 
 import os
+import logging
 
 import cdsapi
 from pathos.threading import ThreadPool as Pool
@@ -332,12 +333,32 @@ class Fetch:
 
         name = "reanalysis-era5"
 
+        # deal with ambiguous vars
+        if (variable in ref.PLVARS) and (variable in ref.SLVARS):
+            instruction_pressure = (
+                "Getting variable from pressure level data. To get the surface"
+                "variable instead, use `--levels surface` or"
+                "`levels=['surface']`.\n"
+            )
+            instruction_surface = (
+                "Getting variable from surface level data. To get the pressure "
+                "variable instead, omit `--levels surface` or "
+                "`levels=['surface']` from the request.\n"
+            )
+            if self.pressure_levels == ["surface"]:
+                instruction = instruction_surface
+            else:
+                instruction = instruction_pressure
+            logging.warn(f"The variable name '{variable}' is ambiguous.\n"
+                         f"{instruction}")
+
         if self.land:
             name += "-land"
         # TODO add option for orography
         elif self.pressure_levels == ["surface"]:
             name += "-single-levels"
-            # report back to the user
+        # the order of the following conditions is important!
+        # please do not switch them
         elif variable in ref.PLVARS:
             name += "-pressure-levels"
         elif variable in ref.SLVARS:
