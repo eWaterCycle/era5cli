@@ -333,6 +333,16 @@ class Fetch:
 
         name = "reanalysis-era5"
 
+        # workaround for deprecated variable 'orography'
+        if variable == "orography":
+            variable =  "geopotential"
+            self.pressure_levels = ["surface"]
+            logging.warn(
+                "The variable 'orography' has been deprecated by CDS. "
+                "Use `--variables geopotential --levels surface` going forward. "
+                "The current query has been changed accordingly."
+                )
+
         # deal with ambiguous vars
         if (variable in ref.PLVARS) and (variable in ref.SLVARS):
             instruction_pressure = (
@@ -349,12 +359,11 @@ class Fetch:
                 instruction = instruction_surface
             else:
                 instruction = instruction_pressure
-            logging.warn(f"The variable name '{variable}' is ambiguous.\n"
+            logging.warn(f"The variable name '{variable}' is ambiguous. "
                          f"{instruction}")
 
         if self.land:
             name += "-land"
-        # TODO add option for orography
         elif self.pressure_levels == ["surface"]:
             name += "-single-levels"
         # the order of the following conditions is important!
