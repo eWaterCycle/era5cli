@@ -541,6 +541,7 @@ def test_build_request():
     (name, request) = era5._build_request('orography', [2008])
     assert request['variable'] == 'geopotential'
 
+
 def test_incompatible_options():
     """Test that invalid combinations of arguments don't silently pass."""
     era5 = initialize(land=True, prelimbe=True)
