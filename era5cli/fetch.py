@@ -398,6 +398,10 @@ class Fetch:
 
         name = self._build_name(variable)
 
+        # deal with deprecated variable orography
+        if variable == 'orography':
+            variable = 'geopotential'
+
         request = {
             'variable': variable,
             'year': years,

@@ -536,6 +536,10 @@ def test_build_request():
     with pytest.raises(ValueError):
         assert era5._build_request('temperature', [2008])
 
+    # requesting data from orography should call geopotential
+    era5 = initialize()
+    (name, request) = era5._build_request('orography', [2008])
+    assert request['variable'] == 'geopotential'
 
 def test_incompatible_options():
     """Test that invalid combinations of arguments don't silently pass."""
