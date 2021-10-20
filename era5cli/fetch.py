@@ -343,16 +343,7 @@ class Fetch:
 
         name = "reanalysis-era5"
 
-        # workaround for deprecated variable 'orography'
-        if variable == "orography":
-            variable = "geopotential"
-            self.pressure_levels = ["surface"]
-            logging.warning(
-                "The variable 'orography' has been deprecated by CDS. Use "
-                "`--variables geopotential --levels surface` going forward. "
-                "The current query has been changed accordingly.")
-
-        # deal with ambiguous vars
+        # report to user in case of ambiguous vars
         if (variable in ref.PLVARS) and (variable in ref.SLVARS):
             instruction_pressure = (
                 "Getting variable from pressure level data. To get the surface"
@@ -371,6 +362,14 @@ class Fetch:
 
         if self.land:
             name += "-land"
+        # workaround for deprecated variable 'orography'
+        elif variable == "orography":
+            variable = "geopotential"
+            name += "-single-levels"
+            logging.warning(
+                "The variable 'orography' has been deprecated by CDS. Use "
+                "`--variables geopotential --levels surface` going forward. "
+                "The current query has been changed accordingly.")
         elif self.pressure_levels == ["surface"]:
             name += "-single-levels"
         # the order of the following conditions is important!
@@ -390,17 +389,13 @@ class Fetch:
                 raise ValueError(
                     "Back extension not (yet) available for ERA5-Land.")
             name += "-preliminary-back-extension"
-        return name
+        return name, variable
 
     def _build_request(self, variable, years):
         """Build the download request for the retrieve method of cdsapi."""
         self._check_variable(variable)
 
-        name = self._build_name(variable)
-
-        # deal with deprecated variable orography
-        if variable == 'orography':
-            variable = 'geopotential'
+        name, variable = self._build_name(variable)
 
         request = {
             'variable': variable,
