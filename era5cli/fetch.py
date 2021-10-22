@@ -325,8 +325,8 @@ class Fetch:
                 and -180 <= lon_min <= 180 and -180 <= lon_max <= 180
                 and lat_max > lat_min and lon_max != lon_min):
             raise ValueError(
-                "Provide coordinates as lat_max lon_min lat_min lon_max."
-                "Latitude must be in range -180,+180 and"
+                "Provide coordinates as lat_max lon_min lat_min lon_max. "
+                "Latitude must be in range -180,+180 and "
                 "longitude must be in range -90,+90.")
 
     def _parse_area(self):
@@ -346,8 +346,8 @@ class Fetch:
         # report to user in case of ambiguous vars
         if (variable in ref.PLVARS) and (variable in ref.SLVARS):
             instruction_pressure = (
-                "Getting variable from pressure level data. To get the surface"
-                "variable instead, use `--levels surface` or"
+                "Getting variable from pressure level data. To get the surface "
+                "variable instead, use `--levels surface` or "
                 "`levels=['surface']`.\n")
             instruction_surface = (
                 "Getting variable from surface level data. To get the "
