@@ -346,9 +346,9 @@ class Fetch:
         # report to user in case of ambiguous vars
         if (variable in ref.PLVARS) and (variable in ref.SLVARS):
             instruction_pressure = (
-                "Getting variable from pressure level data. To get the surface "
-                "variable instead, use `--levels surface` or "
-                "`levels=['surface']`.\n")
+                "Getting variable from pressure level data. To get the "
+                "surface variable instead, add `--levels surface` or "
+                "`levels=['surface']` to the request.\n")
             instruction_surface = (
                 "Getting variable from surface level data. To get the "
                 "pressure variable instead, omit `--levels surface` or "
