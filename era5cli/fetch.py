@@ -1,6 +1,7 @@
 """Fetch ERA5 variables."""
 
 import os
+import logging
 
 import cdsapi
 from pathos.threading import ThreadPool as Pool
@@ -56,10 +57,12 @@ class Fetch:
             Whether to get monthly averaged by hour of day
             (`synoptic = True`) or monthly means of daily means
             (`synoptic = False`).
-        pressurelevels: None, list(int)
+        pressurelevels: None, list
             List of pressure level(s) to download 3D variables for.
             See the Copernicus Climate Data Store website for available
-            pressure levels.
+            pressure levels. For geopotential,
+            `--levels surface` can be used to request data from
+            the single level dataset (previously called orography).
         merge: bool
             Merge yearly output files (`merge = True`), or split
             output files into separate files for every year
@@ -82,12 +85,24 @@ class Fetch:
             `land = True` is incompatible with the use of
             `prelimbe = True` and `ensemble = True`.
     """
-
-    def __init__(self, years: list, months: list, days: list,
-                 hours: list, variables: list, outputformat: str,
-                 outputprefix: str, period: str, ensemble: bool, area=None,
-                 statistics=None, synoptic=None, pressurelevels=None,
-                 merge=False, threads=None, prelimbe=False, land=False):
+    def __init__(self,
+                 years: list,
+                 months: list,
+                 days: list,
+                 hours: list,
+                 variables: list,
+                 outputformat: str,
+                 outputprefix: str,
+                 period: str,
+                 ensemble: bool,
+                 area=None,
+                 statistics=None,
+                 synoptic=None,
+                 pressurelevels=None,
+                 merge=False,
+                 threads=None,
+                 prelimbe=False,
+                 land=False):
         """Initialization of Fetch class."""
         self.months = era5cli.utils._zpad_months(months)
         """list(str): List of zero-padded strings of months
@@ -103,7 +118,8 @@ class Fetch:
         """list(str): List of xx:00 formatted time strings
         (e.g. ['00:00', '01:00', ..., '23:00'])."""
         self.pressure_levels = pressurelevels
-        """list(int): List of pressure levels."""
+        """list(any): List of pressure levels (integer), or the indication
+        'surface', requesting data only from a single-level dataset."""
         self.variables = variables
         """list(str): List of variables."""
         self.area = area
@@ -174,8 +190,13 @@ class Fetch:
 
     def _process_areaname(self):
         (lat_max, lon_min, lat_min, lon_max) = [round(c) for c in self.area]
-        def lon(x): return f"{x}E" if x >= 0 else f"{abs(x)}W"
-        def lat(y): return f"{y}N" if y >= 0 else f"{abs(y)}S"
+
+        def lon(x):
+            return f"{x}E" if x >= 0 else f"{abs(x)}W"
+
+        def lat(y):
+            return f"{y}N" if y >= 0 else f"{abs(y)}S"
+
         name = f"_{lon(lon_min)}-{lon(lon_max)}_{lat(lat_min)}-{lat(lat_max)}"
         return name
 
@@ -183,8 +204,8 @@ class Fetch:
         """Define output filename."""
         start, end = years[0], years[-1]
 
-        prefix = (f"{self.outputprefix}-land" if self.land
-                  else self.outputprefix)
+        prefix = (f"{self.outputprefix}-land"
+                  if self.land else self.outputprefix)
         yearblock = f"{start}-{end}" if not start == end else f"{start}"
         fname = f"{prefix}_{var}_{yearblock}_{self.period}"
         if self.area:
@@ -200,8 +221,10 @@ class Fetch:
 
     def _split_variable(self):
         """Split by variable."""
-        outputfiles = [self._define_outputfilename(var, self.years)
-                       for var in self.variables]
+        outputfiles = [
+            self._define_outputfilename(var, self.years)
+            for var in self.variables
+        ]
         years = len(outputfiles) * [self.years]
         if not self.threads:
             pool = Pool()
@@ -214,8 +237,9 @@ class Fetch:
         outputfiles = []
         variables = []
         for var in self.variables:
-            outputfiles += ([self._define_outputfilename(var, [yr])
-                             for yr in self.years])
+            outputfiles += ([
+                self._define_outputfilename(var, [yr]) for yr in self.years
+            ])
             variables += len(self.years) * [var]
         years = len(self.variables) * self.years
         if not self.threads:
@@ -270,12 +294,10 @@ class Fetch:
         if not self.pressure_levels:
             raise ValueError(
                 "Requested 3D variable(s), but no pressure levels specified."
-                "Aborting."
-            )
+                "Aborting.")
         if not all(level in ref.PLEVELS for level in self.pressure_levels):
             raise ValueError(
-                f"Invalid pressure levels. Allowed values are: {ref.PLEVELS}"
-            )
+                f"Invalid pressure levels. Allowed values are: {ref.PLEVELS}")
 
     def _check_variable(self, variable):
         """Check variable available and compatible with other inputs."""
@@ -284,36 +306,28 @@ class Fetch:
             if variable not in ref.ERA5_LAND_VARS:
                 raise ValueError(
                     f"Variable {variable} is not available in ERA5-Land.\n"
-                    f"Choose from {ref.ERA5_LAND_VARS}"
-                )
-        elif variable in ref.PLVARS+ref.SLVARS:
+                    f"Choose from {ref.ERA5_LAND_VARS}")
+        elif variable in ref.PLVARS + ref.SLVARS:
             if self.period == "monthly":
                 if variable in ref.MISSING_MONTHLY_VARS:
                     header = ("There is no monthly data available for the "
                               "following variables:\n")
-                    raise ValueError(era5cli.utils._print_multicolumn(
-                        header,
-                        ref.MISSING_MONTHLY_VARS))
+                    raise ValueError(
+                        era5cli.utils._print_multicolumn(
+                            header, ref.MISSING_MONTHLY_VARS))
         else:
-            raise ValueError(
-                "Invalid variable name: {}".format(variable)
-            )
+            raise ValueError("Invalid variable name: {}".format(variable))
 
     def _check_area(self):
         """Confirm that area parameters are correct."""
         (lat_max, lon_min, lat_min, lon_max) = self.area
-        if not (-90 <= lat_max <= 90
-                and -90 <= lat_min <= 90
-                and -180 <= lon_min <= 180
-                and -180 <= lon_max <= 180
-                and lat_max > lat_min
-                and lon_max != lon_min
-                ):
+        if not (-90 <= lat_max <= 90 and -90 <= lat_min <= 90
+                and -180 <= lon_min <= 180 and -180 <= lon_max <= 180
+                and lat_max > lat_min and lon_max != lon_min):
             raise ValueError(
-                "Provide coordinates as lat_max lon_min lat_min lon_max."
-                "Latitude must be in range -180,+180 and"
-                "longitude must be in range -90,+90."
-            )
+                "Provide coordinates as lat_max lon_min lat_min lon_max. "
+                "Latitude must be in range -180,+180 and "
+                "longitude must be in range -90,+90.")
 
     def _parse_area(self):
         """Parse area parameters to accepted coordinates."""
@@ -329,16 +343,43 @@ class Fetch:
 
         name = "reanalysis-era5"
 
+        # report to user in case of ambiguous vars
+        if (variable in ref.PLVARS) and (variable in ref.SLVARS):
+            instruction_pressure = (
+                "Getting variable from pressure level data. To get the "
+                "surface variable instead, add `--levels surface` or "
+                "`levels=['surface']` to the request.\n")
+            instruction_surface = (
+                "Getting variable from surface level data. To get the "
+                "pressure variable instead, omit `--levels surface` or "
+                "`levels=['surface']` from the request.\n")
+            if self.pressure_levels == ["surface"]:
+                instruction = instruction_surface
+            else:
+                instruction = instruction_pressure
+            logging.warning(f"The variable name '{variable}' is ambiguous. "
+                            f"{instruction}")
+
         if self.land:
             name += "-land"
+        # workaround for deprecated variable 'orography'
+        elif variable == "orography":
+            variable = "geopotential"
+            name += "-single-levels"
+            logging.warning(
+                "The variable 'orography' has been deprecated by CDS. Use "
+                "`--variables geopotential --levels surface` going forward. "
+                "The current query has been changed accordingly.")
+        elif self.pressure_levels == ["surface"]:
+            name += "-single-levels"
+        # the order of the following conditions is important!
+        # please do not switch them
         elif variable in ref.PLVARS:
             name += "-pressure-levels"
         elif variable in ref.SLVARS:
             name += "-single-levels"
         else:
-            raise ValueError(
-                "Invalid variable name: {}".format(variable)
-            )
+            raise ValueError("Invalid variable name: {}".format(variable))
 
         if self.period == "monthly":
             name += "-monthly-means"
@@ -346,22 +387,23 @@ class Fetch:
         if self.prelimbe:
             if self.land:
                 raise ValueError(
-                    "Back extension not (yet) available for ERA5-Land."
-                )
+                    "Back extension not (yet) available for ERA5-Land.")
             name += "-preliminary-back-extension"
-        return name
+        return name, variable
 
     def _build_request(self, variable, years):
         """Build the download request for the retrieve method of cdsapi."""
         self._check_variable(variable)
 
-        name = self._build_name(variable)
+        name, variable = self._build_name(variable)
 
-        request = {'variable': variable,
-                   'year': years,
-                   'month': self.months,
-                   'time': self.hours,
-                   'format': self.outputformat}
+        request = {
+            'variable': variable,
+            'year': years,
+            'month': self.months,
+            'time': self.hours,
+            'format': self.outputformat
+        }
 
         if "pressure-levels" in name:
             self._check_levels()
@@ -377,7 +419,7 @@ class Fetch:
         if self.period == "hourly":
             request["day"] = self.days
 
-        return(name, request)
+        return (name, request)
 
     def _exit(self):
         pass
@@ -389,13 +431,10 @@ class Fetch:
             print(name, request, outputfile)
         else:
             queueing_message = (
-                os.linesep,
-                "Download request is being queued at Copernicus.",
+                os.linesep, "Download request is being queued at Copernicus.",
                 os.linesep,
                 "It can take some time before downloading starts, ",
-                "please do not kill this process in the meantime.",
-                os.linesep
-            )
+                "please do not kill this process in the meantime.", os.linesep)
             connection = cdsapi.Client()
             print("".join(queueing_message))  # print queueing message
             connection.retrieve(name, request, outputfile)

@@ -106,6 +106,20 @@ def test_period_args():
         assert cli._set_period_args(args)
 
 
+def test_level_arguments():
+    """Test if levels are parsed correctly"""
+    argv = ['hourly', '--startyear', '2008',
+            '--variables', 'geopotential', '--levels', 'surface']
+    args = cli._parse_args(argv)
+    assert args.levels == ['surface']
+
+    # only numeric values or 'surface' are accepted levels
+    argv = ['hourly', '--startyear', '2008',
+            '--variables', 'geopotential', '--levels', 'somethingelse']
+    with pytest.raises(SystemExit):
+        args = cli._parse_args(argv)
+
+
 @mock.patch("era5cli.fetch.Fetch", autospec=True)
 def test_main_fetch(fetch):
     """Test if Fetch part of main completes without error."""
