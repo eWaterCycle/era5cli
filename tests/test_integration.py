@@ -82,11 +82,10 @@ ids = [call[0] for call in call_result]
 @pytest.mark.parametrize("call,result", call_result, ids=ids)
 def test_main(call, result, capsys):
     call = call.split()
+    result = result.replace('\n', ' ') + '\n'
     # until the actual fetch is monkeypatched, make sure the tests are dryruns
     if '--dryrun' not in call:
         pytest.fail('call must be a dryrun')
     cli.main(call)
     captured = capsys.readouterr().out
-    result = result.replace('\n', ' ')
-    result = result + '\n'
     assert result == captured
