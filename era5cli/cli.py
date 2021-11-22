@@ -428,7 +428,7 @@ def _execute(args):
 def main(argv=None):
     """Main."""
     # get arguments
-    if argv == None:
+    if argv is None:
         argv = sys.argv
     args = _parse_args(argv[1:])
     _execute(args)
