@@ -48,11 +48,33 @@ result3 = """reanalysis-era5-pressure-levels {'variable': 'geopotential',
 '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']}
 era5_geopotential_2008_hourly.nc"""
 
+# preliminary-back-extension is combined with monthly-means
+call4 = """era5cli monthly --variables temperature --startyear 1960 --prelimbe
+--dryrun"""
+
+result4 = """reanalysis-era5-pressure-levels-monthly-means-preliminary-back-extension
+{'variable': 'temperature', 'year': 1960, 'month': ['01', '02', '03', '04',
+'05', '06', '07', '08', '09', '10', '11', '12'], 'time': ['00:00'], 'format':
+'netcdf', 'pressure_level': [1, 2, 3, 5, 7, 10, 20, 30, 50, 70, 100, 125, 150,
+175, 200, 225, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 775, 800,
+825, 850, 875, 900, 925, 950, 975, 1000], 'product_type':
+'reanalysis-monthly-means-of-daily-means'} era5_temperature_1960_monthly.nc"""
+
+# era5-Land is combined with monthly means
+call5 = """era5cli monthly --variables snow_cover --startyear 2008 --land
+--dryrun"""
+
+result5 = """reanalysis-era5-land-monthly-means {'variable': 'snow_cover',
+'year': 2008, 'month': ['01', '02', '03', '04', '05', '06', '07', '08', '09',
+'10', '11', '12'], 'time': ['00:00'], 'format': 'netcdf', 'product_type':
+'monthly_averaged_reanalysis'} era5-land_snow_cover_2008_monthly.nc"""
 
 call_result = [
     (call1, result1),
     (call2, result2),
-    (call3, result3)
+    (call3, result3),
+    (call4, result4),
+    (call5, result5)
     ]
 ids = [call[0] for call in call_result]
 
