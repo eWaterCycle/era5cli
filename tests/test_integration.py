@@ -1,13 +1,14 @@
 """Tests to check the full era5cli workflow."""
 
+import logging
 import pytest
 
 import era5cli.cli as cli
 from textwrap import dedent
 
 
-# combine calls with result
-call_result = [
+# combine calls with result and possible warning message, in that order
+call_result_warn = [
     (
         # orography is translated to geopotential in the query
         "era5cli hourly --variables orography --startyear 2008 --dryrun",
@@ -22,7 +23,8 @@ call_result = [
             '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12',
             '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23',
             '24', '25', '26', '27', '28', '29', '30', '31']}
-            era5_orography_2008_hourly.nc""")
+            era5_orography_2008_hourly.nc"""),
+        "The variable 'orography' has been deprecated by CDS."
     ),
     (
         # geopotential needs '--levels surface' to be correctly interpreted
@@ -40,7 +42,8 @@ call_result = [
             '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12',
             '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23',
             '24', '25', '26', '27', '28', '29', '30', '31']}
-            era5_geopotential_2008_hourly.nc""")
+            era5_geopotential_2008_hourly.nc"""),
+        "Getting variable from surface level data."
     ),
     (
         # without --levels surface, geopotential calls pressure level data
@@ -59,7 +62,8 @@ call_result = [
             '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14',
             '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25',
             '26', '27', '28', '29', '30', '31']}
-            era5_geopotential_2008_hourly.nc""")
+            era5_geopotential_2008_hourly.nc"""),
+        ""
     ),
     (
         # preliminary-back-extension is combined with monthly-means
@@ -75,7 +79,8 @@ call_result = [
             350, 400, 450, 500, 550, 600, 650, 700, 750, 775, 800, 825, 850,
             875, 900, 925, 950, 975, 1000], 'product_type':
             'reanalysis-monthly-means-of-daily-means'}
-            era5_temperature_1960_monthly.nc""")
+            era5_temperature_1960_monthly.nc"""),
+        ""
     ),
     (
         # era5-Land is combined with monthly means
@@ -87,7 +92,8 @@ call_result = [
             'year': 2008, 'month': ['01', '02', '03', '04', '05', '06', '07',
             '08', '09', '10', '11', '12'], 'time': ['00:00'], 'format':
             'netcdf', 'product_type': 'monthly_averaged_reanalysis'}
-            era5-land_snow_cover_2008_monthly.nc""")
+            era5-land_snow_cover_2008_monthly.nc"""),
+        ""
     )
 ]
 
@@ -98,16 +104,18 @@ def clean_ids(call):
     return(call)
 
 
-ids = [clean_ids(call[0]) for call in call_result]
+ids = [clean_ids(call[0]) for call in call_result_warn]
 
 
-@pytest.mark.parametrize("call,result", call_result, ids=ids)
-def test_main(call, result, capsys):
+@pytest.mark.parametrize("call,result,warn", call_result_warn, ids=ids)
+def test_main(call, result, warn, capsys, caplog):
     call = call.split()
     result = result.replace('\n', ' ') + '\n'
     # until the actual fetch is monkeypatched, make sure the tests are dryruns
     if '--dryrun' not in call:
         pytest.fail('call must be a dryrun')
-    cli.main(call)
+    with caplog.at_level(logging.INFO):
+        cli.main(call)
     captured = capsys.readouterr().out
     assert result == captured
+    assert warn in caplog.text
