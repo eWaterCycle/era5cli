@@ -91,10 +91,12 @@ call_result = [
     )
 ]
 
+
 def clean_ids(call):
     call = call.replace('\n', ' ')
-    call = call.replace('--dryrun','')
+    call = call.replace('--dryrun', '')
     return(call)
+
 
 ids = [clean_ids(call[0]) for call in call_result]
 
