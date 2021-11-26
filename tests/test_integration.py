@@ -3,8 +3,9 @@
 import logging
 import pytest
 
-import era5cli.cli as cli
 from textwrap import dedent
+
+from era5cli.cli import main
 
 
 # combine calls with result and possible warning message, in that order
@@ -115,7 +116,7 @@ def test_main(call, result, warn, capsys, caplog):
     if '--dryrun' not in call:
         pytest.fail('call must be a dryrun')
     with caplog.at_level(logging.INFO):
-        cli.main(call)
+        main(call)
     captured = capsys.readouterr().out
     assert result == captured
     assert warn in caplog.text
