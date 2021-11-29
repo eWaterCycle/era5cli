@@ -8,12 +8,14 @@ from textwrap import dedent
 from era5cli.cli import main
 
 
-# combine calls with result and possible warning message, in that order
-call_result_warn = [
-    (
+# combine calls with result and possible warning message
+call_result = [
+    {
         # orography is translated to geopotential in the query
-        "era5cli hourly --variables orography --startyear 2008 --dryrun",
-        dedent("""\
+        "call": dedent("""\
+            era5cli hourly --variables orography --startyear 2008 --dryrun
+            """),
+        "result": dedent("""\
             reanalysis-era5-single-levels {'variable': 'geopotential', 'year':
             2008, 'month': ['01', '02', '03', '04', '05', '06', '07', '08',
             '09', '10', '11', '12'], 'time': ['00:00', '01:00', '02:00',
@@ -25,14 +27,14 @@ call_result_warn = [
             '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23',
             '24', '25', '26', '27', '28', '29', '30', '31']}
             era5_orography_2008_hourly.nc"""),
-        "The variable 'orography' has been deprecated by CDS."
-    ),
-    (
+        "warn": "The variable 'orography' has been deprecated by CDS."
+    },
+    {
         # geopotential needs '--levels surface' to be correctly interpreted
-        dedent("""\
+        "call": dedent("""\
             era5cli hourly --variables geopotential --startyear 2008 --dryrun
             --levels surface"""),
-        dedent("""\
+        "result": dedent("""\
             reanalysis-era5-single-levels {'variable': 'geopotential', 'year':
             2008, 'month': ['01', '02', '03', '04', '05', '06', '07', '08',
             '09', '10', '11', '12'], 'time': ['00:00', '01:00', '02:00',
@@ -44,12 +46,14 @@ call_result_warn = [
             '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23',
             '24', '25', '26', '27', '28', '29', '30', '31']}
             era5_geopotential_2008_hourly.nc"""),
-        "Getting variable from surface level data."
-    ),
-    (
+        "warn": "Getting variable from surface level data."
+    },
+    {
         # without --levels surface, geopotential calls pressure level data
-        "era5cli hourly --variables geopotential --startyear 2008 --dryrun",
-        dedent("""\
+        "call": dedent("""\
+            era5cli hourly --variables geopotential --startyear 2008
+            --dryrun"""),
+        "result": dedent("""\
             reanalysis-era5-pressure-levels {'variable': 'geopotential',
             'year': 2008, 'month': ['01', '02', '03', '04', '05', '06', '07',
             '08', '09', '10', '11', '12'], 'time': ['00:00', '01:00', '02:00',
@@ -63,15 +67,14 @@ call_result_warn = [
             '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14',
             '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25',
             '26', '27', '28', '29', '30', '31']}
-            era5_geopotential_2008_hourly.nc"""),
-        ""
-    ),
-    (
+            era5_geopotential_2008_hourly.nc""")
+    },
+    {
         # preliminary-back-extension is combined with monthly-means
-        dedent("""\
+        "call": dedent("""\
             era5cli monthly --variables temperature --startyear 1960 --prelimbe
             --dryrun"""),
-        dedent("""\
+        "result": dedent("""\
             reanalysis-era5-pressure-levels-monthly-means-preliminary-back-extension
             {'variable': 'temperature', 'year': 1960, 'month': ['01', '02',
             '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
@@ -80,22 +83,20 @@ call_result_warn = [
             350, 400, 450, 500, 550, 600, 650, 700, 750, 775, 800, 825, 850,
             875, 900, 925, 950, 975, 1000], 'product_type':
             'reanalysis-monthly-means-of-daily-means'}
-            era5_temperature_1960_monthly.nc"""),
-        ""
-    ),
-    (
+            era5_temperature_1960_monthly.nc""")
+    },
+    {
         # era5-Land is combined with monthly means
-        dedent("""\
+        "call": dedent("""\
             era5cli monthly --variables snow_cover --startyear 2008 --land
             --dryrun"""),
-        dedent("""\
+        "result": dedent("""\
             reanalysis-era5-land-monthly-means {'variable': 'snow_cover',
             'year': 2008, 'month': ['01', '02', '03', '04', '05', '06', '07',
             '08', '09', '10', '11', '12'], 'time': ['00:00'], 'format':
             'netcdf', 'product_type': 'monthly_averaged_reanalysis'}
-            era5-land_snow_cover_2008_monthly.nc"""),
-        ""
-    )
+            era5-land_snow_cover_2008_monthly.nc""")
+    }
 ]
 
 
@@ -105,13 +106,13 @@ def clean_ids(call):
     return(call)
 
 
-ids = [clean_ids(call[0]) for call in call_result_warn]
+ids = [clean_ids(item["call"]) for item in call_result]
 
 
-@pytest.mark.parametrize("call,result,warn", call_result_warn, ids=ids)
-def test_main(call, result, warn, capsys, caplog):
-    call = call.split()
-    result = result.replace('\n', ' ') + '\n'
+@pytest.mark.parametrize("call_result", call_result, ids=ids)
+def test_main(call_result, capsys, caplog):
+    call = call_result["call"].split()
+    result = call_result["result"].replace('\n', ' ') + '\n'
     # until the actual fetch is monkeypatched, make sure the tests are dryruns
     if '--dryrun' not in call:
         pytest.fail('call must be a dryrun')
@@ -119,4 +120,8 @@ def test_main(call, result, warn, capsys, caplog):
         main(call)
     captured = capsys.readouterr().out
     assert result == captured
-    assert warn in caplog.text
+    try:
+        warn = call_result["warn"]
+        assert warn in caplog.text
+    except KeyError:
+        pass
