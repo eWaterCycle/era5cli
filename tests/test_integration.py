@@ -67,7 +67,8 @@ call_result = [
             '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14',
             '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25',
             '26', '27', '28', '29', '30', '31']}
-            era5_geopotential_2008_hourly.nc""")
+            era5_geopotential_2008_hourly.nc"""),
+        "warn": "Getting variable from pressure level data."
     },
     {
         # preliminary-back-extension is combined with monthly-means
@@ -124,4 +125,4 @@ def test_main(call_result, capsys, caplog):
         warn = call_result["warn"]
         assert warn in caplog.text
     except KeyError:
-        assert caplog.text is ''
+        assert caplog.text == ''
