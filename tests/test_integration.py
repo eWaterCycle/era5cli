@@ -124,4 +124,4 @@ def test_main(call_result, capsys, caplog):
         warn = call_result["warn"]
         assert warn in caplog.text
     except KeyError:
-        pass
+        assert caplog.text is ''
