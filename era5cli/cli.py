@@ -425,10 +425,12 @@ def _execute(args):
         return True
 
 
-def main():
+def main(argv=None):
     """Main."""
     # get arguments
-    args = _parse_args(sys.argv[1:])
+    if argv is None:
+        argv = sys.argv
+    args = _parse_args(argv[1:])
     _execute(args)
 
 
