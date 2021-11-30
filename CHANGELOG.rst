@@ -1,6 +1,11 @@
 Release Notes
 *************
 
+1.3.0 (2021-11-30)
+~~~~~~~~~~~~~~~~~~
+* Fix compatibility with changed CDS variables geopotential/orography `#98 <https://github.com/eWaterCycle/era5cli/pull/98>`_
+* Add integration testing `#102 <https://github.com/eWaterCycle/era5cli/pull/102>`_
+
 1.2.1 (2021-04-21)
 ~~~~~~~~~~~~~~~~~~
 * Automatic PyPI release for 1.2.0 failed; updated github action workflow `#91 <https://github.com/eWaterCycle/era5cli/pull/91>`_
