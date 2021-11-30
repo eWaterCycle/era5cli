@@ -2,9 +2,9 @@ name: CI test and coverage
 
 on:
   push:
-    branch: master
+    branches: [master]
   pull_request:
-    branch: master
+    branches: [master]
 
 jobs:
   build:
