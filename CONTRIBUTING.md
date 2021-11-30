@@ -32,10 +32,11 @@ Open [releases](https://github.com/eWaterCycle/era5cli/releases) and draft a new
 release. Copy the changelog for this version into the description (though note
 that the description is in Markdown, so reformat from Rst if necessary).
 
-Tag the release according to semantic versioning guidelines, preceded with a `v`
-(e.g.: v1.0.0). The release title is the tag and the release date together
-(e.g.: v1.0.0 (2019-07-25)). Tick the pre-release box in case the release is a
-candidate release, and amend the version tag with `rc` and the candidate number.
+Tag the release according to [semantic versioning
+guidelines](https://semver.org/), preceded with a `v` (e.g.: v1.0.0). The
+release title is the tag and the release date together (e.g.: v1.0.0
+(2019-07-25)). Tick the pre-release box in case the release is a candidate
+release, and amend the version tag with `rc` and the candidate number.
 
 ## PyPI release workflow
 Publishing a new release in github triggers the github Action workflow that
