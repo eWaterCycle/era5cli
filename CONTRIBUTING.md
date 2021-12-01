@@ -54,7 +54,7 @@ builds and publishes the package to test.PyPI or PyPI. Versions with "rc"
 Other version tags will trigger a PyPI release. Inspect
 `.github/workflows/publish-to-pypi.yml` for more information.
 
-Confirm a pre-release on test.PyPI with:
+Confirm a release candidate on test.PyPI with:
 ```
 pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ era5cli
 ```
