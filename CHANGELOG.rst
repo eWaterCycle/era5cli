@@ -1,6 +1,10 @@
 Release Notes
 *************
 
+1.3.1 (2021-12-01)
+~~~~~~~~~~~~~~~~~~
+* Automatic Zenodo/RSD release failed; updated contribution guidelines `#106 <https://github.com/eWaterCycle/era5cli/pull/106>`_
+
 1.3.0 (2021-11-30)
 ~~~~~~~~~~~~~~~~~~
 * Fix compatibility with changed CDS variables geopotential/orography `#98 <https://github.com/eWaterCycle/era5cli/pull/98>`_
