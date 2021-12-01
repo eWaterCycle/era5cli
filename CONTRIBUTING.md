@@ -18,7 +18,8 @@ Ensure all authors are present in:
 - `era5cli/__version__.py`
 
 ## Confirm release info
-Ensure the right date and upcoming version number is set in:
+Ensure the right date and upcoming version number (including release candidate
+tag, if applicable) is set in:
 
 - `CITATION.cff`
 - `era5cli/__version__.py`
@@ -40,8 +41,9 @@ release title is the tag and the release date together (e.g.: v1.0.0
 ### Release candidate
 When releasing a release candidate on Github, tick the pre-release box, and
 amend the version tag with `rc` and the candidate number. Ensure the release
-candidate version is accurate in `CHANGELOG.rst`. If the version number in this
-file is not updated, Zenodo and RSD release workflows will fail.
+candidate version is accurate in `CITATION.cff` and `era5cli/__version__.py`.
+If the version number in these files is not updated, Zenodo and RSD release
+workflows will fail.
 
 Releasing a release candidate is not required, but can help detect bugs early.
 
