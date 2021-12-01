@@ -42,7 +42,7 @@ release title is the tag and the release date together (e.g.: v1.0.0
 When releasing a release candidate on Github, tick the pre-release box, and
 amend the version tag with `-rc` and the candidate number. Ensure the release
 candidate version is accurate in `CITATION.cff` and `era5cli/__version__.py`.
-If the version number in these files is not updated, Zenodo and RSD release
+If the version number in these files is not updated, Zenodo release
 workflows will fail.
 
 Releasing a release candidate is not required, but can help detect bugs early.
