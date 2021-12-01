@@ -35,15 +35,22 @@ that the description is in Markdown, so reformat from Rst if necessary).
 Tag the release according to [semantic versioning
 guidelines](https://semver.org/), preceded with a `v` (e.g.: v1.0.0). The
 release title is the tag and the release date together (e.g.: v1.0.0
-(2019-07-25)). Tick the pre-release box in case the release is a candidate
-release, and amend the version tag with `rc` and the candidate number.
+(2019-07-25)).
+
+### Release candidate
+When releasing a release candidate on Github, tick the pre-release box, and
+amend the version tag with `rc` and the candidate number. Ensure the release
+candidate version is accurate in `CHANGELOG.rst`. If the version number in this
+file is not updated, Zenodo and RSD release workflows will fail.
+
+Releasing a release candidate is not required, but can help detect bugs early.
 
 ## PyPI release workflow
 Publishing a new release in github triggers the github Action workflow that
 builds and publishes the package to test.PyPI or PyPI. Versions with "rc"
-(releasecandidate) in their version tag will only be published to test.PyPI.
-Other version tags will trigger a PyPI release.
-Inspect `.github/workflows/publish-to-pypi.yml` for more information.
+(release candidate) in their version tag will only be published to test.PyPI.
+Other version tags will trigger a PyPI release. Inspect
+`.github/workflows/publish-to-pypi.yml` for more information.
 
 Confirm a pre-release on test.PyPI with:
 ```
