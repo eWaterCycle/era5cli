@@ -78,7 +78,7 @@ authors:
     given-names: Stefan
     orcid: 0000-0002-5821-2060
 
-cff-version: "1.0.3"
+cff-version: 1.2.0
 date-released: 2021-11-30
 doi: 10.5281/zenodo.3252665
 keywords:
