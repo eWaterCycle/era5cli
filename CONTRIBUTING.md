@@ -65,3 +65,12 @@ Confirm the new release on [Zenodo](https://doi.org/10.5281/zenodo.3252665).
 ## Release on the Research Software Directory
 Wait a few hours, then confirm the addition of a new release on the
 [RSD](https://www.research-software.nl/software/era5cli).
+
+If any contributors have been added, or the description of the software has
+changed, this can be edited (by eScience Center employees) via the [RSD admin
+interface](https://www.research-software.nl/admin/). More information about
+this process (e.g. how to add a new contributor or new affiliation) can be
+found in the [RSD 
+documentation](https://github.com/research-software-directory/research-software-directory/blob/master/docs/entering-data.md)
+or in [this
+blogpost](https://blog.esciencecenter.nl/the-research-software-directory-and-how-it-promotes-software-citation-4bd2137a6b8).
