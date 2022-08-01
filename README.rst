@@ -5,8 +5,8 @@ era5cli
     :alt: License
 
 .. image:: https://readthedocs.org/projects/era5cli/badge/?version=stable
-:target: https://era5cli.readthedocs.io/en/stable/?badge=stable
-:alt: Documentation Status
+    :target: https://era5cli.readthedocs.io/en/stable/?badge=stable
+    :alt: Documentation Status
 
 .. image:: https://img.shields.io/badge/docs-stable-brightgreen.svg
    :target: http://era5cli.readthedocs.io/en/stable/?badge=stable
