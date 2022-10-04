@@ -160,14 +160,6 @@ def test_main_fetch(fetch):
     args = cli._parse_args(argv)
     cli._execute(args)
 
-    # no land available for back extension
-    argv = ['monthly', '--startyear', '1980', '--endyear', '1980',
-            '--variables', 'total_precipitation', '--synoptic',
-            '--ensemble', '--land']
-    args = cli._parse_args(argv)
-    with pytest.raises(AssertionError):
-        cli._execute(args)
-
 
 @mock.patch("era5cli.info.Info", autospec=True)
 def test_main_info(info):

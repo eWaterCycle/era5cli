@@ -148,7 +148,8 @@ def _build_parser():
                              Whether to download the preliminary back extension
                              (1950-1978). Note that when `--prelimbe` is used,
                              `--startyear` and `--endyear` should be set
-                             between 1950 and 1978.
+                             between 1950 and 1978. Please, be aware that
+                             from 1959 ERA5 data is available.
                              `--prelimbe` is incompatible with `--land`.
 
                              ''')
@@ -159,7 +160,7 @@ def _build_parser():
         help=textwrap.dedent('''\
                              Whether to download data from the ERA5-Land
                              dataset. Note that the ERA5-Land dataset starts in
-                             1981.
+                             1950.
                              `--land` is incompatible with the use of
                              `--prelimbe` and `--ensemble`.
 
@@ -343,12 +344,12 @@ def _construct_year_list(args):
                 'year should be between 1950 and 1978'
             )
         elif args.land:
-            assert 1981 <= year <= datetime.now().year, (
-                'for ERA5-Land, year should be between 1981 and present'
+            assert 1950 <= year <= datetime.now().year, (
+                'for ERA5-Land, year should be between 1950 and present'
             )
         else:
-            assert 1979 <= year <= datetime.now().year, (
-                'year should be between 1979 and present'
+            assert 1959 <= year <= datetime.now().year, (
+                'year should be between 1959 and present'
             )
 
     assert endyear >= args.startyear, (
