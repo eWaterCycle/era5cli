@@ -4,3 +4,4 @@ pytest-flake8
 pytest-cov
 Sphinx
 sphinx-argparse
+sphinx_rtd_theme
