@@ -149,7 +149,7 @@ def _build_parser():
                              (1950-1978). Note that when `--prelimbe` is used,
                              `--startyear` and `--endyear` should be set
                              between 1950 and 1978. Please, be aware that
-                             from 1959 ERA5 data is available.
+                             ERA5 data is available from 1959.
                              `--prelimbe` is incompatible with `--land`.
 
                              ''')
