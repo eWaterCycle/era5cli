@@ -138,7 +138,7 @@ def test_main_fetch(fetch):
         assert cli._execute(args)
 
     # should give an AssertionError if years are out of bounds
-    argv = ['hourly', '--startyear', '1950',
+    argv = ['hourly', '--startyear', '1949',
             '--variables', 'total_precipitation', '--statistics',
             '--endyear', '2007', '--ensemble']
     args = cli._parse_args(argv)
