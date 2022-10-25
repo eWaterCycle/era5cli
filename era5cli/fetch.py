@@ -387,7 +387,8 @@ class Fetch:
         if self.prelimbe:
             if self.land:
                 raise ValueError(
-                    "Back extension not (yet) available for ERA5-Land.")
+                    "Back extension not available for ERA5-Land. "
+                    "ERA5-Land data is available from 1950 on.")
             name += "-preliminary-back-extension"
         return name, variable
 
