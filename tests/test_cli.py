@@ -168,6 +168,13 @@ def test_main_fetch(fetch):
     with pytest.raises(AssertionError):
         cli._execute(args)
 
+    # ensemble members are not available for Land
+    argv = ['monthly', '--startyear', '1990', '--endyear', '1990',
+            '--variables', 'total_precipitation', '--ensemble',
+            '--land']
+    args = cli._parse_args(argv)
+    with pytest.raises(AssertionError):
+        cli._execute(args)
 
 @mock.patch("era5cli.info.Info", autospec=True)
 def test_main_info(info):
