@@ -77,6 +77,11 @@ authors:
     family-names: Verhoeven
     given-names: Stefan
     orcid: https://orcid.org/0000-0002-5821-2060
+  -
+    affiliation: "Environment and Climate Change Canada"
+    family-names: Malinina
+    given-names: Elizaveta
+    orcid: https://orcid.org/0000-0002-4102-2877
 
 cff-version: 1.2.0
 date-released: 2021-11-30
