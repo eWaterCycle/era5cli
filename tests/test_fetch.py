@@ -335,7 +335,7 @@ def test_product_type():
     assert producttype is None
 
     era5.ensemble = True
-    with pytest.raises(ValueError):
+    with pytest.raises(AssertionError):
         producttype = era5._product_type()
 
 

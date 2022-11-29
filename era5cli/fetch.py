@@ -250,10 +250,8 @@ class Fetch:
 
     def _product_type(self):
         """Construct the product type name from the options."""
-        if self.land and self.ensemble:
-            raise ValueError(
-                "Era5-Land does not contain Ensemble statistics. "
-                "Aborting."
+        assert not (self.land and self.ensemble), (
+                'ERA5-Land does not contain Ensemble statistics.'
             )
 
         if self.period == 'hourly' and self.ensemble and self.statistics:
