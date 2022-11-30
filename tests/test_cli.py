@@ -138,7 +138,7 @@ def test_main_fetch(fetch):
         assert cli._execute(args)
 
     # should give an AssertionError if years are out of bounds
-    argv = ['hourly', '--startyear', '1950',
+    argv = ['hourly', '--startyear', '1949',
             '--variables', 'total_precipitation', '--statistics',
             '--endyear', '2007', '--ensemble']
     args = cli._parse_args(argv)
@@ -159,14 +159,6 @@ def test_main_fetch(fetch):
             '--ensemble']
     args = cli._parse_args(argv)
     cli._execute(args)
-
-    # no land available for back extension
-    argv = ['monthly', '--startyear', '1980', '--endyear', '1980',
-            '--variables', 'total_precipitation', '--synoptic',
-            '--ensemble', '--land']
-    args = cli._parse_args(argv)
-    with pytest.raises(AssertionError):
-        cli._execute(args)
 
 
 @mock.patch("era5cli.info.Info", autospec=True)

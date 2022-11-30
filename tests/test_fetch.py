@@ -334,6 +334,10 @@ def test_product_type():
     producttype = era5._product_type()
     assert producttype is None
 
+    era5.ensemble = True
+    with pytest.raises(AssertionError):
+        producttype = era5._product_type()
+
 
 def test_check_levels():
     """Test _check_levels function of Fetch class"""

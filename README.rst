@@ -4,13 +4,9 @@ era5cli
     :target: https://opensource.org/licenses/Apache-2.0
     :alt: License
 
-.. image:: https://img.shields.io/badge/docs-stable-brightgreen.svg
-   :target: http://era5cli.readthedocs.io/en/stable/?badge=stable
-   :alt: Stable Documentation
-
-.. image:: https://img.shields.io/badge/docs-latest-brightgreen.svg
-   :target: http://era5cli.readthedocs.io/en/latest/?badge=latest
-   :alt: Latest Documentation
+.. image:: https://readthedocs.org/projects/era5cli/badge/?version=latest
+    :target: https://era5cli.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 
 .. image:: https://github.com/eWaterCycle/era5cli/actions/workflows/test_codecov.yml/badge.svg
    :target: https://github.com/eWaterCycle/era5cli/actions/workflows/test_codecov.yml
@@ -32,7 +28,7 @@ era5cli
 
 .. image:: https://img.shields.io/badge/fair--software.eu-%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8B-yellow
    :target: https://fair-software.eu
-   
+
 .. inclusion-marker-start-do-not-remove
 
 A command line interface to download ERA5 data from the `Copernicus Climate Data Store <https://climate.copernicus.eu/>`_.

@@ -250,6 +250,10 @@ class Fetch:
 
     def _product_type(self):
         """Construct the product type name from the options."""
+        assert not (self.land and self.ensemble), (
+                'ERA5-Land does not contain Ensemble statistics.'
+            )
+
         if self.period == 'hourly' and self.ensemble and self.statistics:
             # The only configuration to return a list
             return [
@@ -387,7 +391,8 @@ class Fetch:
         if self.prelimbe:
             if self.land:
                 raise ValueError(
-                    "Back extension not (yet) available for ERA5-Land.")
+                    "Back extension not available for ERA5-Land. "
+                    "ERA5-Land data is available from 1950 on.")
             name += "-preliminary-back-extension"
         return name, variable
 
