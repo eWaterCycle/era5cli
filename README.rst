@@ -12,7 +12,7 @@ era5cli
    :target: https://github.com/eWaterCycle/era5cli/actions/workflows/test_codecov.yml
    :alt: Github Actions
 
-.. image:: https://codecov.io/gh/eWaterCycle/era5cli/branch/master/graph/badge.svg
+.. image:: https://codecov.io/gh/eWaterCycle/era5cli/branch/main/graph/badge.svg?token=qeZXgGASBK
    :target: https://codecov.io/gh/eWaterCycle/era5cli
    :alt: Test coverage
 
