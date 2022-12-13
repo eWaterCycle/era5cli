@@ -1,6 +1,12 @@
 Release Notes
 *************
 
+1.3.2 (2021-12-13)
+~~~~~~~~~~~~~~~~~~
+* Elaborate the range of years that can be queried `#123 <https://github.com/eWaterCycle/era5cli/pull/123>`_
+* Update Readthedocs theme `#125 <https://github.com/eWaterCycle/era5cli/pull/125>`_
+* Fix a bug that allowed the incompatible combination of --land and --ensemble `#131 <https://github.com/eWaterCycle/era5cli/pull/131>`_
+
 1.3.1 (2021-12-01)
 ~~~~~~~~~~~~~~~~~~
 * Automatic Zenodo/RSD release failed; updated contribution guidelines `#106 <https://github.com/eWaterCycle/era5cli/pull/106>`_
