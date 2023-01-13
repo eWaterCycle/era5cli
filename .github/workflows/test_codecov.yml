@@ -11,18 +11,16 @@ jobs:
         python-version: ["3.7", "3.8", "3.9", "3.10"]
     name: Run tests for ${{ matrix.python-version }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Install python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
         architecture: x64
     - name: Install dependencies and package
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install -r requirements-dev.txt
-        pip install -e .
+        pip install -e .[dev]
     - name: Test with pytest
       run: pytest
     - name: Flake8
@@ -31,7 +29,7 @@ jobs:
       run: |
         pytest --cov=era5cli --cov-report term --cov-report xml:cov.sml tests/
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1.3.2
+      uses: codecov/codecov-action@v3
       with:
         files: cov.sml
         directory: ./coverage/reports/
