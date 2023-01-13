@@ -1,9 +1,7 @@
 """Tests for era5cli utility functios."""
 
 import pytest
-import tempfile
 from netCDF4 import Dataset
-import os
 
 import era5cli.utils
 import era5cli
