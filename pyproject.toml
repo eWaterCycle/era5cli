@@ -1,4 +1,78 @@
 [build-system]
-# Minimum requirements for the build system to execute.
-requires = ["setuptools", "wheel"]  # PEP 508 specifications.
-build-backend = "setuptools.build_meta"
+requires = ["hatchling>=1.8.0", "hatch-vcs", "hatch-fancy-pypi-readme"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["era5cli"]
+
+[tool.hatch.version]
+path = "era5cli/__version__.py"
+
+[project]
+name = "era5cli"
+description = "A command line interface to download ERA5 data from the Copernicus Climate Data Store. https://climate.copernicus.eu/.."
+readme = "README.rst"
+license = { text = "Apache Software License" }
+requires-python = ">=3.7"
+authors = [
+    {name = "Ronald van Haren"},
+    {name = "Jaro Camphuijsen"},
+    {name = "Yifat Dzigan"},
+    {name = "Niels Drost"},
+    {name = "Fakhereh Alidoost"},
+    {name = "Bouwe Andela"},
+    {name = "Jerom Aerts"},
+    {name = "Berend Weel"},
+    {name = "Rolf Hut"},
+    {name = "Klaus Zimmermann"},
+    {name = "Peter Kalverla"},
+    {name = "Barbara Vreede", email="b.vreede@esciencecenter.nl"},
+    {name = "Aytaç Paçal"},
+    {name = "Stef Smeets"},
+    {name = "Stefan Verhoeven"},
+    {name = "Bart Schilperoort", email = "b.schilperoort@esciencecenter.nl" }
+]
+keywords = [
+  "ERA-5",
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Atmospheric Science",
+  "License :: OSI Approved :: Apache Software License",
+  "Natural Language :: English",
+  "Operating System :: MacOS :: MacOS X",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+]
+dependencies = [
+  "cdsapi == 0.4.0",
+  "pathos",
+  "PTable",
+  "netCDF4"
+]
+dynamic = ["version"]
+
+[project.scripts]
+era5cli="era5cli.cli:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "flake8",
+    "pytest-flake8",
+    "pytest-cov",
+    "Sphinx",
+    "sphinx-argparse",
+    "sphinx_rtd_theme"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
