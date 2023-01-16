@@ -19,10 +19,12 @@ def test_init(arg):
     era5info = info.Info(arg)
     assert isinstance(era5info.infolist, list)
 
+
 def test_invalid_init():
     """Test init function of Info class."""
     with pytest.raises(ValueError, match="Unknown value for reference argument."):
         info.Info("4Dvars")
+
 
 @pytest.mark.parametrize("arg", ["levels", "2Dvars", "3Dvars", "land"])
 def test_define_table_header(arg):
