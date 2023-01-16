@@ -4,8 +4,8 @@ era5cli
     :target: https://opensource.org/licenses/Apache-2.0
     :alt: License
 
-.. image:: https://readthedocs.org/projects/era5cli/badge/?version=latest
-    :target: https://era5cli.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/era5cli/badge/?version=stable
+    :target: https://era5cli.readthedocs.io/en/stable/?badge=stable
     :alt: Documentation Status
 
 .. image:: https://github.com/eWaterCycle/era5cli/actions/workflows/test_codecov.yml/badge.svg
