@@ -141,7 +141,7 @@ def print_multicolumn(header: str, info: list):
     table.align = "l"
     table.hrules = prettytable.NONE
     table.vrules = prettytable.NONE
-    chunks = [info[i : i + nrows] for i in range(0, len(info), nrows)]
+    chunks = [info[i: i + nrows] for i in range(0, len(info), nrows)]
     chunks[-1].extend("" for _ in range(nrows - len(chunks[-1])))
     chunks = zip(*chunks)
     for chunk in chunks:
