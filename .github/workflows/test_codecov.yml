@@ -1,4 +1,4 @@
-name: CI test and coverage
+name: Coverage report
 
 on:
   push:
@@ -9,36 +9,25 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10']
-    name: Run tests for ${{ matrix.python-version }}
+    name: Checkout repo and setup Python
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Install python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: "3.10"
         architecture: x64
     - name: Install dependencies and package
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install -r requirements-dev.txt
-        pip install -e .
-    - name: Test with pytest
-      run: pytest
-    - name: Flake8
-      run: flake8
-    - name: Test coverage
-      run: |
-        pytest --cov=era5cli --cov-report term --cov-report xml:cov.sml tests/
+        pip install -e .[dev]
+    - name: Generate test coverage
+      run: pytest --cov=era5cli --cov-report term --cov-report xml:cov.xml tests/
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1.3.2
+      uses: codecov/codecov-action@v3
       with:
-        files: cov.sml
         directory: ./coverage/reports/
+        files: ./cov.xml
         env_vars: python-version
         fail_ci_if_error: true
-        path_to_write_report: ./coverage/codecov_report.txt
         verbose: true

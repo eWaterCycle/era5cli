@@ -1,9 +1,7 @@
-"""Tests for era5cli utility functios."""
+"""Tests for era5cli utility functions."""
 
 import pytest
-import tempfile
 from netCDF4 import Dataset
-import os
 
 import era5cli.utils
 import era5cli
@@ -121,10 +119,10 @@ def test_print_multicolumn():
     assert True
 
 
-def test_append_history():
+def test_append_history(tmp_path):
     """Test append_history utility function."""
     # test netCDF file with existing history
-    (fd, filename) = tempfile.mkstemp(suffix=".nc")
+    filename = tmp_path / "dummy.nc"
     name = "reanalysis-era5-single-levels"
     request = "request"
     # create tmp netCDF file
@@ -137,26 +135,19 @@ def test_append_history():
     # load netCDF file
     ncfile = Dataset(filename, 'r')
     new_history = ncfile.history
-    appendtxt = "Downloaded using {} {}.".format(
-        era5cli.__name__,
-        era5cliversion)
+    appendtxt = f"Downloaded using {era5cli.__name__} {era5cliversion}."
     hist_split = new_history.split('\n')
     assert hist_split[0].split()[-2:] == [name, request]
     assert hist_split[1] == orig_history
-    # remove temporary file
-    os.remove(filename)
 
     # test netCDF file without existing history
-    ncfile = Dataset(filename, 'w')
+    dummy_file2 = tmp_path / "dummy2.nc"
+    ncfile = Dataset(dummy_file2, 'w')
     ncfile.close()
     # test append history
-    era5cli.utils._append_history(name, request, filename)
+    era5cli.utils._append_history(name, request, dummy_file2)
     # load netCDF file
-    ncfile = Dataset(filename, 'r')
+    ncfile = Dataset(dummy_file2, 'r')
     new_history = ncfile.history
-    appendtxt = "Downloaded using {} {}.".format(
-        era5cli.__name__,
-        era5cliversion)
+    appendtxt = f"Downloaded using {era5cli.__name__} {era5cliversion}."
     new_history = appendtxt
-    # remove temporary file
-    os.remove(filename)
