@@ -54,7 +54,7 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
 ]
 dependencies = [
-  "cdsapi == 0.4.0",
+  "cdsapi == 0.5.1",
   "pathos",
   "PTable",
   "netCDF4"
