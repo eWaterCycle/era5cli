@@ -30,6 +30,7 @@ authors = [
     {name = "Aytaç Paçal"},
     {name = "Stef Smeets"},
     {name = "Stefan Verhoeven"},
+    {name = "Elizaveta Malinina"},
     {name = "Bart Schilperoort", email = "b.schilperoort@esciencecenter.nl" }
 ]
 keywords = [

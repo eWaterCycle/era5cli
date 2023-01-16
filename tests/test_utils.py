@@ -1,4 +1,4 @@
-"""Tests for era5cli utility functios."""
+"""Tests for era5cli utility functions."""
 
 import pytest
 from netCDF4 import Dataset
