@@ -314,9 +314,7 @@ class Fetch:
                     "following variables:\n"
                 )
                 raise ValueError(
-                    era5cli.utils.print_multicolumn(
-                        header, ref.MISSING_MONTHLY_VARS
-                    )
+                    era5cli.utils.print_multicolumn(header, ref.MISSING_MONTHLY_VARS)
                 )
         else:
             raise ValueError(f"Invalid variable name: {variable}")

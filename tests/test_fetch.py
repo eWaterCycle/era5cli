@@ -4,6 +4,7 @@ import unittest.mock as mock
 import pytest
 from era5cli import fetch
 
+
 # fmt: off
 ALL_HOURS = [
     "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00",

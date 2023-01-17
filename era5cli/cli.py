@@ -2,14 +2,12 @@
 """Download ERA5 variables."""
 
 import argparse
-import textwrap
 import sys
-
+import textwrap
 from datetime import datetime
-
-import era5cli.inputref as ref
-import era5cli.info as einfo
 import era5cli.fetch as efetch
+import era5cli.info as einfo
+import era5cli.inputref as ref
 
 
 def _level_parse(level):

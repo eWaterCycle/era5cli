@@ -26,21 +26,26 @@ Populate the development environment with the required dependencies:
 ::
 
     pip install -U pip
-    pip install -r requirements-dev.txt
-    pip install -e .
+    pip install -e .[dev]
 
-Before pushing a new addition, run flake8 and pytest to confirm that the code
+Before pushing a new addition, some tools are required to confirm that the code
 is up to standard.
-
-Use flake8 to check for code style issues:
-::
-
-   flake8 era5cli/
 
 Use pytest to run the test suite:
 ::
 
-   pytest era5cli/
+   pytest
+
+Use flake8 to check for code style issues:
+::
+
+   flake8 .
+
+And lastly, format the code and sort the imports using black and isort:
+::
+
+   black .
+   isort .
 
 Deactivate the environment with:
 ::

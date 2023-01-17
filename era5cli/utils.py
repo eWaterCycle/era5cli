@@ -40,12 +40,8 @@ def _zpadlist(values: list, inputtype: str, minval: int, maxval: int) -> list:
     """
     returnlist = []
     for value in values:
-        assert (
-            int(value) >= minval
-        ), f"invalid value specified for {inputtype}: {value}"
-        assert (
-            int(value) <= maxval
-        ), f"invalid value specified for {inputtype}: {value}"
+        assert int(value) >= minval, f"invalid value specified for {inputtype}: {value}"
+        assert int(value) <= maxval, f"invalid value specified for {inputtype}: {value}"
         returnlist += [str(int(value)).zfill(2)]
     return returnlist
 
@@ -141,7 +137,7 @@ def print_multicolumn(header: str, info: list):
     table.align = "l"
     table.hrules = prettytable.NONE
     table.vrules = prettytable.NONE
-    chunks = [info[i: i + nrows] for i in range(0, len(info), nrows)]
+    chunks = [info[i : i + nrows] for i in range(0, len(info), nrows)]
     chunks[-1].extend("" for _ in range(nrows - len(chunks[-1])))
     chunks = zip(*chunks)
     for chunk in chunks:

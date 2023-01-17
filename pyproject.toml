@@ -68,8 +68,11 @@ era5cli="era5cli.cli:main"
 dev = [
     "pytest",
     "flake8",
+    "flake8-pyproject",
     "pytest-flake8",
     "pytest-cov",
+    "black",
+    "isort",
     "Sphinx",
     "sphinx-argparse",
     "sphinx_rtd_theme"
@@ -93,3 +96,10 @@ no_lines_before = ["FUTURE","STDLIB","THIRDPARTY","FIRSTPARTY","LOCALFOLDER"]
 known_first_party = ["era5cli"]
 src_paths = ["era5cli", "tests"]
 line_length = 120
+
+[tool.flake8]
+max-line-length = 88
+ignore = [
+  "E203",  # Whitespace before ":". Not PEP8 compliant (https://github.com/psf/black/issues/315)
+  "W503",  # https://peps.python.org/pep-0008/#should-a-line-break-before-or-after-a-binary-operator
+]
