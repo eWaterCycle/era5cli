@@ -18,8 +18,8 @@ Contribute to the tool
 Create and activate the development environment:
 ::
 
-    python3 -m venv env
-    . env/bin/activate
+    python3 -m venv envname
+    . envname/bin/activate  # use './envname/Scripts/Activate.ps1' on windows.
 
 
 Populate the development environment with the required dependencies:
@@ -28,24 +28,18 @@ Populate the development environment with the required dependencies:
     pip install -U pip
     pip install -e .[dev]
 
-Before pushing a new addition, some tools are required to confirm that the code
+Before pushing a new addition, some checks are required to confirm that the code
 is up to standard.
 
-Use pytest to run the test suite:
+To run the test suite:
 ::
 
-   pytest
+   hatch run test:run
 
-Use flake8 to check for code style issues:
+To format the code, and check the code styling:
 ::
 
-   flake8 .
-
-And lastly, format the code and sort the imports using black and isort:
-::
-
-   black .
-   isort .
+   hatch run style:fmt
 
 Deactivate the environment with:
 ::
@@ -61,4 +55,4 @@ When updating the documentation, use the environment created above.
 Build the documentation with:
 ::
 
-   sphinx-build docs/source docs/build
+   hatch run docs:build
