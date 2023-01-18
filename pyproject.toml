@@ -65,9 +65,8 @@ dynamic = ["version"]
 era5cli="era5cli.cli:main"
 
 [project.optional-dependencies]
-dev = [
-    "hatch",
-]
+dev = ["hatch",]
+docs = ["Sphinx", "sphinx-argparse", "sphinx_rtd_theme",]  # Required for readthedocs
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -109,7 +108,7 @@ dependencies = [
 ]
 
 [tool.hatch.envs.test.scripts]
-run = ["pytest",]
+check = ["pytest",]
 cov = ["pytest --cov=era5cli --cov-report term --cov-report xml:cov.xml tests/"]
 
 [tool.black]

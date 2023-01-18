@@ -34,7 +34,7 @@ is up to standard.
 To run the test suite:
 ::
 
-   hatch run test:run
+   hatch run test:check
 
 To format the code, and check the code styling:
 ::
