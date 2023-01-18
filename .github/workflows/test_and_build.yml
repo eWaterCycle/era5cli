@@ -27,4 +27,4 @@ jobs:
     - name: Check codestyle
       run: hatch run style:check
     - name: Build the package
-      run: python -m build
+      run: hatch build
