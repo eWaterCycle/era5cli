@@ -13,7 +13,6 @@ readthedocs](https://era5cli.readthedocs.io/en/latest/contribute.html).
 ## Author information
 Ensure all authors are present in:
 
-- `.zenodo.json`
 - `CITATION.cff`
 - `era5cli/__version__.py`
 
