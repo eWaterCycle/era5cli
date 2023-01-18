@@ -13,7 +13,6 @@ readthedocs](https://era5cli.readthedocs.io/en/latest/contribute.html).
 ## Author information
 Ensure all authors are present in:
 
-- `.zenodo.json`
 - `CITATION.cff`
 - `era5cli/__version__.py`
 
@@ -23,6 +22,7 @@ tag, if applicable) is set in:
 
 - `CITATION.cff`
 - `era5cli/__version__.py`
+- `docs/source/conf.py`
 
 ## Update the changelog
 Update `CHANGELOG.rst` with new features and fixes in the upcoming version.
@@ -70,7 +70,7 @@ If any contributors have been added, or the description of the software has
 changed, this can be edited (by eScience Center employees) via the [RSD admin
 interface](https://www.research-software.nl/admin/). More information about
 this process (e.g. how to add a new contributor or new affiliation) can be
-found in the [RSD 
+found in the [RSD
 documentation](https://github.com/research-software-directory/research-software-directory/blob/master/docs/entering-data.md)
 or in [this
 blogpost](https://blog.esciencecenter.nl/the-research-software-directory-and-how-it-promotes-software-citation-4bd2137a6b8).

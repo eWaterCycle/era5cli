@@ -1,7 +1,7 @@
 """Print ERA5 information on available variables and levels."""
 
 import era5cli.inputref as ref
-from era5cli.utils import _print_multicolumn
+from era5cli.utils import print_multicolumn
 
 
 class Info:
@@ -38,7 +38,7 @@ class Info:
                 if self.infoname in vallist:
                     self.infotype.append(valname)
         if len(self.infotype) == 0:
-            raise ValueError('Unknown value for reference argument.')
+            raise ValueError("Unknown value for reference argument.")
 
     def list(self):
         """Print a list of available variables or pressure levels.
@@ -47,22 +47,22 @@ class Info:
         printed in multiple columns if the size of the terminal supports it.
         """
         self._define_table_header()
-        _print_multicolumn(self.header, self.infolist)
+        print_multicolumn(self.header, self.infolist)
 
     def vars(self):
         """Return the  variable name or pressure level.
 
         Print in which list the given variable occurs.
         """
-        lists = ', '.join(self.infotype)
-        print("{} is in the list(s): {}".format(self.infoname, lists))
+        lists = ", ".join(self.infotype)
+        print(f"{self.infoname} is in the list(s): {lists}")
 
     def _define_table_header(self):
         """Define table header."""
         hdict = {
-            'levels': 'pressure levels',
-            '2Dvars': '2D variables',
-            '3Dvars': '3D variables',
-            'land': 'ERA5-land variables'
+            "levels": "pressure levels",
+            "2Dvars": "2D variables",
+            "3Dvars": "3D variables",
+            "land": "ERA5-land variables",
         }
-        self.header = "Available {}:".format(hdict[self.infoname])
+        self.header = f"Available {hdict[self.infoname]}:"

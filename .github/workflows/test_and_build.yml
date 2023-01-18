@@ -26,8 +26,11 @@ jobs:
         pip install -e .[dev]
     - name: Test with pytest
       run: pytest
-    - name: Flake8
-      run: flake8
+    - name: Check codestyle
+      run: |
+        flake8
+        isort . --check
+        black . --check
     - name: Install build dependencies and build package
       run: |
         python -m pip install build hatch --user
