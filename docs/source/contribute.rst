@@ -15,18 +15,18 @@ using and the version of the cdsapi library installed.
 Contribute to the tool
 ======================
 
+Make sure `pip` and `hatch` are up to date:
+::
+
+   python3 -m pip install pip hatch --upgrade
+
 Create and activate the development environment:
 ::
 
-    python3 -m venv envname
-    . envname/bin/activate  # use './envname/Scripts/Activate.ps1' on windows.
+   hatch shell  # Or: python3 -m hatch shell
 
-
-Populate the development environment with the required dependencies:
-::
-
-    pip install -U pip
-    pip install -e .[dev]
+This will start a virtual environment with the required dependencies to allow for
+development. Run this command before trying out any changes made to the code.
 
 Before pushing a new addition, some checks are required to confirm that the code
 is up to standard.
@@ -34,25 +34,23 @@ is up to standard.
 To run the test suite:
 ::
 
-   hatch run test:check
+   hatch run test
 
 To format the code, and check the code styling:
 ::
 
-   hatch run style:fmt
+   hatch run format
 
-Deactivate the environment with:
+Exit the the environment with:
 ::
 
-   deactivate
+   exit
 
 
 Contribute to the documentation
 ===============================
 
-When updating the documentation, use the environment created above.
-
-Build the documentation with:
+When updating the documentation, build the documentation with:
 ::
 
    hatch run docs:build

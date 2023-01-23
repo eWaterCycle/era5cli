@@ -65,51 +65,39 @@ dynamic = ["version"]
 era5cli="era5cli.cli:main"
 
 [project.optional-dependencies]
-dev = ["hatch",]
+dev = [
+  "hatch",
+  "flake8",
+  "flake8-pyproject",
+  "black",
+  "isort",
+  "pytest",
+  "pytest-flake8",
+  "pytest-cov",
+]
 docs = ["Sphinx", "sphinx-argparse", "sphinx_rtd_theme",]  # Required for readthedocs
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 
-[tool.hatch.envs.style]
-detached = true
-dependencies = [
-  "flake8",
-  "flake8-pyproject",
-  "black",
-  "isort",
-]
+[tool.hatch.envs.default]
+features = ["dev",]
 
-[tool.hatch.envs.style.scripts]
-check = [
-  "flake8 .",
+[tool.hatch.envs.default.scripts]
+lint = [
+  "flake8p .",  # flake8p ensures pyproject.toml is used for configuration
   "black --check --diff .",
   "isort --check-only --diff .",
 ]
-fmt = ["isort .", "black .", "check",]
+format = ["isort .", "black .", "lint",]
+test = ["pytest",]
+coverage = ["pytest --cov=era5cli --cov-report term --cov-report xml:cov.xml tests/"]
 
 [tool.hatch.envs.docs]
-dependencies = [
-  "Sphinx",
-  "sphinx-argparse",
-  "sphinx_rtd_theme",
-]
+features = ["docs",]
 
 [tool.hatch.envs.docs.scripts]
 build = ["sphinx-build docs/source docs/build",]
-
-[tool.hatch.envs.test]
-dependencies = [
-  "flake8",
-  "flake8-pyproject",
-  "pytest",
-  "pytest-flake8",
-  "pytest-cov",
-]
-
-[tool.hatch.envs.test.scripts]
-check = ["pytest",]
-cov = ["pytest --cov=era5cli --cov-report term --cov-report xml:cov.xml tests/"]
 
 [tool.black]
 line-length = 88
