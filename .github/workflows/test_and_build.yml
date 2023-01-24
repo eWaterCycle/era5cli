@@ -20,18 +20,11 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
         architecture: x64
-    - name: Install dependencies and package
-      run: |
-        python -m pip install --upgrade pip
-        pip install -e .[dev]
+    - name: Update pip and hatch
+      run: python -m pip install --upgrade pip hatch
     - name: Test with pytest
-      run: pytest
+      run: hatch run test
     - name: Check codestyle
-      run: |
-        flake8
-        isort . --check
-        black . --check
-    - name: Install build dependencies and build package
-      run: |
-        python -m pip install build hatch --user
-        python -m build
+      run: hatch run lint
+    - name: Build the package
+      run: hatch build

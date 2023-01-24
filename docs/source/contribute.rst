@@ -15,50 +15,42 @@ using and the version of the cdsapi library installed.
 Contribute to the tool
 ======================
 
+Make sure `pip` and `hatch` are up to date:
+::
+
+   python3 -m pip install pip hatch --upgrade
+
 Create and activate the development environment:
 ::
 
-    python3 -m venv env
-    . env/bin/activate
+   hatch shell  # Or: python3 -m hatch shell
 
+This will start a virtual environment with the required dependencies to allow for
+development. Run this command before trying out any changes made to the code.
 
-Populate the development environment with the required dependencies:
-::
-
-    pip install -U pip
-    pip install -e .[dev]
-
-Before pushing a new addition, some tools are required to confirm that the code
+Before pushing a new addition, some checks are required to confirm that the code
 is up to standard.
 
-Use pytest to run the test suite:
+To run the test suite:
 ::
 
-   pytest
+   hatch run test
 
-Use flake8 to check for code style issues:
+To format the code, and check the code styling:
 ::
 
-   flake8 .
+   hatch run format
 
-And lastly, format the code and sort the imports using black and isort:
+Exit the the environment with:
 ::
 
-   black .
-   isort .
-
-Deactivate the environment with:
-::
-
-   deactivate
+   exit
 
 
 Contribute to the documentation
 ===============================
 
-When updating the documentation, use the environment created above.
-
-Build the documentation with:
+When updating the documentation, build the documentation with:
 ::
 
-   sphinx-build docs/source docs/build
+   hatch run docs:build
