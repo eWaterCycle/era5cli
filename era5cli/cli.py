@@ -8,6 +8,7 @@ from datetime import datetime
 import era5cli.fetch as efetch
 import era5cli.info as einfo
 import era5cli.inputref as ref
+from era5cli import key_management
 
 
 def _level_parse(level):
@@ -403,6 +404,61 @@ def _build_parser():
         ),
     )
 
+    config = subparsers.add_parser(
+        "config",
+        description="Configure the CDS login info for era5cli",
+        prog=textwrap.dedent(
+            """
+            Use `era5cli config --help` for more information
+
+            To find your key and UID, go to https://cds.climate.copernicus.eu/ and login
+            with your email and password. Then go to your user profile (top right).
+
+            """
+        ),
+        help=textwrap.dedent(
+            """
+            Configure the CDS login info for era5cli.
+
+            """
+        ),
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+
+    config.add_argument(
+        "--uid",
+        type=str,
+        required=True,
+        help=textwrap.dedent(
+            """
+            Your CDS User ID, e.g.: 123456
+            """
+        ),
+    )
+
+    config.add_argument(
+        "--key",
+        type=str,
+        required=True,
+        help=textwrap.dedent(
+            """
+            Your CDS key, e.g.: "4s215sgs-2dfa-6h34-62h2-1615ad163414"
+            """
+        ),
+    )
+
+    config.add_argument(
+        "--url",
+        type=str,
+        required=False,
+        default=key_management.DEFAULT_CDS_URL,
+        help=textwrap.dedent(
+            f"""
+            URL to the CDS, by default: {key_management.DEFAULT_CDS_URL}
+            """
+        ),
+    )
+
     return parser
 
 
@@ -480,6 +536,13 @@ def _execute(args):
     # the info subroutine
     if args.command == "info":
         return _run_info(args)
+
+    if args.command == "config":
+        return key_management.run_config(
+            url=args.url,
+            uid=args.uid,
+            key=args.key,
+        )
 
     # the fetching subroutines
     years = _construct_year_list(args)
