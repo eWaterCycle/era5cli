@@ -1,8 +1,8 @@
-import cdsapi
 import os
 from pathlib import Path
-from requests.exceptions import ConnectionError  # pylint: disable=redefined-builtin
 from typing import Tuple
+import cdsapi
+from requests.exceptions import ConnectionError  # pylint: disable=redefined-builtin
 
 
 ERA5CLI_CONFIG_PATH = Path.home() / ".config" / "era5cli.txt"
@@ -63,33 +63,34 @@ def attempt_cds_login(url: str, fullkey: str) -> True:
 
     except ConnectionError as err:
         raise ConnectionError(
-            "Failed to connect to CDS. Please check your internet connection and/or the"
-            f" URL in the era5cli configuration: {ERA5CLI_CONFIG_PATH.resolve()}" +
-            os.linesep + "Or redefine your configuration with 'era5cli config'"
+            f"{os.linesep}Failed to connect to CDS. Please check your internet "
+            "connection and/or the"
+            f" URL in the era5cli configuration: {ERA5CLI_CONFIG_PATH.resolve()}"
+            f"{os.linesep}Or redefine your configuration with 'era5cli config'"
         ) from err
 
     except Exception as err:
         if AUTH_ERR_MSG in str(err):
             raise InvalidLoginError(
-                os.linesep +
-                "Authorization with the CDS served failed. Likely due to an incorrect" +
-                " key or UID." +
-                os.linesep +
-                "Please check your era5cli configuration file: " +
-                f"{ERA5CLI_CONFIG_PATH.resolve()}" +
-                os.linesep +
+                f"{os.linesep}Authorization with the CDS served failed. Likely due to"
+                " an incorrect key or UID."
+                f"{os.linsep}Please check your era5cli configuration file: "
+                f"{ERA5CLI_CONFIG_PATH.resolve()}{os.linesep}"
                 "Or redefine your configuration with 'era5cli config'"
             ) from err
         if NO_DATA_ERR_MSG in str(err):
             raise InvalidRequestError(
-                os.linesep +
-                "Something changed in the CDS API. Please raise an issue on "
-                "https://www.github.com/eWaterCycle/era5cli"
+                f"{os.linesep}Something changed in the CDS API. Please raise an issue "
+                "on https://www.github.com/eWaterCycle/era5cli"
             ) from err
         raise err
 
 
-def run_config(url: str, uid: str, key: str,) -> True:
+def run_config(
+    url: str,
+    uid: str,
+    key: str,
+) -> True:
     """Check the user-input configuration. Entry point for the CLI."""
     attempt_cds_login(url, fullkey=f"{uid}:{key}")
     write_era5cli_config(url, uid, key)
