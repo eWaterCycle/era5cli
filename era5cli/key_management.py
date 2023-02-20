@@ -74,7 +74,7 @@ def attempt_cds_login(url: str, fullkey: str) -> True:
             raise InvalidLoginError(
                 f"{os.linesep}Authorization with the CDS served failed. Likely due to"
                 " an incorrect key or UID."
-                f"{os.linsep}Please check your era5cli configuration file: "
+                f"{os.linesep}Please check your era5cli configuration file: "
                 f"{ERA5CLI_CONFIG_PATH.resolve()}{os.linesep}"
                 "Or redefine your configuration with 'era5cli config'"
             ) from err

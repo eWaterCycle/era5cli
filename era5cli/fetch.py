@@ -6,6 +6,7 @@ import cdsapi
 from pathos.threading import ThreadPool as Pool
 import era5cli.inputref as ref
 import era5cli.utils
+from era5cli import key_management
 
 
 class Fetch:
@@ -105,6 +106,8 @@ class Fetch:
         land=False,
     ):
         """Initialization of Fetch class."""
+        self._get_login()  # Get login info from config file.
+
         self.months = era5cli.utils._zpad_months(months)
         """list(str): List of zero-padded strings of months
         (e.g. ['01', '02',..., '12'])."""
@@ -157,6 +160,9 @@ class Fetch:
         self.land = land
         """bool: Whether to download from the ERA5-Land
         dataset."""
+
+    def _get_login(self):
+        self.url, self.key = key_management.load_era5cli_config()
 
     def fetch(self, dryrun=False):
         """Split calls and fetch results.
@@ -447,7 +453,7 @@ class Fetch:
                 "please do not kill this process in the meantime.",
                 os.linesep,
             )
-            connection = cdsapi.Client()
+            connection = cdsapi.Client(url=self.url, key=self.key)
             print("".join(queueing_message))  # print queueing message
             connection.retrieve(name, request, outputfile)
             era5cli.utils.append_history(name, request, outputfile)
