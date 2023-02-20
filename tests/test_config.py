@@ -1,7 +1,7 @@
 from unittest.mock import patch
 import pytest
 from era5cli import key_management
-
+import sys
 
 @pytest.fixture(scope="function")
 def config_path_era5(tmp_path_factory):
@@ -10,12 +10,13 @@ def config_path_era5(tmp_path_factory):
 
 @pytest.fixture(scope="function")
 def config_path_cds(tmp_path_factory):
-    fn = tmp_path_factory.mktemp(".config") / ".cdsapirc"
+    fn = tmp_path_factory.mktemp(".config") / "cdsapirc.txt"
     with open(fn, mode="w", encoding="utf-8") as f:
         f.write("url: a\nkey: 123:abc-def")
     return fn
 
 
+@pytest.mark.skipif(sys.version_info < (3, 9), reason="Parenthesized context managers")
 class TestConfig:
     def test_check_cdsrc_no(self, config_path_era5, config_path_cds):
         """.cdsapirc exists. User says no. Should raise InvalidLoginError"""
