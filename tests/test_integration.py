@@ -2,9 +2,10 @@
 
 import logging
 from textwrap import dedent
+from unittest import mock
 import pytest
 from era5cli.cli import main
-from unittest import mock
+
 
 # combine calls with result and possible warning message
 call_result = [
@@ -136,11 +137,11 @@ def test_main(call_result, capsys, caplog):
     if "--dryrun" not in call:
         pytest.fail("call must be a dryrun")
     with caplog.at_level(logging.INFO):
-            with mock.patch(
-                "era5cli.fetch.key_management.load_era5cli_config",
-                return_value=("url", "key:uid")
-            ):
-                main(call)
+        with mock.patch(
+            "era5cli.fetch.key_management.load_era5cli_config",
+            return_value=("url", "key:uid"),
+        ):
+            main(call)
     captured = capsys.readouterr().out
     assert result == captured
     try:

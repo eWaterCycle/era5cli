@@ -313,12 +313,12 @@ def test_main_info(info):
 
 
 config_args = [
-        "config",
-        "--uid",
-        "123456",
-        "--key",
-        "abc-def",
-    ]
+    "config",
+    "--uid",
+    "123456",
+    "--key",
+    "abc-def",
+]
 
 
 def test_config_parse():

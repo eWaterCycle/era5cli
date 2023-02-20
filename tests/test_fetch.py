@@ -21,6 +21,7 @@ ALL_DAYS = [
 ALL_MONTHS = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
 # fmt: on
 
+
 def initialize(
     outputformat="netcdf",
     merge=False,
@@ -41,7 +42,7 @@ def initialize(
 ):
     with mock.patch(
         "era5cli.fetch.key_management.load_era5cli_config",
-        return_value=("url", "key:uid")
+        return_value=("url", "key:uid"),
     ):
         """Initializer of the class."""
         return fetch.Fetch(
@@ -64,9 +65,9 @@ def initialize(
             land=land,
         )
 
+
 @mock.patch(
-    "era5cli.fetch.key_management.load_era5cli_config",
-    return_value=("url", "key:uid")
+    "era5cli.fetch.key_management.load_era5cli_config", return_value=("url", "key:uid")
 )
 def test_init(load_era5cli_config):
     """Test init function of Fetch class."""
