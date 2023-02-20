@@ -310,3 +310,25 @@ def test_main_info(info):
     argv = ["info", "total_precipitation"]
     args = cli._parse_args(argv)
     cli._execute(args)
+
+
+config_args = [
+        "config",
+        "--uid",
+        "123456",
+        "--key",
+        "abc-def",
+    ]
+
+
+def test_config_parse():
+    args = cli._parse_args(config_args)
+    assert args.uid == "123456"
+    assert args.key == "abc-def"
+
+
+@mock.patch("era5cli.key_management.attempt_cds_login", return_value=True)
+@mock.patch("era5cli.key_management.write_era5cli_config")
+def test_config_write(mock_a, mock_b):
+    args = cli._parse_args(config_args)
+    cli._execute(args)
