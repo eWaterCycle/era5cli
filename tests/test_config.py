@@ -1,6 +1,6 @@
 from unittest.mock import patch
-from era5cli import key_management
 import pytest
+from era5cli import key_management
 
 
 @pytest.fixture(scope="function")
@@ -24,7 +24,7 @@ class TestConfig:
             patch("era5cli.key_management.attempt_cds_login", return_value=True),
             patch("era5cli.key_management.ERA5CLI_CONFIG_PATH", config_path_era5),
             patch("era5cli.key_management.CDSAPI_CONFIG_PATH", config_path_cds),
-            ):
+        ):
             with pytest.raises(key_management.InvalidLoginError):
                 key_management.check_era5cli_config()
 
@@ -35,7 +35,7 @@ class TestConfig:
             patch("era5cli.key_management.attempt_cds_login", return_value=True),
             patch("era5cli.key_management.ERA5CLI_CONFIG_PATH", config_path_era5),
             patch("era5cli.key_management.CDSAPI_CONFIG_PATH", config_path_cds),
-            ):
+        ):
             key_management.check_era5cli_config()
             with open(config_path_era5, "r", encoding="utf-8") as f:
                 assert f.readlines() == ["url: a\n", "uid: 123\n", "key: abc-def\n"]
