@@ -95,6 +95,9 @@ def run_config(
     try:
         attempt_cds_login(url, fullkey=f"{uid}:{key}")
         write_era5cli_config(url, uid, key)
+        print(
+            f"Keys succesfully validated and stored in {ERA5CLI_CONFIG_PATH.resolve()}"
+        )
         return True
     except InvalidLoginError:
         print(

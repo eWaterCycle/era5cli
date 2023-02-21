@@ -342,8 +342,7 @@ def test_config_write(mock_a, mock_b):
 )
 @mock.patch("era5cli.key_management.write_era5cli_config")
 def test_config_invalid(mock_a, mock_b, capfd):
-    """Assuming the CDS login is invalid, see if the right error is printed to console.
-    """
+    """Assume the CDS login is invalid, see if the right error is printed to console."""
     args = cli._parse_args(config_args)
     cli._execute(args)
     out, _ = capfd.readouterr()

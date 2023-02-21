@@ -1,6 +1,11 @@
 Release Notes
 *************
 
+Unreleased
+~~~~~~~~~~
+* Change CDS keys from .cdsapirc file to .config/eracli.txt file. This will avoid conflict with e.g. ADS.
+* Add validator for era5cli.txt keys. This should provide better feedback to users and reduce user error.
+
 1.3.2 (2021-12-13)
 ~~~~~~~~~~~~~~~~~~
 * Elaborate the range of years that can be queried `#123 <https://github.com/eWaterCycle/era5cli/pull/123>`_
