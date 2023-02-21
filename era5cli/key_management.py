@@ -41,7 +41,7 @@ def attempt_cds_login(url: str, fullkey: str) -> True:
         url=url,
         key=fullkey,
         verify=True,
-        quiet=True,  # Supress output to the consolve from the test retrieve.
+        quiet=True,  # Supress output to the console from the test retrieve.
     )
 
     try:
@@ -83,7 +83,7 @@ def attempt_cds_login(url: str, fullkey: str) -> True:
                 f"{os.linesep}Something changed in the CDS API. Please raise an issue "
                 "on https://www.github.com/eWaterCycle/era5cli"
             ) from err
-        raise err
+        raise err  # pragma: no cover
 
 
 def run_config(

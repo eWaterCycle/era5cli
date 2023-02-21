@@ -39,7 +39,7 @@ class TestEra5CliConfig:
         mp1 = patch("era5cli.key_management.ERA5CLI_CONFIG_PATH", valid_path_era5)
         mp2 = patch("era5cli.key_management.attempt_cds_login", return_value=True)
         with mp1, mp2:
-            key_management.attempt_cds_login()
+            key_management.check_era5cli_config()
 
 
 class TestConfigCdsrc:
@@ -76,7 +76,10 @@ class TestConfigCdsrc:
 
     def test_cdsrcfile_invalid_keys(self, empty_path_era5, valid_path_cds):
         """.cdsapirc exists. url+key is validated, and is bad."""
-        mp1 = patch("era5cli.key_management.attempt_cds_login", return_value=False)
+        mp1 = patch(
+            "era5cli.key_management.attempt_cds_login",
+            side_effect=key_management.InvalidLoginError,
+        )
         mp2 = patch("era5cli.key_management.ERA5CLI_CONFIG_PATH", empty_path_era5)
         mp3 = patch("era5cli.key_management.CDSAPI_CONFIG_PATH", valid_path_cds)
         with mp1, mp2, mp3:
