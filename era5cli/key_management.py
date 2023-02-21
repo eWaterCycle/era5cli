@@ -46,10 +46,10 @@ def attempt_cds_login(url: str, fullkey: str) -> True:
 
     try:
         # Check the URL
-        connection.status()
+        connection.status()  # pragma: no cover
 
         # Checks if the authentication works, without downloading data
-        connection.retrieve(
+        connection.retrieve(  # pragma: no cover
             "reanalysis-era5-single-levels",
             {
                 "variable": "2t",
