@@ -86,19 +86,19 @@ class TestConfigCdsrc:
                 key_management.check_era5cli_config()
 
 
-class AttemptCdsLogin:
+class TestAttemptCdsLogin:
     """Test the keymanagement.attempt_cds_login function.
 
     attempt_cds_login is monkeypatched elsewhere, these tests ensure it works as
     expected.
     """
 
-    def test_status_fail():
+    def test_status_fail(self):
         with patch("cdsapi.Client.status", side_effect=rex.ConnectionError):
             with pytest.raises(rex.ConnectionError, match="Failed to connect to CDS"):
                 key_management.attempt_cds_login(url="test", fullkey="abc:def")
 
-    def test_connection_fail():
+    def test_connection_fail(self):
         mp1 = patch("cdsapi.Client.status")
         mp2 = patch(
             "cdsapi.Client.retrieve",
@@ -111,7 +111,7 @@ class AttemptCdsLogin:
             ):
                 key_management.attempt_cds_login(url="test", fullkey="abc:def")
 
-    def test_retrieve_fail():
+    def test_retrieve_fail(self):
         mp1 = patch("cdsapi.Client.status")
         mp2 = patch(
             "cdsapi.Client.retrieve",
@@ -124,7 +124,7 @@ class AttemptCdsLogin:
             ):
                 key_management.attempt_cds_login(url="test", fullkey="abc:def")
 
-    def test_all_pass():
+    def test_all_pass(self):
         mp1 = patch("cdsapi.Client.status")
         mp2 = patch("cdsapi.Client.retrieve")
         with mp1, mp2:
