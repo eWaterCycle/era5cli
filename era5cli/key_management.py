@@ -92,9 +92,16 @@ def run_config(
     key: str,
 ) -> True:
     """Check the user-input configuration. Entry point for the CLI."""
-    attempt_cds_login(url, fullkey=f"{uid}:{key}")
-    write_era5cli_config(url, uid, key)
-    return True
+    try:
+        attempt_cds_login(url, fullkey=f"{uid}:{key}")
+        write_era5cli_config(url, uid, key)
+        return True
+    except InvalidLoginError:
+        print(
+            "Error: the UID and key are rejected by the CDS. "
+            "Please check and try again."
+        )
+    return False
 
 
 def check_era5cli_config() -> None:

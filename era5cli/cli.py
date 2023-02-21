@@ -406,14 +406,18 @@ def _build_parser():
 
     config = subparsers.add_parser(
         "config",
-        description="Configure the CDS login info for era5cli",
+        description="",
         prog=textwrap.dedent(
             """
-            Use `era5cli config --help` for more information
+            Configure the CDS login info for era5cli.
+
+            This will create a config file in your home directory, in folder named
+            ".config". The CDS URL, your UID and the CDS keys will be stored here.
 
             To find your key and UID, go to https://cds.climate.copernicus.eu/ and login
             with your email and password. Then go to your user profile (top right).
 
+            Use `era5cli config --help` for more information.
             """
         ),
         help=textwrap.dedent(
@@ -454,7 +458,7 @@ def _build_parser():
         default=key_management.DEFAULT_CDS_URL,
         help=textwrap.dedent(
             f"""
-            URL to the CDS, by default: {key_management.DEFAULT_CDS_URL}
+            (optional) URL to the CDS, by default: {key_management.DEFAULT_CDS_URL}
             """
         ),
     )
