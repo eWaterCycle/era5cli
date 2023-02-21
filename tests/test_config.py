@@ -123,3 +123,11 @@ class AttemptCdsLogin:
                 match="Something changed in the CDS API",
             ):
                 key_management.attempt_cds_login(url="test", fullkey="abc:def")
+
+    def test_all_pass():
+        mp1 = patch("cdsapi.Client.status")
+        mp2 = patch("cdsapi.Client.retrieve")
+        with mp1, mp2:
+            assert (
+                key_management.attempt_cds_login(url="test", fullkey="abc:def") is True
+            )
