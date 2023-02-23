@@ -7,6 +7,7 @@ from pathos.threading import ThreadPool as Pool
 import era5cli.inputref as ref
 import era5cli.utils
 from era5cli import key_management
+import itertools
 
 
 class Fetch:
@@ -179,8 +180,12 @@ class Fetch:
         self._extension()
         # define fetch call depending on split argument
         if not self.merge:
-            # split by variable and year
-            self._split_variable_yr()
+            # split request. Land and ensable requests need to be split by variable,
+            #     year and month to avoid too-large-request error
+            if (self.ensemble or self.land) and self.period == "hourly":
+                self._split_variable_yr_month()
+            else:
+                self._split_variable_yr()
         else:
             # split by variable
             self._split_variable()
@@ -206,13 +211,19 @@ class Fetch:
         name = f"_{lon(lon_min)}-{lon(lon_max)}_{lat(lat_min)}-{lat(lat_max)}"
         return name
 
-    def _define_outputfilename(self, var, years):
+    def _define_outputfilename(self, var, years, month=None):
         """Define output filename."""
         start, end = years[0], years[-1]
 
         prefix = f"{self.outputprefix}-land" if self.land else self.outputprefix
-        yearblock = f"{start}-{end}" if not start == end else f"{start}"
-        fname = f"{prefix}_{var}_{yearblock}_{self.period}"
+
+        yearblock = f"{start}-{end}" if start != end else f"{start}"
+
+        fname = f"{prefix}_{var}_{yearblock}"
+        if month is not None:
+            fname += f"_{month}"
+        fname += f"_{self.period}"
+
         if self.area:
             fname += self._process_areaname()
         if self.ensemble:
@@ -246,6 +257,27 @@ class Fetch:
         years = len(self.variables) * self.years
         pool = Pool(nodes=self.threads) if self.threads else Pool()
         pool.map(self._getdata, variables, years, outputfiles)
+
+    def _split_variable_yr_month(self):
+        """Fetch variable split by variable, year, and month."""
+        outputfiles = []
+        variables = []
+        years = []
+        months = []
+
+        for var, year, month in itertools.product(
+            self.variables,
+            self.years,
+            self.months
+        ):
+            outputfiles += [self._define_outputfilename(var, [year, year], month)]
+            variables += [var]
+            years += [year]
+            months += [month]
+
+        pool = Pool(nodes=self.threads) if self.threads else Pool()
+        pool.map(self._getdata, variables, years, outputfiles, months)
+
 
     def _product_type(self):
         """Construct the product type name from the options."""
@@ -406,7 +438,7 @@ class Fetch:
             name += "-preliminary-back-extension"
         return name, variable
 
-    def _build_request(self, variable, years):
+    def _build_request(self, variable, years, months=None):
         """Build the download request for the retrieve method of cdsapi."""
         self._check_variable(variable)
 
@@ -415,10 +447,11 @@ class Fetch:
         request = {
             "variable": variable,
             "year": years,
-            "month": self.months,
             "time": self.hours,
             "format": self.outputformat,
         }
+
+        request["month"] = self.months if months is None else months
 
         if "pressure-levels" in name:
             self._check_levels()
@@ -439,9 +472,9 @@ class Fetch:
     def _exit(self):
         pass
 
-    def _getdata(self, variables: list, years: list, outputfile: str):
+    def _getdata(self, variables: list, years: list, outputfile: str, months=None):
         """Fetch variables using cds api call."""
-        name, request = self._build_request(variables, years)
+        name, request = self._build_request(variables, years, months)
         if self.dryrun:
             print(name, request, outputfile)
         else:

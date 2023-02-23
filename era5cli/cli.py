@@ -9,6 +9,8 @@ import era5cli.fetch as efetch
 import era5cli.info as einfo
 import era5cli.inputref as ref
 from era5cli import key_management
+import certifi
+import urllib3
 
 
 def _level_parse(level):
@@ -547,6 +549,8 @@ def _execute(args):
             uid=args.uid,
             key=args.key,
         )
+
+    _ = urllib3.PoolManager(cert_reqs="CERT_REQUIRED", ca_certs=certifi.where())
 
     # the fetching subroutines
     years = _construct_year_list(args)
