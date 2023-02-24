@@ -447,11 +447,10 @@ class Fetch:
         request = {
             "variable": variable,
             "year": years,
+            "month": self.months if months is None else months,
             "time": self.hours,
             "format": self.outputformat,
         }
-
-        request["month"] = self.months if months is None else months
 
         if "pressure-levels" in name:
             self._check_levels()

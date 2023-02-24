@@ -256,52 +256,32 @@ def test_define_outputfilename():
     assert fname == fn
 
 
-def test_number_outputfiles(capsys):
+_vars = ["total_precipitation", "runoff"]
+_years = [2007, 2008, 2009]
+@pytest.mark.parametrize(
+    "variables, years, merge, ensemble, expected",
+    [
+        (_vars[:2], _years[:3], False, False, 2*3),
+        (_vars[:2], _years[:3], True, False, 2), # Test merge
+        (_vars[:2], _years[:3], False, True, 2*3*12),
+        (_vars[:2], _years[:1], False, False, 2*1),
+        (_vars[:1], _years[:3], False, False, 1*3),
+
+    ]
+)
+def test_number_outputfiles(capsys, variables, years, merge, ensemble, expected):
     """Test function for the number of outputs."""
     # two variables and three years
     era5 = initialize(
-        variables=["total_precipitation", "runoff"],
-        years=[2007, 2008, 2009],
-        merge=False,
+        variables=variables,
+        years=years,
+        merge=merge,
+        ensemble=ensemble,
     )
     era5.fetch(dryrun=True)
     captured = capsys.readouterr()
     outputlength = len(captured.out.split("\n")) - 1
-    if not era5.merge:
-        # No. of outputs is 2*3 = 6 if merge = False
-        assert outputlength == len(era5.years) * len(era5.variables)
-    else:
-        # No. of outputs is 2*1 = 2 if merge = True
-        assert outputlength == len(era5.variables)
-
-    # one variable and three years
-    era5 = initialize(
-        variables=["total_precipitation"], years=[2007, 2008, 2009], merge=False
-    )
-    era5.fetch(dryrun=True)
-    captured = capsys.readouterr()
-    outputlength = len(captured.out.split("\n")) - 1
-    if not era5.merge:
-        # No. of outputs is 1*3 = 3 if merge = False
-        assert outputlength == len(era5.years) * len(era5.variables)
-    else:
-        # No. of outputs is 1 if merge = True
-        assert outputlength == len(era5.variables)
-
-    # two variables and one year
-    era5 = initialize(
-        variables=["total_precipitation", "runoff"], years=[2007], merge=False
-    )
-    era5.fetch(dryrun=True)
-    captured = capsys.readouterr()
-    outputlength = len(captured.out.split("\n")) - 1
-    if not era5.merge:
-        # No. of outputs is 2*1 = 2 if merge = False
-        assert outputlength == len(era5.years) * len(era5.variables)
-    else:
-        # No. of outputs is 2 if merge = True
-        assert outputlength == len(era5.variables)
-    del era5, captured
+    assert outputlength == expected
 
 
 def test_product_type():
