@@ -5,6 +5,7 @@ Unreleased
 ~~~~~~~~~~
 * Change CDS keys from .cdsapirc file to .config/eracli.txt file. This will avoid conflict with e.g. ADS.
 * Add validator for era5cli.txt keys. This should provide better feedback to users and reduce user error.
+* Automatically split up requests for --land and --ensemble by month. This will prevent users encountering a Request Too Large error.
 
 1.3.2 (2021-12-13)
 ~~~~~~~~~~~~~~~~~~
