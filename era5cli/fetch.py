@@ -482,7 +482,7 @@ class Fetch:
                 "please do not kill this process in the meantime.",
                 os.linesep,
             )
-            connection = cdsapi.Client(url=self.url, key=self.key)
+            connection = cdsapi.Client(url=self.url, key=self.key, verify=True)
             print("".join(queueing_message))  # print queueing message
             connection.retrieve(name, request, outputfile)
             era5cli.utils.append_history(name, request, outputfile)

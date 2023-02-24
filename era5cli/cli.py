@@ -5,8 +5,6 @@ import argparse
 import sys
 import textwrap
 from datetime import datetime
-import certifi
-import urllib3
 import era5cli.fetch as efetch
 import era5cli.info as einfo
 import era5cli.inputref as ref
@@ -549,8 +547,6 @@ def _execute(args):
             uid=args.uid,
             key=args.key,
         )
-
-    _ = urllib3.PoolManager(cert_reqs="CERT_REQUIRED", ca_certs=certifi.where())
 
     # the fetching subroutines
     years = _construct_year_list(args)
