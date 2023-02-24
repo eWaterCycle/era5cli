@@ -5,12 +5,12 @@ import argparse
 import sys
 import textwrap
 from datetime import datetime
+import certifi
+import urllib3
 import era5cli.fetch as efetch
 import era5cli.info as einfo
 import era5cli.inputref as ref
 from era5cli import key_management
-import certifi
-import urllib3
 
 
 def _level_parse(level):

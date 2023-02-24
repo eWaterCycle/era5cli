@@ -1,5 +1,6 @@
 """Fetch ERA5 variables."""
 
+import itertools
 import logging
 import os
 import cdsapi
@@ -7,7 +8,6 @@ from pathos.threading import ThreadPool as Pool
 import era5cli.inputref as ref
 import era5cli.utils
 from era5cli import key_management
-import itertools
 
 
 class Fetch:
@@ -266,9 +266,7 @@ class Fetch:
         months = []
 
         for var, year, month in itertools.product(
-            self.variables,
-            self.years,
-            self.months
+            self.variables, self.years, self.months
         ):
             outputfiles += [self._define_outputfilename(var, [year, year], month)]
             variables += [var]
@@ -277,7 +275,6 @@ class Fetch:
 
         pool = Pool(nodes=self.threads) if self.threads else Pool()
         pool.map(self._getdata, variables, years, outputfiles, months)
-
 
     def _product_type(self):
         """Construct the product type name from the options."""
