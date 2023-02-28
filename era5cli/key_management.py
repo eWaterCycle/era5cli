@@ -86,7 +86,7 @@ def attempt_cds_login(url: str, fullkey: str) -> True:
         raise err  # pragma: no cover
 
 
-def run_config(
+def set_config(
     url: str,
     uid: str,
     key: str,
