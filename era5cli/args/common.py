@@ -1,9 +1,10 @@
 import textwrap
 from argparse import ArgumentParser
 import era5cli.inputref as ref
+from typing import Union
 
 
-def _level_parse(level: str) -> int:
+def _level_parse(level: str) -> Union[str, int]:
     """Parse levels as integers, or the string 'surface'"""
     if level == "surface":
         return str(level)

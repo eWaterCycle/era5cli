@@ -31,6 +31,7 @@ def valid_path_cds(tmp_path_factory):
 
 
 class TestEra5CliConfig:
+    """Test the functionality when the /.config/era5cli.txt file exists."""
     def test_load_era5cli_config(self, valid_path_era5):
         with patch("era5cli.key_management.ERA5CLI_CONFIG_PATH", valid_path_era5):
             assert key_management.load_era5cli_config() == ("b", "123:abc-def")

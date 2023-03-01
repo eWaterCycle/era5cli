@@ -88,6 +88,10 @@ def add_config_args(subparsers: argparse._SubParsersAction) -> None:
     )
 
 
+class InputError(Exception):
+    "Raised when a user inputs an invalid combination of arguments."
+
+
 def config_control_flow(args):
     """Control flow for the config subparser.
 
@@ -102,9 +106,9 @@ def config_control_flow(args):
         True
     """
     if args.show and any((args.uid, args.key)):
-        raise AttributeError("Either call `show` or set the key. Not both.")
+        raise InputError("Either call `show` or set the key. Not both.")
     if not args.show and (args.uid is None or args.key is None):
-        raise AttributeError("Both the UID and the key are required inputs.")
+        raise InputError("Both the UID and the key are required inputs.")
     if args.show:
         url, fullkey = key_management.load_era5cli_config()
         uid, key = fullkey.split(":")
