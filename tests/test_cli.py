@@ -2,10 +2,11 @@
 
 import unittest.mock as mock
 import pytest
+import era5cli.args
 import era5cli.cli as cli
 import era5cli.inputref as ref
 from era5cli import key_management
-import era5cli.args
+
 
 def test_parse_args():
     """Test argument parser of cli."""
@@ -351,15 +352,16 @@ def test_config_invalid(mock_a, mock_b, capfd):
 
 class TestConfigControlFlow:
     """Test the args.config.config_control_flow function."""
+
     @mock.patch(
         "era5cli.key_management.load_era5cli_config",
-        return_value=("https://www.test.org/", "123:abc-def")
+        return_value=("https://www.test.org/", "123:abc-def"),
     )
     def test_config_show(self, mock, capsys):
         args = cli._parse_args(["config", "--show"])
         cli._execute(args)
 
-        expected =  (
+        expected = (
             "Contents of .config/era5cli.txt:\n"
             "    uid: 123\n"
             "    key: abc-def\n"

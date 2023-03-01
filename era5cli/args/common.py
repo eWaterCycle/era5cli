@@ -1,7 +1,7 @@
 import textwrap
 from argparse import ArgumentParser
-import era5cli.inputref as ref
 from typing import Union
+import era5cli.inputref as ref
 
 
 def _level_parse(level: str) -> Union[str, int]:
