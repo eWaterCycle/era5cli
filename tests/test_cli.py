@@ -333,7 +333,6 @@ def test_config_parse():
 def test_config_write(mock_a, mock_b):
     """Assuming the CDS login is valid, see if the write function is called"""
     args = cli._parse_args(config_args)
-    print(args)
     cli._execute(args)
 
 
