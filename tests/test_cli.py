@@ -4,6 +4,7 @@ import unittest.mock as mock
 import pytest
 import era5cli.cli as cli
 import era5cli.inputref as ref
+from era5cli import key_management
 
 
 def test_parse_args():
@@ -310,3 +311,39 @@ def test_main_info(info):
     argv = ["info", "total_precipitation"]
     args = cli._parse_args(argv)
     cli._execute(args)
+
+
+config_args = [
+    "config",
+    "--uid",
+    "123456",
+    "--key",
+    "abc-def",
+]
+
+
+def test_config_parse():
+    args = cli._parse_args(config_args)
+    assert args.uid == "123456"
+    assert args.key == "abc-def"
+
+
+@mock.patch("era5cli.key_management.attempt_cds_login", return_value=True)
+@mock.patch("era5cli.key_management.write_era5cli_config")
+def test_config_write(mock_a, mock_b):
+    """Assuming the CDS login is valid, see if the write function is called"""
+    args = cli._parse_args(config_args)
+    cli._execute(args)
+
+
+@mock.patch(
+    "era5cli.key_management.attempt_cds_login",
+    side_effect=key_management.InvalidLoginError,
+)
+@mock.patch("era5cli.key_management.write_era5cli_config")
+def test_config_invalid(mock_a, mock_b, capfd):
+    """Assume the CDS login is invalid, see if the right error is printed to console."""
+    args = cli._parse_args(config_args)
+    cli._execute(args)
+    out, _ = capfd.readouterr()
+    assert "Error: the UID and key are rejected" in out

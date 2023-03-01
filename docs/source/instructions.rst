@@ -11,45 +11,19 @@ Register at Copernicus Climate Data Service
 
 -  Copy your user ID and API key.
 
-Create a key ascii file
-~~~~~~~~~~~~~~~~~~~~~~~
+Configure era5cli to use your ID and key
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Linux
-#####
-In Linux create a new file called .cdsapirc in the home directory of your user and add the following two lines:
-
+To configure era5cli to use your ID and API key, do:
 ::
 
-   url: https://cds.climate.copernicus.eu/api/v2
-
-   key: UID:KEY
-
-Replace UID with your user ID and KEY with your API key
-
-Windows
-#######
-In Windows create a new file called .cdsapirc (e.g. with Notepad) where in your windows environment, %USERPROFILE% is usually located at C:\Users\Username folder). And add the following two lines
-
-::
-
-   url: https://cds.climate.copernicus.eu/api/v2
-
-   key: UID:KEY
-
-Replace UID with your user ID and KEY with your API key
-
-MacOS
-#####
-In MacOS create a new file called .cdsapirc in the home directory of your user and add the following two lines:
+   era5cli config --uid ID_NUMBER --key "KEY"
 
 
-::
+Where ID_NUMBER is your user ID (e.g. ``123456``) and "KEY" is your API key, inside double quotes (e.g. ``"4s215sgs-2dfa-6h34-62h2-1615ad163414"``).
 
-   url: https://cds.climate.copernicus.eu/api/v2
+After running this command your ID and key are validated and stored inside your home folder, under ``.config/era5cli.txt``. You can also edit this file manually.
 
-   key: UID:KEY
-
-Replace UID with your user ID and KEY with your API key
 
 Info on available variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

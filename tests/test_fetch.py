@@ -40,29 +40,36 @@ def initialize(
     prelimbe=False,
     land=False,
 ):
-    """Initializer of the class."""
-    return fetch.Fetch(
-        years=years,
-        months=months,
-        days=days,
-        hours=hours,
-        area=area,
-        variables=variables,
-        outputformat=outputformat,
-        outputprefix="era5",
-        period=period,
-        ensemble=ensemble,
-        statistics=statistics,
-        synoptic=synoptic,
-        pressurelevels=pressurelevels,
-        merge=merge,
-        threads=threads,
-        prelimbe=prelimbe,
-        land=land,
-    )
+    with mock.patch(
+        "era5cli.fetch.key_management.load_era5cli_config",
+        return_value=("url", "key:uid"),
+    ):
+        """Initializer of the class."""
+        return fetch.Fetch(
+            years=years,
+            months=months,
+            days=days,
+            hours=hours,
+            area=area,
+            variables=variables,
+            outputformat=outputformat,
+            outputprefix="era5",
+            period=period,
+            ensemble=ensemble,
+            statistics=statistics,
+            synoptic=synoptic,
+            pressurelevels=pressurelevels,
+            merge=merge,
+            threads=threads,
+            prelimbe=prelimbe,
+            land=land,
+        )
 
 
-def test_init():
+@mock.patch(
+    "era5cli.fetch.key_management.load_era5cli_config", return_value=("url", "key:uid")
+)
+def test_init(load_era5cli_config):
     """Test init function of Fetch class."""
     era5 = fetch.Fetch(
         years=[2008, 2009],
