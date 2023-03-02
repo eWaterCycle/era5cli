@@ -136,3 +136,32 @@ def add_period_args(subparsers, common):
             """
         ),
     )
+
+
+def set_period_args(args):
+    """Set subroutine specific arguments for monthly and hourly fetches."""
+    if args.command == "monthly":
+        statistics = None
+        days = None
+        if args.synoptic is False:
+            synoptic = None
+            hours = [0]
+        elif len(args.synoptic) == 0:
+            synoptic = True
+            hours = range(24)
+        else:
+            synoptic = True
+            hours = args.synoptic
+    elif args.command == "hourly":
+        synoptic = None
+        statistics = args.statistics
+        if statistics:
+            assert args.ensemble, (
+                "Statistics can only be computed over an ensemble, "
+                "add --ensemble or remove --statistics."
+            )
+        days = args.days
+        hours = args.hours
+    else:
+        raise AttributeError(f'The command "{args.command}" is not valid.')
+    return synoptic, statistics, days, hours

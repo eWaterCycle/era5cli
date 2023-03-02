@@ -3,8 +3,8 @@
 import unittest.mock as mock
 import pytest
 import era5cli.args
-import era5cli.cli as cli
 import era5cli.inputref as ref
+from era5cli import cli
 from era5cli import key_management
 
 
@@ -28,7 +28,7 @@ def test_parse_args():
     assert args.endyear == 2008
     assert args.ensemble
     assert args.format == "netcdf"
-    assert args.hours == list(range(0, 24))
+    assert args.hours == list(range(24))
     assert args.levels == ref.PLEVELS
     assert args.months == list(range(1, 13))
     assert args.outputprefix == "era5"
@@ -151,7 +151,7 @@ def test_period_args():
         "--ensemble",
     ]
     args = cli._parse_args(argv)
-    period_args = cli._set_period_args(args)
+    period_args = era5cli.args.periods.set_period_args(args)
     # Period_args consists of (synoptic, statistics, days, hours)
     assert period_args == (None, None, None, [0])
 
@@ -167,7 +167,7 @@ def test_period_args():
         "--ensemble",
     ]
     args = cli._parse_args(argv)
-    period_args = cli._set_period_args(args)
+    period_args = era5cli.args.periods.set_period_args(args)
     # Period_args consists of (synoptic, statistics, days, hours)
     assert period_args == (True, None, None, [4, 7])
 
@@ -181,15 +181,15 @@ def test_period_args():
         "--ensemble",
     ]
     args = cli._parse_args(argv)
-    period_args = cli._set_period_args(args)
+    period_args = era5cli.args.periods.set_period_args(args)
     # Period_args consists of (synoptic, statistics, days, hours)
-    assert period_args == (True, None, None, range(0, 24))
+    assert period_args == (True, None, None, range(24))
 
-    # test whether the info option does not end up in _set_period_args
+    # test whether the info option does not end up in set_period_args
     argv = ["info", "2Dvars"]
     args = cli._parse_args(argv)
     with pytest.raises(AttributeError):
-        assert cli._set_period_args(args)
+        assert era5cli.args.periods.set_period_args(args)
 
 
 def test_level_arguments():

@@ -1,5 +1,6 @@
 import argparse
 import textwrap
+import era5cli.info
 
 
 def add_info_args(subparsers):
@@ -45,3 +46,13 @@ def add_info_args(subparsers):
             """
         ),
     )
+
+
+def run_info(args):
+    # List dataset information
+    era5info = era5cli.info.Info(args.name)
+    if era5info.infotype == "list":
+        era5info.list()
+        return True
+    era5info.vars()
+    return True

@@ -1,17 +1,16 @@
 import textwrap
 from argparse import ArgumentParser
+from datetime import datetime
 from typing import Union
 import era5cli.inputref as ref
 
 
 def _level_parse(level: str) -> Union[str, int]:
     """Parse levels as integers, or the string 'surface'"""
-    if level == "surface":
-        return str(level)
-    return int(level)
+    return level if level == "surface" else int(level)
 
 
-def populate_common(argument_parser: ArgumentParser) -> None:
+def add_common_args(argument_parser: ArgumentParser) -> None:
     """Populate the ArgumentParser with common (shared) arguments.
 
     Adds the following arguments:
@@ -242,3 +241,28 @@ def populate_common(argument_parser: ArgumentParser) -> None:
             """
         ),
     )
+
+
+def construct_year_list(args):
+    """Make a continous list of years from the startyear and endyear arguments."""
+    if not args.endyear:
+        endyear = args.startyear
+    else:
+        endyear = args.endyear
+
+    # check whether correct years have been entered
+    for year in (args.startyear, endyear):
+        if args.prelimbe:
+            assert 1950 <= year <= 1978, "year should be between 1950 and 1978"
+        elif args.land:
+            assert (
+                1950 <= year <= datetime.now().year
+            ), "for ERA5-Land, year should be between 1950 and present"
+        else:
+            assert (
+                1959 <= year <= datetime.now().year
+            ), "year should be between 1959 and present"
+
+    assert endyear >= args.startyear, "endyear should be >= startyear or None"
+
+    return list(range(args.startyear, endyear + 1))
