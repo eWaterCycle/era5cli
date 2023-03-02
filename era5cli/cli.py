@@ -35,13 +35,13 @@ def _parse_args(args):
 
 
 def _execute(input_args: argparse.Namespace) -> True:
-    """Call to ERA-5 cli library."""
+    """Execute the arguments given by the user."""
 
     if input_args.command == "info":
         return args.info.run_info(input_args)
 
     if input_args.command == "config":
-        return args.config.config_control_flow(input_args)
+        return args.config.run_config(input_args)
 
     # the fetching subroutines
     years = args.common.construct_year_list(input_args)
@@ -72,10 +72,16 @@ def _execute(input_args: argparse.Namespace) -> True:
 
 
 def main(argv=None):
-    """Main."""
-    # get arguments
+    """Run era5cli.
+
+    argv is an optional kwarg to be used in testing. When called
+    from the command line, the user-input arguments are retreived
+    using sys.argv.
+    """
     if argv is None:
         argv = sys.argv
+
+    # Skip the first argument (i.e. 'era5cli')
     args = _parse_args(argv[1:])
     _execute(args)
 

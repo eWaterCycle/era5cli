@@ -92,7 +92,7 @@ class InputError(Exception):
     "Raised when a user inputs an invalid combination of arguments."
 
 
-def config_control_flow(args):
+def run_config(args):
     """Control flow for the config subparser.
 
     This custom control flow is required to implement the exclusive

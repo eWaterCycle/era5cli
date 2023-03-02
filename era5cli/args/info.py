@@ -49,6 +49,7 @@ def add_info_args(subparsers):
 
 
 def run_info(args):
+    """Run the info routine"""
     # List dataset information
     era5info = era5cli.info.Info(args.name)
     if era5info.infotype == "list":
