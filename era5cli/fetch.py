@@ -221,7 +221,7 @@ class Fetch:
 
         fname = f"{prefix}_{var}_{yearblock}"
         if month is not None:
-            fname += f"_{month}"
+            fname += f"-{month}"
         fname += f"_{self.period}"
 
         if self.area:
