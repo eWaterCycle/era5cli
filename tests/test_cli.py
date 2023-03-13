@@ -152,8 +152,8 @@ def test_period_args():
     ]
     args = cli._parse_args(argv)
     period_args = era5cli.args.periods.set_period_args(args)
-    # Period_args consists of (synoptic, statistics, days, hours)
-    assert period_args == (None, None, None, [0])
+    # Period_args consists of (synoptic, statistics, splitmonths, days, hours)
+    assert period_args == (None, None, False, None, [0])
 
     argv = [
         "monthly",
@@ -168,8 +168,8 @@ def test_period_args():
     ]
     args = cli._parse_args(argv)
     period_args = era5cli.args.periods.set_period_args(args)
-    # Period_args consists of (synoptic, statistics, days, hours)
-    assert period_args == (True, None, None, [4, 7])
+    # Period_args consists of (synoptic, statistics, splitmonths, days, hours)
+    assert period_args == (True, None, False, None, [4, 7])
 
     argv = [
         "monthly",
@@ -183,7 +183,7 @@ def test_period_args():
     args = cli._parse_args(argv)
     period_args = era5cli.args.periods.set_period_args(args)
     # Period_args consists of (synoptic, statistics, days, hours)
-    assert period_args == (True, None, None, range(24))
+    assert period_args == (True, None, False, None, range(24))
 
     # test whether the info option does not end up in set_period_args
     argv = ["info", "2Dvars"]
