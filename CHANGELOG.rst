@@ -5,7 +5,10 @@ Unreleased
 ~~~~~~~~~~
 * Change CDS keys from .cdsapirc file to .config/eracli.txt file. This will avoid conflict with e.g. ADS.
 * Add validator for era5cli.txt keys. This should provide better feedback to users and reduce user error.
-* Automatically split up requests for --land and --ensemble by month. This will prevent users encountering a Request Too Large error.
+* Added --splitmonths argument for `era5cli hourly`. This allows users to avoid a Request Too Large error.
+* When a request would encounter a Request Too Large error in the CDS API, they are warned, and given a suggestion to use --splitmonths.
+* If a user makes a request for hourly --land or --ensemble without --splitmonths they are warned that the behavior will change in the future.
+* cli.py has been refactored to make the structure more clear. Seperate argument builders are now in their own modules.
 
 1.3.2 (2021-12-13)
 ~~~~~~~~~~~~~~~~~~
