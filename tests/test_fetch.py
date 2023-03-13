@@ -2,6 +2,7 @@
 
 import unittest.mock as mock
 import pytest
+from era5cli import _request_size
 from era5cli import fetch
 
 
@@ -119,6 +120,14 @@ def test_init(mockpatch):
         variables=["temperature"], period="monthly", days=None, pressurelevels=[1]
     )
     assert isinstance(era5, fetch.Fetch)
+
+    with pytest.raises(_request_size.TooLargeRequestError):
+        initialize(
+            land=True, variables=["skin_temperature"], ensemble=False, splitmonths=False
+        )
+
+    with pytest.raises(ValueError, match="are not compatible"):
+        initialize(merge=True, splitmonths=True)
 
 
 @mock.patch("cdsapi.Client", autospec=True)

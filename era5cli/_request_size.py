@@ -42,6 +42,4 @@ def request_too_large(fetch: "Fetch") -> bool:
     if fetch.statistics:
         request_size *= 3  # Mean and spread are added.
 
-    if request_size > MAX_REQUESTS:
-        return True
-    return False
+    return True if request_size > MAX_REQUESTS else False
