@@ -8,6 +8,8 @@ from pathos.threading import ThreadPool as Pool
 import era5cli.inputref as ref
 import era5cli.utils
 from era5cli import key_management
+from era5cli._request_size import TooLargeRequestError
+from era5cli._request_size import request_too_large
 
 
 class Fetch:
@@ -101,6 +103,7 @@ class Fetch:
         statistics=None,
         synoptic=None,
         pressurelevels=None,
+        splitmonths=False,
         merge=False,
         threads=None,
         prelimbe=False,
@@ -138,6 +141,8 @@ class Fetch:
         """str: Prefix of output filename."""
         self.threads = threads
         """int: number of parallel threads to use for downloading."""
+        self.splitmonths = splitmonths
+        """bool: Split request per month, can avoid Too Large Request error."""
         self.merge = merge
         """bool: Merge yearly output files if True."""
         self.period = period
@@ -162,6 +167,34 @@ class Fetch:
         """bool: Whether to download from the ERA5-Land
         dataset."""
 
+        if self.merge and self.splitmonths:
+            raise ValueError(
+                "\nThe commands '--merge' and '--splitmonths' are not compatible with"
+                "\neach other. Please pick one of the two."
+            )
+
+        if not splitmonths and self.period == "hourly" and (land or ensemble):
+            logging.warning(
+                "\n  The flag --splitmonths was not used, however, in a future version"
+                "\n  this flag will represent the default behavior for hourly --land"
+                "\n  and --ensemble requests. Please update your workflow accordingly."
+            )
+
+        vars = list(self.variables)  # Use list() to avoid copying by reference
+        if "geopotential" in vars and pressurelevels == ["surface"]:
+            vars.remove("geopotential")
+        if any([var in ref.PLVARS for var in vars]):
+            print(pressurelevels)
+            self._check_levels()
+
+        if self.period == "hourly" and request_too_large(self):
+            raise TooLargeRequestError(
+                "\nYour request is too large for the CDS API."
+                "\nConsider splitting up your request in months, "
+                "using the '--splitmonths' flag."
+                "\nFor more info see 'era5cli hourly --help'."
+            )
+
     def _get_login(self):
         self.url, self.key = key_management.load_era5cli_config()
 
@@ -179,15 +212,12 @@ class Fetch:
         # define extension output filename
         self._extension()
         # define fetch call depending on split argument
-        if not self.merge:
-            # split request. Land and ensable requests need to be split by variable,
-            #     year and month to avoid too-large-request error
-            if (self.ensemble or self.land) and self.period == "hourly":
-                self._split_variable_yr_month()
-            else:
-                self._split_variable_yr()
+
+        if self.splitmonths:
+            self._split_variable_yr_month()
+        elif not self.merge:
+            self._split_variable_yr()
         else:
-            # split by variable
             self._split_variable()
 
     def _extension(self):
@@ -410,9 +440,9 @@ class Fetch:
             variable = "geopotential"
             name += "-single-levels"
             logging.warning(
-                "The variable 'orography' has been deprecated by CDS. Use "
-                "`--variables geopotential --levels surface` going forward. "
-                "The current query has been changed accordingly."
+                "\n  The variable 'orography' has been deprecated by CDS. Use"
+                "\n  `--variables geopotential --levels surface` going forward."
+                "\n  The current query has been changed accordingly."
             )
         elif self.pressure_levels == ["surface"]:
             name += "-single-levels"
@@ -450,7 +480,6 @@ class Fetch:
         }
 
         if "pressure-levels" in name:
-            self._check_levels()
             request["pressure_level"] = self.pressure_levels
 
         if self.area:

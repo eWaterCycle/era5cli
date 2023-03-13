@@ -6,7 +6,7 @@ def add_period_args(subparsers, common):
     """Add period related parsers and arguments.
 
     Adds the following parsers:
-        monthly, daily, houry.
+        monthly, hourly.
 
     As well as the following arguments (for
     some of the previously mentioned parsers):
@@ -99,6 +99,19 @@ def add_period_args(subparsers, common):
         ),
     )
 
+    hourly.add_argument(
+        "--splitmonths",
+        action="store_true",
+        help=textwrap.dedent(
+            """
+            When downloading hourly data, provide
+            the `--splitmonths` argument to split requests and files
+            by month, and add the month to the filename.
+
+            """
+        ),
+    )
+
     monthly = subparsers.add_parser(
         "monthly",
         parents=[common, mnth],
@@ -143,6 +156,7 @@ def set_period_args(args):
     if args.command == "monthly":
         statistics = None
         days = None
+        splitmonths = False
         if args.synoptic is False:
             synoptic = None
             hours = [0]
@@ -154,7 +168,8 @@ def set_period_args(args):
             hours = args.synoptic
     elif args.command == "hourly":
         synoptic = None
-        statistics = args.statistics
+        splitmonths: bool = args.splitmonths
+        statistics: bool = args.statistics
         if statistics:
             assert args.ensemble, (
                 "Statistics can only be computed over an ensemble, "
@@ -164,4 +179,4 @@ def set_period_args(args):
         hours = args.hours
     else:
         raise AttributeError(f'The command "{args.command}" is not valid.')
-    return synoptic, statistics, days, hours
+    return synoptic, statistics, splitmonths, days, hours
