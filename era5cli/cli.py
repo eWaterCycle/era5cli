@@ -82,7 +82,7 @@ def main(argv=None):
     using sys.argv.
     """
     if argv is None:
-        argv = sys.argv
+        argv = sys.argv  # pragma: no cover
 
     # Skip the first argument (i.e. 'era5cli')
     args = _parse_args(argv[1:])
