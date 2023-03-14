@@ -1,4 +1,6 @@
 import argparse
+import distutils.util
+import logging
 import textwrap
 
 
@@ -66,9 +68,27 @@ def add_period_args(subparsers, common):
         ),
     )
 
+    splitmonths = argparse.ArgumentParser(add_help=False)
+
+    splitmonths.add_argument(
+        "--splitmonths",
+        type=lambda x: bool(distutils.util.strtobool(x)),  # type=bool doesn't work.
+        default=None,  # To be set to True in the future
+        help=textwrap.dedent(
+            """
+            When downloading hourly data, use:
+            `--splitmonths True` to split requests and files
+            by month, and add the month to the filename.
+
+            Defaults to `False`, but will default to `True` in
+            a future release.
+            """
+        ),
+    )
+
     hourly = subparsers.add_parser(
         "hourly",
-        parents=[common, mnth, day, hour],
+        parents=[common, mnth, day, hour, splitmonths],
         description="Execute the data fetch process for hourly data.",
         prog=textwrap.dedent(
             """
@@ -94,19 +114,6 @@ def add_period_args(subparsers, common):
             When downloading hourly ensemble data, provide
             the `--statistics` argument to download statistics
             (ensemble mean and ensemble spread)
-
-            """
-        ),
-    )
-
-    hourly.add_argument(
-        "--splitmonths",
-        action="store_true",
-        help=textwrap.dedent(
-            """
-            When downloading hourly data, provide
-            the `--splitmonths` argument to split requests and files
-            by month, and add the month to the filename.
 
             """
         ),
@@ -168,7 +175,18 @@ def set_period_args(args):
             hours = args.synoptic
     elif args.command == "hourly":
         synoptic = None
-        splitmonths: bool = args.splitmonths
+        if args.splitmonths is None:
+            splitmonths = False
+            logging.warning(
+                "\n  The argument --splitmonths was not used. However, in a future "
+                "\n  version this flag will default to `True`. To avoid this, either"
+                "\n  use `--splitmonths True` and update your workflow accordingly,"
+                "\n  or set --splitmonths to False."
+            )
+        else:
+            splitmonths: bool = args.splitmonths
+        print(splitmonths)
+
         statistics: bool = args.statistics
         if statistics:
             assert args.ensemble, (

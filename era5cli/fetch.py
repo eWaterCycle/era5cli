@@ -173,13 +173,6 @@ class Fetch:
                 "\neach other. Please pick one of the two."
             )
 
-        if not splitmonths and self.period == "hourly" and (land or ensemble):
-            logging.warning(
-                "\n  The flag --splitmonths was not used, however, in a future version"
-                "\n  this flag will represent the default behavior for hourly --land"
-                "\n  and --ensemble requests. Please update your workflow accordingly."
-            )
-
         vars = list(self.variables)  # Use list() to avoid copying by reference
         if "geopotential" in vars and pressurelevels == ["surface"]:
             vars.remove("geopotential")
@@ -189,10 +182,10 @@ class Fetch:
 
         if self.period == "hourly" and request_too_large(self):
             raise TooLargeRequestError(
-                "\nYour request is too large for the CDS API."
-                "\nConsider splitting up your request in months, "
-                "using the '--splitmonths' flag."
-                "\nFor more info see 'era5cli hourly --help'."
+                "\n  Your request is too large for the CDS API."
+                "\n  Consider splitting up your request in months, "
+                "\n  by using '--splitmonths True'."
+                "\n  For more info see 'era5cli hourly --help'."
             )
 
     def _get_login(self):
