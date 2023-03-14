@@ -8,6 +8,11 @@ if TYPE_CHECKING:
     from era5cli.fetch import Fetch
 
 
+# The following "MAX_REQUESTS" come from the cds.climate.copernicus.eu
+# api request generator. On the CDS one 'request' represents one 2D 'image' of the data
+# i.e. one variable, at one timestep, at one (pressure)level.
+# Single- and multi- level variables have a limit of 120.000 requests, while ERA5-land
+# is limited to 1000, likely due to the higher spatial resolution.
 MAX_REQUESTS = 120000  # Maximum requests for non-land data
 MAX_REQUESTS_LAND = 1000  # Max requests for "reanalysis-era5-land"
 VALID_HOURS_ENSEMBLE = [0, 3, 6, 9, 12, 15, 18, 21]
