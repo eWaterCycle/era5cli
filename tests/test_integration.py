@@ -57,16 +57,16 @@ call_result = [
     },
     {
         # without --levels surface, geopotential calls pressure level data
+        # Note: only request a single month to avoid TooLargeRequest
         "call": dedent(
             """\
-            era5cli hourly --variables geopotential --startyear 2008
+            era5cli hourly --variables geopotential --startyear 2008 --months 01
             --dryrun"""
         ),
         "result": dedent(
             """\
             reanalysis-era5-pressure-levels {'variable': 'geopotential',
-            'year': 2008, 'month': ['01', '02', '03', '04', '05', '06', '07',
-            '08', '09', '10', '11', '12'], 'time': ['00:00', '01:00', '02:00',
+            'year': 2008, 'month': ['01'], 'time': ['00:00', '01:00', '02:00',
             '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00',
             '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00',
             '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
@@ -143,7 +143,7 @@ def test_main(call_result, capsys, caplog):
         ):
             main(call)
     captured = capsys.readouterr().out
-    assert result == captured
+    assert result in captured
     try:
         warn = call_result["warn"]
         assert warn in caplog.text

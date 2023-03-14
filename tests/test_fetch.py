@@ -2,6 +2,7 @@
 
 import unittest.mock as mock
 import pytest
+from era5cli import _request_size
 from era5cli import fetch
 
 
@@ -39,6 +40,7 @@ def initialize(
     hours=list(range(24)),
     prelimbe=False,
     land=False,
+    splitmonths=False,
 ):
     with mock.patch(
         "era5cli.fetch.key_management.load_era5cli_config",
@@ -63,13 +65,14 @@ def initialize(
             threads=threads,
             prelimbe=prelimbe,
             land=land,
+            splitmonths=splitmonths,
         )
 
 
 @mock.patch(
     "era5cli.fetch.key_management.load_era5cli_config", return_value=("url", "key:uid")
 )
-def test_init(load_era5cli_config):
+def test_init(mockpatch):
     """Test init function of Fetch class."""
     era5 = fetch.Fetch(
         years=[2008, 2009],
@@ -83,7 +86,7 @@ def test_init(load_era5cli_config):
         ensemble=True,
         statistics=None,
         synoptic=None,
-        pressurelevels=None,
+        pressurelevels="surface",
         merge=False,
         threads=2,
         prelimbe=False,
@@ -100,7 +103,7 @@ def test_init(load_era5cli_config):
     assert era5.ensemble
     assert era5.statistics is None
     assert era5.synoptic is None
-    assert era5.pressure_levels is None
+    assert era5.pressure_levels == "surface"
     assert not era5.merge
     assert era5.threads == 2
     assert not era5.prelimbe
@@ -108,11 +111,23 @@ def test_init(load_era5cli_config):
 
     # initializing hourly variable with days=None should result in ValueError
     with pytest.raises(TypeError):
-        era5 = initialize(variables=["temperature"], period="hourly", days=None)
+        era5 = initialize(
+            variables=["temperature"], period="hourly", days=None, pressurelevels=[1]
+        )
 
     # initializing monthly variable with days=None returns fetch.Fetch object
-    era5 = initialize(variables=["temperature"], period="monthly", days=None)
+    era5 = initialize(
+        variables=["temperature"], period="monthly", days=None, pressurelevels=[1]
+    )
     assert isinstance(era5, fetch.Fetch)
+
+    with pytest.raises(_request_size.TooLargeRequestError):
+        initialize(
+            land=True, variables=["skin_temperature"], ensemble=False, splitmonths=False
+        )
+
+    with pytest.raises(ValueError, match="are not compatible"):
+        initialize(merge=True, splitmonths=True)
 
 
 @mock.patch("cdsapi.Client", autospec=True)
@@ -153,15 +168,14 @@ def test_fetch_nodryrun(cds, era5cli_utilsappend_history):
     assert era5.fetch() is None
 
     # invalid pressure level should raise ValueError
-    era5 = initialize(
-        outputformat="grib",
-        merge=True,
-        threads=None,
-        pressurelevels=[1, 2, 9],
-        variables=["temperature"],
-    )
     with pytest.raises(ValueError):
-        assert era5.fetch()
+        era5 = initialize(
+            outputformat="grib",
+            merge=True,
+            threads=None,
+            pressurelevels=[1, 2, 9],
+            variables=["temperature"],
+        )
 
     # invalid variable name should raise ValueError
     era5 = initialize(
@@ -234,74 +248,61 @@ def test_define_outputfilename():
     fn = "era5_total_precipitation_2008-2009_hourly_ensemble_synoptic.grb"
     assert fname == fn
 
-    era5 = initialize(land=True, ensemble=False)
+    era5 = initialize(land=True, ensemble=False, splitmonths=True)
     era5._extension()
-    fname = era5._define_outputfilename("total_precipitation", [2008])
-    fn = "era5-land_total_precipitation_2008_hourly.nc"
+    fname = era5._define_outputfilename("total_precipitation", [2008], month="01")
+    fn = "era5-land_total_precipitation_2008-01_hourly.nc"
     assert fname == fn
 
     era5.area = [90.0, -180.0, -90.0, 180.0]
-    fname = era5._define_outputfilename("total_precipitation", [2008])
-    fn = "era5-land_total_precipitation_2008_hourly_180W-180E_90S-90N.nc"
+    fname = era5._define_outputfilename("total_precipitation", [2008], month="01")
+    fn = "era5-land_total_precipitation_2008-01_hourly_180W-180E_90S-90N.nc"
     assert fname == fn
 
     era5.area = [90.0, -180.0, -80.999, 170.001]
-    fname = era5._define_outputfilename("total_precipitation", [2008])
-    fn = "era5-land_total_precipitation_2008_hourly_180W-170E_81S-90N.nc"
+    fname = era5._define_outputfilename("total_precipitation", [2008], month="01")
+    fn = "era5-land_total_precipitation_2008-01_hourly_180W-170E_81S-90N.nc"
     assert fname == fn
 
     era5.area = [0, 120, -90, 180]
-    fname = era5._define_outputfilename("total_precipitation", [2008])
-    fn = "era5-land_total_precipitation_2008_hourly_120E-180E_90S-0N.nc"
+    fname = era5._define_outputfilename("total_precipitation", [2008], month="01")
+    fn = "era5-land_total_precipitation_2008-01_hourly_120E-180E_90S-0N.nc"
     assert fname == fn
 
 
-def test_number_outputfiles(capsys):
+_vars = ["total_precipitation", "runoff"]
+_years = [2007, 2008, 2009]
+
+
+@pytest.mark.parametrize(
+    "variables, years, merge, ensemble, splitmonths, expected",
+    [
+        (_vars, _years, False, False, False, 2 * 3),
+        (_vars, _years, True, False, False, 2),  # Test merge
+        (_vars, _years, False, True, False, 2 * 3),  # Current default
+        (_vars, _years, False, True, True, 2 * 3 * 12),  # Future default
+        (_vars, _years[:1], False, False, False, 2 * 1),
+        (_vars[:1], _years, False, False, False, 1 * 3),
+    ],
+)
+def test_number_outputfiles(
+    capsys, variables, years, merge, ensemble, splitmonths, expected
+):
     """Test function for the number of outputs."""
     # two variables and three years
     era5 = initialize(
-        variables=["total_precipitation", "runoff"],
-        years=[2007, 2008, 2009],
-        merge=False,
+        variables=variables,
+        years=years,
+        merge=merge,
+        ensemble=ensemble,
+        splitmonths=splitmonths,
     )
     era5.fetch(dryrun=True)
     captured = capsys.readouterr()
-    outputlength = len(captured.out.split("\n")) - 1
-    if not era5.merge:
-        # No. of outputs is 2*3 = 6 if merge = False
-        assert outputlength == len(era5.years) * len(era5.variables)
-    else:
-        # No. of outputs is 2*1 = 2 if merge = True
-        assert outputlength == len(era5.variables)
 
-    # one variable and three years
-    era5 = initialize(
-        variables=["total_precipitation"], years=[2007, 2008, 2009], merge=False
-    )
-    era5.fetch(dryrun=True)
-    captured = capsys.readouterr()
-    outputlength = len(captured.out.split("\n")) - 1
-    if not era5.merge:
-        # No. of outputs is 1*3 = 3 if merge = False
-        assert outputlength == len(era5.years) * len(era5.variables)
-    else:
-        # No. of outputs is 1 if merge = True
-        assert outputlength == len(era5.variables)
-
-    # two variables and one year
-    era5 = initialize(
-        variables=["total_precipitation", "runoff"], years=[2007], merge=False
-    )
-    era5.fetch(dryrun=True)
-    captured = capsys.readouterr()
-    outputlength = len(captured.out.split("\n")) - 1
-    if not era5.merge:
-        # No. of outputs is 2*1 = 2 if merge = False
-        assert outputlength == len(era5.years) * len(era5.variables)
-    else:
-        # No. of outputs is 2 if merge = True
-        assert outputlength == len(era5.variables)
-    del era5, captured
+    # Every request has 'product_type' in it once, ie. the number of requests equals:
+    nrequests = captured.out.count("product_type")
+    assert nrequests == expected
 
 
 def test_product_type():
@@ -558,9 +559,8 @@ def test_build_request():
     assert request == req
 
     # requesting 3d variable with pressurelevels=None should give a ValueError
-    era5 = initialize(variables=["temperature"], pressurelevels=None)
     with pytest.raises(ValueError):
-        assert era5._build_request("temperature", [2008])
+        era5 = initialize(variables=["temperature"], pressurelevels=None)
 
     # requesting data from orography should call geopotential
     era5 = initialize()

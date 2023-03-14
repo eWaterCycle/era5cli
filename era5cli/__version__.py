@@ -23,6 +23,7 @@ __author__ = (
     "Stef Smeets",
     "Stefan Verhoeven",
     "Elizaveta Malinina",
+    "Bart Schilperoort",
 )
 __email__ = "ewatercycle@esciencecenter.nl"
 __version__ = "1.3.2"

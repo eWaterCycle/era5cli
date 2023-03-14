@@ -121,3 +121,11 @@ ignore = [
   "E203",  # Whitespace before ":". Not PEP8 compliant (https://github.com/psf/black/issues/315)
   "W503",  # https://peps.python.org/pep-0008/#should-a-line-break-before-or-after-a-binary-operator
 ]
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "@overload",
+  "if TYPE_CHECKING:",
+  "if typing.TYPE_CHECKING:"
+]

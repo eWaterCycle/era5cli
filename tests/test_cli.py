@@ -2,8 +2,9 @@
 
 import unittest.mock as mock
 import pytest
-import era5cli.cli as cli
+import era5cli.args
 import era5cli.inputref as ref
+from era5cli import cli
 from era5cli import key_management
 
 
@@ -27,7 +28,7 @@ def test_parse_args():
     assert args.endyear == 2008
     assert args.ensemble
     assert args.format == "netcdf"
-    assert args.hours == list(range(0, 24))
+    assert args.hours == list(range(24))
     assert args.levels == ref.PLEVELS
     assert args.months == list(range(1, 13))
     assert args.outputprefix == "era5"
@@ -150,9 +151,9 @@ def test_period_args():
         "--ensemble",
     ]
     args = cli._parse_args(argv)
-    period_args = cli._set_period_args(args)
-    # Period_args consists of (synoptic, statistics, days, hours)
-    assert period_args == (None, None, None, [0])
+    period_args = era5cli.args.periods.set_period_args(args)
+    # Period_args consists of (synoptic, statistics, splitmonths, days, hours)
+    assert period_args == (None, None, False, None, [0])
 
     argv = [
         "monthly",
@@ -166,9 +167,9 @@ def test_period_args():
         "--ensemble",
     ]
     args = cli._parse_args(argv)
-    period_args = cli._set_period_args(args)
-    # Period_args consists of (synoptic, statistics, days, hours)
-    assert period_args == (True, None, None, [4, 7])
+    period_args = era5cli.args.periods.set_period_args(args)
+    # Period_args consists of (synoptic, statistics, splitmonths, days, hours)
+    assert period_args == (True, None, False, None, [4, 7])
 
     argv = [
         "monthly",
@@ -180,15 +181,15 @@ def test_period_args():
         "--ensemble",
     ]
     args = cli._parse_args(argv)
-    period_args = cli._set_period_args(args)
+    period_args = era5cli.args.periods.set_period_args(args)
     # Period_args consists of (synoptic, statistics, days, hours)
-    assert period_args == (True, None, None, range(0, 24))
+    assert period_args == (True, None, False, None, range(24))
 
-    # test whether the info option does not end up in _set_period_args
+    # test whether the info option does not end up in set_period_args
     argv = ["info", "2Dvars"]
     args = cli._parse_args(argv)
     with pytest.raises(AttributeError):
-        assert cli._set_period_args(args)
+        assert era5cli.args.periods.set_period_args(args)
 
 
 def test_level_arguments():
@@ -347,3 +348,39 @@ def test_config_invalid(mock_a, mock_b, capfd):
     cli._execute(args)
     out, _ = capfd.readouterr()
     assert "Error: the UID and key are rejected" in out
+
+
+class TestConfigControlFlow:
+    """Test the args.config.config_control_flow function."""
+
+    @mock.patch(
+        "era5cli.key_management.load_era5cli_config",
+        return_value=("https://www.test.org/", "123:abc-def"),
+    )
+    def test_config_show(self, mock, capsys):
+        args = cli._parse_args(["config", "--show"])
+        cli._execute(args)
+
+        expected = (
+            "Contents of .config/era5cli.txt:\n"
+            "    uid: 123\n"
+            "    key: abc-def\n"
+            "    url: https://www.test.org/\n"
+        )
+        out, _ = capsys.readouterr()
+        assert expected in out
+
+    @pytest.mark.parametrize(
+        "input_args",
+        [
+            ["config", "--show", "--uid", "123"],
+            ["config", "--show", "--key", "abc-def"],
+            ["config", "--show", "--uid", "123", "--key", "abc-def"],
+            ["config", "--key", "abc-def"],
+            ["config", "--uid", "123"],
+        ],
+    )
+    def test_config_inputerror(self, input_args):
+        with pytest.raises(era5cli.args.config.InputError):
+            args = cli._parse_args(input_args)
+            cli._execute(args)

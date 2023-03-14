@@ -1,5 +1,6 @@
 """Fetch ERA5 variables."""
 
+import itertools
 import logging
 import os
 import cdsapi
@@ -7,6 +8,8 @@ from pathos.threading import ThreadPool as Pool
 import era5cli.inputref as ref
 import era5cli.utils
 from era5cli import key_management
+from era5cli._request_size import TooLargeRequestError
+from era5cli._request_size import request_too_large
 
 
 class Fetch:
@@ -100,6 +103,7 @@ class Fetch:
         statistics=None,
         synoptic=None,
         pressurelevels=None,
+        splitmonths=False,
         merge=False,
         threads=None,
         prelimbe=False,
@@ -137,6 +141,8 @@ class Fetch:
         """str: Prefix of output filename."""
         self.threads = threads
         """int: number of parallel threads to use for downloading."""
+        self.splitmonths = splitmonths
+        """bool: Split request per month, can avoid Too Large Request error."""
         self.merge = merge
         """bool: Merge yearly output files if True."""
         self.period = period
@@ -161,6 +167,27 @@ class Fetch:
         """bool: Whether to download from the ERA5-Land
         dataset."""
 
+        if self.merge and self.splitmonths:
+            raise ValueError(
+                "\nThe commands '--merge' and '--splitmonths' are not compatible with"
+                "\neach other. Please pick one of the two."
+            )
+
+        vars = list(self.variables)  # Use list() to avoid copying by reference
+        if "geopotential" in vars and pressurelevels == ["surface"]:
+            vars.remove("geopotential")
+        if any([var in ref.PLVARS for var in vars]):
+            print(pressurelevels)
+            self._check_levels()
+
+        if self.period == "hourly" and request_too_large(self):
+            raise TooLargeRequestError(
+                "\n  Your request is too large for the CDS API."
+                "\n  Consider splitting up your request in months, "
+                "\n  by using '--splitmonths True'."
+                "\n  For more info see 'era5cli hourly --help'."
+            )
+
     def _get_login(self):
         self.url, self.key = key_management.load_era5cli_config()
 
@@ -178,11 +205,12 @@ class Fetch:
         # define extension output filename
         self._extension()
         # define fetch call depending on split argument
-        if not self.merge:
-            # split by variable and year
+
+        if self.splitmonths:
+            self._split_variable_yr_month()
+        elif not self.merge:
             self._split_variable_yr()
         else:
-            # split by variable
             self._split_variable()
 
     def _extension(self):
@@ -206,13 +234,19 @@ class Fetch:
         name = f"_{lon(lon_min)}-{lon(lon_max)}_{lat(lat_min)}-{lat(lat_max)}"
         return name
 
-    def _define_outputfilename(self, var, years):
+    def _define_outputfilename(self, var, years, month=None):
         """Define output filename."""
         start, end = years[0], years[-1]
 
         prefix = f"{self.outputprefix}-land" if self.land else self.outputprefix
-        yearblock = f"{start}-{end}" if not start == end else f"{start}"
-        fname = f"{prefix}_{var}_{yearblock}_{self.period}"
+
+        yearblock = f"{start}-{end}" if start != end else f"{start}"
+
+        fname = f"{prefix}_{var}_{yearblock}"
+        if month is not None:
+            fname += f"-{month}"
+        fname += f"_{self.period}"
+
         if self.area:
             fname += self._process_areaname()
         if self.ensemble:
@@ -246,6 +280,24 @@ class Fetch:
         years = len(self.variables) * self.years
         pool = Pool(nodes=self.threads) if self.threads else Pool()
         pool.map(self._getdata, variables, years, outputfiles)
+
+    def _split_variable_yr_month(self):
+        """Fetch variable split by variable, year, and month."""
+        outputfiles = []
+        variables = []
+        years = []
+        months = []
+
+        for var, year, month in itertools.product(
+            self.variables, self.years, self.months
+        ):
+            outputfiles += [self._define_outputfilename(var, [year, year], month)]
+            variables += [var]
+            years += [year]
+            months += [month]
+
+        pool = Pool(nodes=self.threads) if self.threads else Pool()
+        pool.map(self._getdata, variables, years, outputfiles, months)
 
     def _product_type(self):
         """Construct the product type name from the options."""
@@ -381,9 +433,9 @@ class Fetch:
             variable = "geopotential"
             name += "-single-levels"
             logging.warning(
-                "The variable 'orography' has been deprecated by CDS. Use "
-                "`--variables geopotential --levels surface` going forward. "
-                "The current query has been changed accordingly."
+                "\n  The variable 'orography' has been deprecated by CDS. Use"
+                "\n  `--variables geopotential --levels surface` going forward."
+                "\n  The current query has been changed accordingly."
             )
         elif self.pressure_levels == ["surface"]:
             name += "-single-levels"
@@ -406,7 +458,7 @@ class Fetch:
             name += "-preliminary-back-extension"
         return name, variable
 
-    def _build_request(self, variable, years):
+    def _build_request(self, variable, years, months=None):
         """Build the download request for the retrieve method of cdsapi."""
         self._check_variable(variable)
 
@@ -415,13 +467,12 @@ class Fetch:
         request = {
             "variable": variable,
             "year": years,
-            "month": self.months,
+            "month": self.months if months is None else months,
             "time": self.hours,
             "format": self.outputformat,
         }
 
         if "pressure-levels" in name:
-            self._check_levels()
             request["pressure_level"] = self.pressure_levels
 
         if self.area:
@@ -439,9 +490,9 @@ class Fetch:
     def _exit(self):
         pass
 
-    def _getdata(self, variables: list, years: list, outputfile: str):
+    def _getdata(self, variables: list, years: list, outputfile: str, months=None):
         """Fetch variables using cds api call."""
-        name, request = self._build_request(variables, years)
+        name, request = self._build_request(variables, years, months)
         if self.dryrun:
             print(name, request, outputfile)
         else:
@@ -453,7 +504,7 @@ class Fetch:
                 "please do not kill this process in the meantime.",
                 os.linesep,
             )
-            connection = cdsapi.Client(url=self.url, key=self.key)
+            connection = cdsapi.Client(url=self.url, key=self.key, verify=True)
             print("".join(queueing_message))  # print queueing message
             connection.retrieve(name, request, outputfile)
             era5cli.utils.append_history(name, request, outputfile)
