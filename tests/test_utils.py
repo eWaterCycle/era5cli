@@ -158,3 +158,30 @@ def testappend_history(tmp_path):
     new_history = ncfile.history
     appendtxt = f"Downloaded using {era5cli.__name__} {era5cliversion}."
     new_history = appendtxt
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        ("True", True),
+        ("true", True),
+        ("Yes", True),
+        ("y", True),
+        ("1", True),
+        ("False", False),
+        ("false", False),
+        ("No", False),
+        ("n", False),
+        ("0", False),
+    ],
+)
+def test_strtobool(value, expected):
+    """Test correct inputs."""
+    assert era5cli.utils.strtobool(value) == expected
+
+
+@pytest.mark.parametrize("value", ["tr", "01", "maybe", "Fals"])
+def test_strtobool_incorrect(value):
+    """Test incorrect inputs."""
+    with pytest.raises(ValueError, match="Could not convert string to boolean"):
+        era5cli.utils.strtobool(value)

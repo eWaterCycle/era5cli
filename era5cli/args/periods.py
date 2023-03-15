@@ -1,7 +1,7 @@
 import argparse
-import distutils.util
 import logging
 import textwrap
+from era5cli import utils
 
 
 def add_period_args(subparsers, common):
@@ -72,7 +72,7 @@ def add_period_args(subparsers, common):
 
     splitmonths.add_argument(
         "--splitmonths",
-        type=lambda x: bool(distutils.util.strtobool(x)),  # type=bool doesn't work.
+        type=lambda x: bool(utils.strtobool(x)),  # type=bool doesn't work.
         default=None,  # To be set to True in the future
         help=textwrap.dedent(
             """
