@@ -183,3 +183,22 @@ def _append_netcdf_history(ncfile: str, appendtxt: str):
     except AttributeError:
         ncfile.history = appendtxt
     ncfile.close()
+
+
+def strtobool(value: str) -> bool:
+    """Convert a string to a boolean. Required to have a true/false arg in argparse.
+
+    For example: `--flag True` or `--flag False`.
+    """
+    trues = ["true", "yes", "y", "1"]
+    falses = ["false", "no", "n", "0"]
+
+    if value.lower() in trues:
+        return True
+    elif value.lower() in falses:
+        return False
+    else:
+        raise ValueError(
+            "Could not convert string to boolean. Valid inputs are:"
+            f"{trues} and {falses}."
+        )
