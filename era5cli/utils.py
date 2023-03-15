@@ -189,16 +189,19 @@ def strtobool(value: str) -> bool:
     """Convert a string to a boolean. Required to have a true/false arg in argparse.
 
     For example: `--flag True` or `--flag False`.
+
+    Functions the same as:
+    https://github.com/pypa/distutils/blob/4435cec31b8eb5712aa8bf993bea3f07051c24d8/distutils/util.py#L340-L353
+    However, distutils will be deprecated in future Python versions.
     """
-    trues = ["true", "yes", "y", "1"]
-    falses = ["false", "no", "n", "0"]
+    trues = ["true", "t", "yes", "y", "1"]
+    falses = ["false", "f", "no", "n", "0"]
 
     if value.lower() in trues:
         return True
-    elif value.lower() in falses:
+    if value.lower() in falses:
         return False
-    else:
-        raise ValueError(
-            "Could not convert string to boolean. Valid inputs are:"
-            f"{trues} and {falses}."
-        )
+    raise ValueError(
+        "Could not convert string to boolean. Valid inputs are:"
+        f"{trues} and {falses} (case insensitive)."
+    )
