@@ -173,15 +173,14 @@ def testappend_history(tmp_path):
         ("No", False),
         ("n", False),
         ("0", False),
-    ]
+    ],
 )
 def test_strtobool(value, expected):
     """Test correct inputs."""
     assert era5cli.utils.strtobool(value) == expected
 
-@pytest.mark.parametrize(
-    "value", ["tr", "01", "maybe", "Fals"]
-)
+
+@pytest.mark.parametrize("value", ["tr", "01", "maybe", "Fals"])
 def test_strtobool_incorrect(value):
     """Test incorrect inputs."""
     with pytest.raises(ValueError, match="Could not convert string to boolean"):
