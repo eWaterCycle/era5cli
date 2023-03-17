@@ -1,0 +1,70 @@
+site_name: era5cli documentation
+repo_url: https://github.com/eWaterCycle/era5cli
+repo_name: era5cli
+
+nav:
+  - "Home":
+    - About: index.md
+  - "User Guide":
+    - Getting started: getting_started.md
+    - Formulating requests: formulating_requests.md
+    - Dataset overview: hourly_monthly.md
+  - "CLI Reference":
+    - CLI usage: reference/cli_usage.md
+    - Argument overview: reference/arguments.md
+    - Variable overview: reference/variables.md
+  - "Contributing":
+    - contribute.md
+  - "Developer Documentation":
+    - dev.md
+
+theme:
+  name: material
+  #custom_dir: docs/assets/css
+  logo: assets/era5cli_logo_v2_colors.png
+  features:
+    - navigation.sections
+    - navigation.instant
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.footer
+    - navigation.path
+    - content.code.copy
+    - search.suggest
+  icon:
+    repo: fontawesome/brands/github-alt
+
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+      primary: blue
+      accent: dark blue
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+      primary: indigo
+      accent: dark blue
+
+plugins:
+- search:
+    lang: en
+- gen-files:
+    scripts:
+      - docs/gen_reference_pages.py
+
+extra:
+  generator: true
+
+markdown_extensions:
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - admonition
+  - pymdownx.details
