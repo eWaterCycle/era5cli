@@ -17,6 +17,8 @@ nav:
     - contribute.md
   - "Developer Documentation":
     - dev.md
+  - "Changelog":
+    - CHANGELOG.md
 
 theme:
   name: material
