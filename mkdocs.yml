@@ -20,8 +20,8 @@ nav:
 
 theme:
   name: material
-  #custom_dir: docs/assets/css
-  logo: assets/era5cli_logo_v2_colors.png
+  logo: assets/era5cli_logo_colors.png
+  favicon: assets/era5cli_favicon.png
   features:
     - navigation.sections
     - navigation.instant

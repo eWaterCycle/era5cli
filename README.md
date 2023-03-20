@@ -1,4 +1,4 @@
-<img align="right" width="150" alt="Logo" src="docs/assets/era5cli_logo_v2_colors_border.png">
+<img align="right" width="150" alt="Logo" src="docs/assets/era5cli_logo_colors_border.png">
 
 
 [![github license badge](https://img.shields.io/github/license/eWaterCycle/era5cli)](https://github.com/eWaterCycle/era5cli)
