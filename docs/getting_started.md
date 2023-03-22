@@ -40,7 +40,7 @@ For installation, multiple options are available depending on your setup:
 
 ## Copernicus CDS credentials
 
-To be able to use era5cli, you need to be [**registered** at the Copernicus Climate Data Service (CDS)](https://cds.climate.copernicus.eu/user/register?destination=%2F%23!%2Fhome).
+To be able to use era5cli, you need to be [**registered**](https://cds.climate.copernicus.eu/user/register?destination=%2F%23!%2Fhome) at the Copernicus Climate Data Service (CDS).
 
 After activating your account, **login** on the CDS website, go to your **profile page** (top right on the website), and view your **API keys** at the bottom of the page.
 
@@ -56,7 +56,7 @@ After running this command your ID and key are validated and stored inside your 
 
 ## Your first request
 
-Now you should be able to make a request for data from the CDS. A request you could run can be, for example:
+Now you should be able to make a request for data from the CDS. For example:
 
 ```sh
 era5cli monthly --variables soil_type --startyear 2000 --months 01

@@ -16,8 +16,12 @@ To be able to make a request, you need to decide on a few main points:
 A typical request in `era5cli` can look like the following:
 
 ```
-era5cli hourly --land --variables 2m_temperature 2m_dewpoint_temperature
-    --startyear 2000 --endyear 2020 --splitmonths True
+era5cli hourly \
+    --land \
+    --variables 2m_temperature 2m_dewpoint_temperature \
+    --startyear 2000 \
+    --endyear 2020 \
+    --splitmonths True \
     --area 53.6 3.3 50.7 7.5
 ```
 
