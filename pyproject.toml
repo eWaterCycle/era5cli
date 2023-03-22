@@ -11,7 +11,7 @@ path = "era5cli/__version__.py"
 [project]
 name = "era5cli"
 description = "A command line interface to download ERA5 data from the Copernicus Climate Data Store. https://climate.copernicus.eu/.."
-readme = "README.rst"
+readme = "README.md"
 license = { text = "Apache Software License" }
 requires-python = ">=3.7"
 authors = [
@@ -35,6 +35,9 @@ authors = [
 ]
 keywords = [
   "ERA-5",
+  "climate data",
+  "cds api",
+  "cds download",
 ]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
@@ -75,7 +78,11 @@ dev = [
   "pytest-flake8",
   "pytest-cov",
 ]
-docs = ["Sphinx", "sphinx-argparse", "sphinx_rtd_theme",]  # Required for readthedocs
+docs = [
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocs-gen-files",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -97,7 +104,8 @@ coverage = ["pytest --cov=era5cli --cov-report term --cov-report xml:cov.xml tes
 features = ["docs",]
 
 [tool.hatch.envs.docs.scripts]
-build = ["sphinx-build docs/source docs/build",]
+build = ["mkdocs build",]
+serve = ["mkdocs serve",]
 
 [tool.black]
 line-length = 88
