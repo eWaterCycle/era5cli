@@ -6,9 +6,8 @@ To be able to make a request, you need to decide on a few main points:
 - Do you want to the data globally, or specify a bounding box (using `--area`).
 - (*For pressure level data:*) on which levels do you want the data.
 
-???+ note
+!!! note
     All available arguments are listed in the [CLI Reference](reference/arguments.md)
-
 
 
 ### Example request

@@ -10,3 +10,7 @@ For ease of searching, an overview of all available variables is shown below. Th
     will list all single level variables that contain the word 'temperature'.
 
 ### Lists of variables
+
+<!---
+Note: the variable lists will be added by the gen_references_pages.py script to the bottom of this file
+-->

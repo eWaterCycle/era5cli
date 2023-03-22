@@ -3,15 +3,6 @@
 
 For installation, multiple options are available depending on your setup:
 
-=== "Overview"
-
-    | Source | Status |
-    |-|-|
-    | PyPI (pip) | [![](https://badge.fury.io/py/era5cli.svg)](https://pypi.org/project/era5cli/) |
-    | conda-forge | [![](https://anaconda.org/conda-forge/era5cli/badges/version.svg)](https://anaconda.org/conda-forge/era5cli) |
-    | Github | [![](https://img.shields.io/github/commits-since/eWaterCycle/era5cli/latest.svg)](https://github.com/eWaterCycle/era5cli)
-
-
 === "pip"
 
     To install era5cli from PyPI, use the following command:
@@ -37,6 +28,11 @@ For installation, multiple options are available depending on your setup:
     pip install -U  git+https://github.com/eWaterCycle/era5cli.git
     ```
 
+*****
+
+| **Source** | PyPI (pip) | conda-forge | Github |
+|------------|------------|-------------|--------|
+| **Status** | [![](https://badge.fury.io/py/era5cli.svg)](https://pypi.org/project/era5cli/) | [![](https://anaconda.org/conda-forge/era5cli/badges/version.svg)](https://anaconda.org/conda-forge/era5cli) | [![](https://img.shields.io/github/commits-since/eWaterCycle/era5cli/latest.svg)](https://github.com/eWaterCycle/era5cli) |
 
 ## Copernicus CDS credentials
 

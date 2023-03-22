@@ -1,0 +1,4 @@
+/* Change the color of the footer from the (default) black */
+.md-footer {
+    background-color: var(--md-typeset-a-color);
+}

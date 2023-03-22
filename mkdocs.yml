@@ -1,10 +1,11 @@
 site_name: era5cli documentation
 repo_url: https://github.com/eWaterCycle/era5cli
 repo_name: era5cli
+extra_css:
+  - stylesheets/extra.css
 
 nav:
-  - "Home":
-    - About: index.md
+  - Home: index.md
   - "User Guide":
     - Getting started: getting_started.md
     - Formulating requests: formulating_requests.md
