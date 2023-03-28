@@ -10,7 +10,6 @@ import era5cli.utils
 from era5cli import key_management
 from era5cli._request_size import TooLargeRequestError
 from era5cli._request_size import request_too_large
-from pathlib import Path
 
 
 class Fetch:

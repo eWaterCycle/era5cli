@@ -4,11 +4,11 @@ import datetime
 import shutil
 import textwrap
 from pathlib import Path
+from typing import List
 import prettytable
 from netCDF4 import Dataset
 import era5cli
 from era5cli.__version__ import __version__ as era5cliversion
-from typing import List
 
 
 def _zpadlist(values: list, inputtype: str, minval: int, maxval: int) -> list:
@@ -209,6 +209,7 @@ def strtobool(value: str) -> bool:
 
 
 def assert_outputfiles_not_exist(outputfiles: List[str]) -> None:
+    """Check if files already exist, and prompt the user if they do."""
     if any(Path(file).exists() for file in outputfiles):
         answer = input(
             "\n  Some filenames already exists in this folder."
