@@ -10,6 +10,7 @@ import era5cli.utils
 from era5cli import key_management
 from era5cli._request_size import TooLargeRequestError
 from era5cli._request_size import request_too_large
+from pathlib import Path
 
 
 class Fetch:
@@ -263,11 +264,11 @@ class Fetch:
         outputfiles = [
             self._define_outputfilename(var, self.years) for var in self.variables
         ]
+        era5cli.utils.assert_outputfiles_not_exist(outputfiles)
+
         years = len(outputfiles) * [self.years]
-        if not self.threads:
-            pool = Pool()
-        else:
-            pool = Pool(nodes=self.threads)
+
+        pool = Pool(nodes=self.threads) if self.threads else Pool()
         pool.map(self._getdata, self.variables, years, outputfiles)
 
     def _split_variable_yr(self):
@@ -277,7 +278,11 @@ class Fetch:
         for var in self.variables:
             outputfiles += [self._define_outputfilename(var, [yr]) for yr in self.years]
             variables += len(self.years) * [var]
+
+        era5cli.utils.assert_outputfiles_not_exist(outputfiles)
+
         years = len(self.variables) * self.years
+
         pool = Pool(nodes=self.threads) if self.threads else Pool()
         pool.map(self._getdata, variables, years, outputfiles)
 
@@ -295,6 +300,8 @@ class Fetch:
             variables += [var]
             years += [year]
             months += [month]
+
+        era5cli.utils.assert_outputfiles_not_exist(outputfiles)
 
         pool = Pool(nodes=self.threads) if self.threads else Pool()
         pool.map(self._getdata, variables, years, outputfiles, months)
@@ -493,6 +500,7 @@ class Fetch:
     def _getdata(self, variables: list, years: list, outputfile: str, months=None):
         """Fetch variables using cds api call."""
         name, request = self._build_request(variables, years, months)
+
         if self.dryrun:
             print(name, request, outputfile)
         else:

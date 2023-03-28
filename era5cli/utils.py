@@ -8,6 +8,7 @@ import prettytable
 from netCDF4 import Dataset
 import era5cli
 from era5cli.__version__ import __version__ as era5cliversion
+from typing import List
 
 
 def _zpadlist(values: list, inputtype: str, minval: int, maxval: int) -> list:
@@ -205,3 +206,16 @@ def strtobool(value: str) -> bool:
         "Could not convert string to boolean. Valid inputs are:"
         f"{trues} and {falses} (case insensitive)."
     )
+
+
+def assert_outputfiles_not_exist(outputfiles: List[str]) -> None:
+    if any(Path(file).exists() for file in outputfiles):
+        answer = input(
+            "\n  Some filenames already exists in this folder."
+            "\n  Do you want to overwrite them? (Y/N)"
+        )
+        if answer.lower() in ["n", "no", "nope"]:
+            raise FileExistsError(
+                "\n  One or more files already exist in this folder."
+                "\n  Please remove them, or change to a different folder to continue"
+            )
