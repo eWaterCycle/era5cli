@@ -1,5 +1,6 @@
 """Tests for era5cli Fetch class."""
 
+import pathlib
 import unittest.mock as mock
 import pytest
 from era5cli import _request_size
@@ -643,3 +644,15 @@ def test_area():
     with pytest.raises(ValueError):
         era5 = initialize(area=[-180, 180, -90])
         era5._build_request("total_precipitation", [2008])
+
+
+def test_file_exists():
+    with mock.patch.object(pathlib.Path, "exists", return_value=True):
+        era5 = initialize()
+
+        with mock.patch("builtins.input", return_value="Y"):
+            era5.fetch(dryrun=True)
+
+        with mock.patch("builtins.input", return_value="N"):
+            with pytest.raises(FileExistsError):
+                era5.fetch(dryrun=True)
