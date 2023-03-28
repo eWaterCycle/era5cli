@@ -189,6 +189,9 @@ class Fetch:
             )
 
     def _get_login(self):
+        # First check if the config exists, and guide the user if it does not.
+        key_management.check_era5cli_config()
+        # Only then load the keys (as they should be there now).
         self.url, self.key = key_management.load_era5cli_config()
 
     def fetch(self, dryrun=False):

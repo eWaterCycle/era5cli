@@ -24,6 +24,14 @@ ALL_MONTHS = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", 
 # fmt: on
 
 
+@pytest.fixture(scope="module", autouse=True)
+def my_thing_mock():
+    with mock.patch(
+        "era5cli.fetch.key_management.check_era5cli_config", autospec=True
+    ) as _fixture:
+        yield _fixture
+
+
 def initialize(
     outputformat="netcdf",
     merge=False,
