@@ -73,6 +73,9 @@ docs/doctrees/
 docs/html/
 docs/build/
 
+# mkdocs
+site/
+
 # External Sources
 #src/external
 src/
