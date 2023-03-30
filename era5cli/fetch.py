@@ -79,7 +79,7 @@ class Fetch:
             the data will be downloaded.
         prelimbe: bool
             Whether to download the preliminary back extension (1950-1978).
-            Note that in this case, `years` nust be between 1950 and
+            Note that in this case, `years` must be between 1950 and
             1978. `prelimbe = True` is incompatible with `land = True`.
         land: bool
             Whether to download data from the ERA5-Land dataset.

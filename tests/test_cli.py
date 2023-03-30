@@ -257,7 +257,7 @@ def test_main_fetch(fetch):
     argv = [
         "hourly",
         "--startyear",
-        "1949",
+        "1939",
         "--variables",
         "total_precipitation",
         "--statistics",
