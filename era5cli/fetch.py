@@ -173,6 +173,14 @@ class Fetch:
                 "\neach other. Please pick one of the two."
             )
 
+        if self.prelimbe:
+            logging.warning(
+                "\n  The years of the ERA5 preliminary back extension (1950 - 1978) are"
+                "\n  now included in the main ERA5 products. The `--prelimbe` argument"
+                "\n  will be deprecated in a future release."
+                "\n  Please update your workflow accordingly."
+            )
+
         vars = list(self.variables)  # Use list() to avoid copying by reference
         if "geopotential" in vars and pressurelevels == ["surface"]:
             vars.remove("geopotential")

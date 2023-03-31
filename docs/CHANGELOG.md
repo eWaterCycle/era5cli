@@ -16,6 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  - Change CDS keys from `.cdsapirc` file to `.config/eracli.txt` file. This will avoid conflict with e.g. ADS.
  - If a user makes a request without `--splitmonths` they are warned that the behavior will change in the future, and that they have to choose between `--splitmonths False` and `--splitmonths True`.
  - When a request would encounter a Request Too Large error in the CDS API, they are warned, and given a suggestion to use `--splitmonths`.
+ - The earliest valid start year of requests has been updated to 1950.
+ - Usage of `--prelimbe` now raises a deprecation warning. It will be deprecated in a future release, as all the back extension years are now included in the main products.
+
+**Dev changes:**
+
  - `cli.py` has been refactored to make the structure more clear. Seperate argument builders are now in their own modules.
  - The documentation has been overhauled, and now uses Markdown files & MkDocs.
 
