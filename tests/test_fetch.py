@@ -50,6 +50,7 @@ def initialize(
     prelimbe=False,
     land=False,
     splitmonths=False,
+    overwrite=False,
 ):
     with mock.patch(
         "era5cli.fetch.key_management.load_era5cli_config",
@@ -75,6 +76,7 @@ def initialize(
             prelimbe=prelimbe,
             land=land,
             splitmonths=splitmonths,
+            overwrite=overwrite,
         )
 
 
@@ -664,3 +666,8 @@ def test_file_exists():
         with mock.patch("builtins.input", return_value="N"):
             with pytest.raises(FileExistsError):
                 era5.fetch(dryrun=True)
+
+def test_overwrite():
+    with mock.patch.object(pathlib.Path, "exists", return_value=True):
+        era5 = initialize(overwrite=True)
+        era5.fetch(dryrun=True)

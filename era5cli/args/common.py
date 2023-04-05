@@ -27,6 +27,7 @@ def add_common_args(argument_parser: ArgumentParser) -> None:
         --prelimbe,
         --land,
         --area,
+        --overwrite
 
     Args:
         argument_parser: the ArgumentParser that the arguments are added to.
@@ -242,6 +243,21 @@ def add_common_args(argument_parser: ArgumentParser) -> None:
         ),
     )
 
+    argument_parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        default=False,
+        help=textwrap.dedent(
+            """
+            Whether to overwrite existing files or not.
+            Providing the `--overwrite` argument will make
+            era5cli overwrite existing files. By default,
+            you will be prompted if a file already exists, with
+            the question if you want to overwrite it or not.
+
+            """
+        ),
+    )
 
 def construct_year_list(args):
     """Make a continous list of years from the startyear and endyear arguments."""

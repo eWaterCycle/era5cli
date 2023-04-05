@@ -86,6 +86,12 @@ class Fetch:
             Note that the ERA5-Land dataset starts in 1981.
             `land = True` is incompatible with the use of
             `prelimbe = True` and `ensemble = True`.
+        overwrite: bool
+            Whether to overwrite existing files or not.
+            Setting `overwrite = True` will make
+            era5cli overwrite existing files. By default,
+            you will be prompted if a file already exists, with
+            the question if you want to overwrite it or not.
     """
 
     def __init__(
@@ -108,6 +114,7 @@ class Fetch:
         threads=None,
         prelimbe=False,
         land=False,
+        overwrite=False,
     ):
         """Initialization of Fetch class."""
         self._get_login()  # Get login info from config file.
@@ -166,6 +173,8 @@ class Fetch:
         self.land = land
         """bool: Whether to download from the ERA5-Land
         dataset."""
+        self.overwrite = overwrite
+        """bool: Whether to overwrite existing files."""
 
         if self.merge and self.splitmonths:
             raise ValueError(
@@ -274,7 +283,8 @@ class Fetch:
         outputfiles = [
             self._define_outputfilename(var, self.years) for var in self.variables
         ]
-        era5cli.utils.assert_outputfiles_not_exist(outputfiles)
+        if not self.overwrite:
+            era5cli.utils.assert_outputfiles_not_exist(outputfiles)
 
         years = len(outputfiles) * [self.years]
 
@@ -289,7 +299,8 @@ class Fetch:
             outputfiles += [self._define_outputfilename(var, [yr]) for yr in self.years]
             variables += len(self.years) * [var]
 
-        era5cli.utils.assert_outputfiles_not_exist(outputfiles)
+        if not self.overwrite:
+            era5cli.utils.assert_outputfiles_not_exist(outputfiles)
 
         years = len(self.variables) * self.years
 
@@ -311,7 +322,8 @@ class Fetch:
             years += [year]
             months += [month]
 
-        era5cli.utils.assert_outputfiles_not_exist(outputfiles)
+        if not self.overwrite:
+            era5cli.utils.assert_outputfiles_not_exist(outputfiles)
 
         pool = Pool(nodes=self.threads) if self.threads else Pool()
         pool.map(self._getdata, variables, years, outputfiles, months)

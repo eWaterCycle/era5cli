@@ -214,6 +214,7 @@ def assert_outputfiles_not_exist(outputfiles: List[str]) -> None:
         answer = input(
             "\n  Some filenames already exists in this folder."
             "\n  Do you want to overwrite them? (Y/N)"
+            "\n  Tip: to skip this flag, use `--overwrite`."
         )
         if answer.lower() in ["n", "no", "nope"]:
             raise FileExistsError(
