@@ -1,5 +1,3 @@
-# Contributing to era5cli
-
 ## Bug reports
 
 If you think you have found a bug, please [open a new issue on GitHub](https://github.com/ewatercycle/era5cli/issues).

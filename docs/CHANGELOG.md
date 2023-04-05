@@ -18,11 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  - When a request would encounter a Request Too Large error in the CDS API, they are warned, and given a suggestion to use `--splitmonths`.
  - The earliest valid start year of requests has been updated to 1950.
  - Usage of `--prelimbe` now raises a deprecation warning. It will be deprecated in a future release, as all the back extension years are now included in the main products.
+ - The documentation has been fully overhauled, and now uses Markdown files & MkDocs.
 
 **Dev changes:**
 
  - `cli.py` has been refactored to make the structure more clear. Seperate argument builders are now in their own modules.
- - The documentation has been overhauled, and now uses Markdown files & MkDocs.
 
 ## 1.3.2 - 2021-12-13
 **Changed:**
