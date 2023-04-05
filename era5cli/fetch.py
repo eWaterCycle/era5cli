@@ -92,6 +92,10 @@ class Fetch:
             era5cli overwrite existing files. By default,
             you will be prompted if a file already exists, with
             the question if you want to overwrite it or not.
+        dashed_vars: bool
+            Whether to use dashed variable names in the output
+            files, or the normal names ('temperature-of-snow-layer'
+            instead of 'temperature_of_snow_layer').
     """
 
     def __init__(
@@ -115,6 +119,7 @@ class Fetch:
         prelimbe=False,
         land=False,
         overwrite=False,
+        dashed_vars=False,
     ):
         """Initialization of Fetch class."""
         self._get_login()  # Get login info from config file.
@@ -175,6 +180,9 @@ class Fetch:
         dataset."""
         self.overwrite = overwrite
         """bool: Whether to overwrite existing files."""
+        self.dashed_vars = dashed_vars
+        """bool: Whether to use dashed variable names in the output
+        files, or the normal names."""
 
         if self.merge and self.splitmonths:
             raise ValueError(
@@ -262,7 +270,10 @@ class Fetch:
 
         yearblock = f"{start}-{end}" if start != end else f"{start}"
 
-        fname = f"{prefix}_{var}_{yearblock}"
+        varname = var.replace("_", "-") if self.dashed_vars else var
+
+        fname = f"{prefix}_{varname}_{yearblock}"
+
         if month is not None:
             fname += f"-{month}"
         fname += f"_{self.period}"
