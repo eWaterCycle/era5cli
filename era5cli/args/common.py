@@ -259,6 +259,7 @@ def add_common_args(argument_parser: ArgumentParser) -> None:
         ),
     )
 
+
 def construct_year_list(args):
     """Make a continous list of years from the startyear and endyear arguments."""
     if not args.endyear:
