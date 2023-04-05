@@ -197,7 +197,7 @@ def add_common_args(argument_parser: ArgumentParser) -> None:
             (1950-1978). Note that when `--prelimbe` is used,
             `--startyear` and `--endyear` should be set
             between 1950 and 1978. Please, be aware that
-            ERA5 data is available from 1959.
+            ERA5 data is available from 1940.
             `--prelimbe` is incompatible with `--land`
 
             """
@@ -260,8 +260,8 @@ def construct_year_list(args):
             ), "for ERA5-Land, year should be between 1950 and present"
         else:
             assert (
-                1959 <= year <= datetime.now().year
-            ), "year should be between 1959 and present"
+                1940 <= year <= datetime.now().year
+            ), "year should be between 1940 and present"
 
     assert endyear >= args.startyear, "endyear should be >= startyear or None"
 
