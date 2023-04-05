@@ -667,6 +667,7 @@ def test_file_exists():
             with pytest.raises(FileExistsError):
                 era5.fetch(dryrun=True)
 
+
 def test_overwrite():
     with mock.patch.object(pathlib.Path, "exists", return_value=True):
         era5 = initialize(overwrite=True)
