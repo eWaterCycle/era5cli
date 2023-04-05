@@ -79,7 +79,7 @@ class Fetch:
             the data will be downloaded.
         prelimbe: bool
             Whether to download the preliminary back extension (1950-1978).
-            Note that in this case, `years` nust be between 1950 and
+            Note that in this case, `years` must be between 1950 and
             1978. `prelimbe = True` is incompatible with `land = True`.
         land: bool
             Whether to download data from the ERA5-Land dataset.
@@ -171,6 +171,14 @@ class Fetch:
             raise ValueError(
                 "\nThe commands '--merge' and '--splitmonths' are not compatible with"
                 "\neach other. Please pick one of the two."
+            )
+
+        if self.prelimbe:
+            logging.warning(
+                "\n  The years of the ERA5 preliminary back extension (1950 - 1978) are"
+                "\n  now included in the main ERA5 products. The `--prelimbe` argument"
+                "\n  will be deprecated in a future release."
+                "\n  Please update your workflow accordingly."
             )
 
         vars = list(self.variables)  # Use list() to avoid copying by reference
