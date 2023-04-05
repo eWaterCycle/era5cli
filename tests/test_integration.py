@@ -7,6 +7,14 @@ import pytest
 from era5cli.cli import main
 
 
+@pytest.fixture(scope="module", autouse=True)
+def my_thing_mock():
+    with mock.patch(
+        "era5cli.fetch.key_management.check_era5cli_config", autospec=True
+    ) as _fixture:
+        yield _fixture
+
+
 # combine calls with result and possible warning message
 call_result = [
     {

@@ -185,7 +185,6 @@ def set_period_args(args):
             )
         else:
             splitmonths: bool = args.splitmonths
-        print(splitmonths)
 
         statistics: bool = args.statistics
         if statistics:
