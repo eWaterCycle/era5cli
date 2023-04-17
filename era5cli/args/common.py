@@ -259,6 +259,24 @@ def add_common_args(argument_parser: ArgumentParser) -> None:
         ),
     )
 
+    argument_parser.add_argument(
+        "--dashed-varname",
+        action="store_true",
+        default=False,
+        help=textwrap.dedent(
+            """
+            Whether to use dashed variable names in the output
+            files, or the (default )normal names.
+            Dashed names can allow for easier extraction
+            of the different facets from the filename.
+            For example:
+              'era5_temperature-of-snow-layer_1999_hourly.nc'
+            instead:
+              'era5_temperature_of_snow_layer_1999_hourly.nc'
+            """
+        ),
+    )
+
 
 def construct_year_list(args):
     """Make a continous list of years from the startyear and endyear arguments."""
