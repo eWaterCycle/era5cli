@@ -260,7 +260,7 @@ def add_common_args(argument_parser: ArgumentParser) -> None:
     )
 
     argument_parser.add_argument(
-        "--dashed_varname",
+        "--dashed-varname",
         action="store_true",
         default=False,
         help=textwrap.dedent(
