@@ -4,6 +4,7 @@ import datetime
 import shutil
 import textwrap
 from pathlib import Path
+from typing import List
 import prettytable
 from netCDF4 import Dataset
 import era5cli
@@ -205,3 +206,18 @@ def strtobool(value: str) -> bool:
         "Could not convert string to boolean. Valid inputs are:"
         f"{trues} and {falses} (case insensitive)."
     )
+
+
+def assert_outputfiles_not_exist(outputfiles: List[str]) -> None:
+    """Check if files already exist, and prompt the user if they do."""
+    if any(Path(file).exists() for file in outputfiles):
+        answer = input(
+            "\n  Some filenames already exists in this folder."
+            "\n  Do you want to overwrite them? (Y/N)"
+            "\n  Tip: to skip this flag, use `--overwrite`."
+        )
+        if answer.lower() in ["n", "no", "nope"]:
+            raise FileExistsError(
+                "\n  One or more files already exist in this folder."
+                "\n  Please remove them, or change to a different folder to continue"
+            )

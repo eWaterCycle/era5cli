@@ -86,6 +86,16 @@ class Fetch:
             Note that the ERA5-Land dataset starts in 1981.
             `land = True` is incompatible with the use of
             `prelimbe = True` and `ensemble = True`.
+        overwrite: bool
+            Whether to overwrite existing files or not.
+            Setting `overwrite = True` will make
+            era5cli overwrite existing files. By default,
+            you will be prompted if a file already exists, with
+            the question if you want to overwrite it or not.
+        dashed_vars: bool
+            Whether to use dashed variable names in the output
+            files, or the normal names ('temperature-of-snow-layer'
+            instead of 'temperature_of_snow_layer').
     """
 
     def __init__(
@@ -108,6 +118,8 @@ class Fetch:
         threads=None,
         prelimbe=False,
         land=False,
+        overwrite=False,
+        dashed_vars=False,
     ):
         """Initialization of Fetch class."""
         self._get_login()  # Get login info from config file.
@@ -166,6 +178,11 @@ class Fetch:
         self.land = land
         """bool: Whether to download from the ERA5-Land
         dataset."""
+        self.overwrite = overwrite
+        """bool: Whether to overwrite existing files."""
+        self.dashed_vars = dashed_vars
+        """bool: Whether to use dashed variable names in the output
+        files, or the normal names."""
 
         if self.merge and self.splitmonths:
             raise ValueError(
@@ -197,6 +214,9 @@ class Fetch:
             )
 
     def _get_login(self):
+        # First check if the config exists, and guide the user if it does not.
+        key_management.check_era5cli_config()
+        # Only then load the keys (as they should be there now).
         self.url, self.key = key_management.load_era5cli_config()
 
     def fetch(self, dryrun=False):
@@ -250,7 +270,10 @@ class Fetch:
 
         yearblock = f"{start}-{end}" if start != end else f"{start}"
 
-        fname = f"{prefix}_{var}_{yearblock}"
+        varname = var.replace("_", "-") if self.dashed_vars else var
+
+        fname = f"{prefix}_{varname}_{yearblock}"
+
         if month is not None:
             fname += f"-{month}"
         fname += f"_{self.period}"
@@ -271,11 +294,12 @@ class Fetch:
         outputfiles = [
             self._define_outputfilename(var, self.years) for var in self.variables
         ]
+        if not self.overwrite:
+            era5cli.utils.assert_outputfiles_not_exist(outputfiles)
+
         years = len(outputfiles) * [self.years]
-        if not self.threads:
-            pool = Pool()
-        else:
-            pool = Pool(nodes=self.threads)
+
+        pool = Pool(nodes=self.threads) if self.threads else Pool()
         pool.map(self._getdata, self.variables, years, outputfiles)
 
     def _split_variable_yr(self):
@@ -285,7 +309,12 @@ class Fetch:
         for var in self.variables:
             outputfiles += [self._define_outputfilename(var, [yr]) for yr in self.years]
             variables += len(self.years) * [var]
+
+        if not self.overwrite:
+            era5cli.utils.assert_outputfiles_not_exist(outputfiles)
+
         years = len(self.variables) * self.years
+
         pool = Pool(nodes=self.threads) if self.threads else Pool()
         pool.map(self._getdata, variables, years, outputfiles)
 
@@ -303,6 +332,9 @@ class Fetch:
             variables += [var]
             years += [year]
             months += [month]
+
+        if not self.overwrite:
+            era5cli.utils.assert_outputfiles_not_exist(outputfiles)
 
         pool = Pool(nodes=self.threads) if self.threads else Pool()
         pool.map(self._getdata, variables, years, outputfiles, months)
@@ -501,6 +533,7 @@ class Fetch:
     def _getdata(self, variables: list, years: list, outputfile: str, months=None):
         """Fetch variables using cds api call."""
         name, request = self._build_request(variables, years, months)
+
         if self.dryrun:
             print(name, request, outputfile)
         else:

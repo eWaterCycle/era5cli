@@ -1,5 +1,6 @@
 """Tests for era5cli Fetch class."""
 
+import pathlib
 import unittest.mock as mock
 import pytest
 from era5cli import _request_size
@@ -23,6 +24,14 @@ ALL_MONTHS = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", 
 # fmt: on
 
 
+@pytest.fixture(scope="module", autouse=True)
+def my_thing_mock():
+    with mock.patch(
+        "era5cli.fetch.key_management.check_era5cli_config", autospec=True
+    ) as _fixture:
+        yield _fixture
+
+
 def initialize(
     outputformat="netcdf",
     merge=False,
@@ -41,6 +50,7 @@ def initialize(
     prelimbe=False,
     land=False,
     splitmonths=False,
+    overwrite=False,
 ):
     with mock.patch(
         "era5cli.fetch.key_management.load_era5cli_config",
@@ -66,6 +76,7 @@ def initialize(
             prelimbe=prelimbe,
             land=land,
             splitmonths=splitmonths,
+            overwrite=overwrite,
         )
 
 
@@ -643,3 +654,21 @@ def test_area():
     with pytest.raises(ValueError):
         era5 = initialize(area=[-180, 180, -90])
         era5._build_request("total_precipitation", [2008])
+
+
+def test_file_exists():
+    with mock.patch.object(pathlib.Path, "exists", return_value=True):
+        era5 = initialize()
+
+        with mock.patch("builtins.input", return_value="Y"):
+            era5.fetch(dryrun=True)
+
+        with mock.patch("builtins.input", return_value="N"):
+            with pytest.raises(FileExistsError):
+                era5.fetch(dryrun=True)
+
+
+def test_overwrite():
+    with mock.patch.object(pathlib.Path, "exists", return_value=True):
+        era5 = initialize(overwrite=True)
+        era5.fetch(dryrun=True)

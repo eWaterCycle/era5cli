@@ -27,6 +27,7 @@ def add_common_args(argument_parser: ArgumentParser) -> None:
         --prelimbe,
         --land,
         --area,
+        --overwrite
 
     Args:
         argument_parser: the ArgumentParser that the arguments are added to.
@@ -238,6 +239,40 @@ def add_common_args(argument_parser: ArgumentParser) -> None:
             to two decimals. By default, the entire
             available area will be returned
 
+            """
+        ),
+    )
+
+    argument_parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        default=False,
+        help=textwrap.dedent(
+            """
+            Whether to overwrite existing files or not.
+            Providing the `--overwrite` argument will make
+            era5cli overwrite existing files. By default,
+            you will be prompted if a file already exists, with
+            the question if you want to overwrite it or not.
+
+            """
+        ),
+    )
+
+    argument_parser.add_argument(
+        "--dashed-varname",
+        action="store_true",
+        default=False,
+        help=textwrap.dedent(
+            """
+            Whether to use dashed variable names in the output
+            files, or the (default )normal names.
+            Dashed names can allow for easier extraction
+            of the different facets from the filename.
+            For example:
+              'era5_temperature-of-snow-layer_1999_hourly.nc'
+            instead:
+              'era5_temperature_of_snow_layer_1999_hourly.nc'
             """
         ),
     )
