@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
  - Add validator for `era5cli.txt` keys. This should provide better feedback to users and reduce user error.
  - Added --splitmonths argument for `era5cli hourly`. This allows users to avoid a Request Too Large error.
+ - Added --dashed-varname argument, to produce names where the variable name is separated using hyphens. For example: `soil-type` vs. `soil_type`. For the ongoing discussion, see [#53](https://github.com/eWaterCycle/era5cli/issues/53).
 
 **Changed:**
 
