@@ -17,7 +17,8 @@ nav:
   - "Contributing":
     - contribute.md
   - "Developer Documentation":
-    - dev.md
+    - general_development.md
+    - development_era5cli.md
   - "Changelog":
     - CHANGELOG.md
 

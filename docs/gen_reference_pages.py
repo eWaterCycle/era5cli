@@ -76,7 +76,7 @@ with mkdocs_gen_files.open(filename, "a") as f:  # Only append to file (!)
         ) as process:
             stdout, stderr = process.communicate()
         helpstr = stdout.decode("utf-8")
-        helpstr = helpstr[helpstr.index("optional arguments") :]
+        helpstr = helpstr[helpstr.index("option") :]
 
         # Split out \r\n (for Windows only?)
         split_str = helpstr.splitlines()

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
  - Add validator for `era5cli.txt` keys. This should provide better feedback to users and reduce user error.
  - Added --splitmonths argument for `era5cli hourly`. This allows users to avoid a Request Too Large error.
+ - Added --dashed-varname argument, to produce names where the variable name is separated using hyphens. For example: `soil-type` vs. `soil_type`. For the ongoing discussion, see [#53](https://github.com/eWaterCycle/era5cli/issues/53).
 
 **Changed:**
 
@@ -19,11 +20,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  - When a file already exists and would be overwritten, the user is prompted for confirmation. This should prevent accidental overwriting of files. This check can be skipped with the `--overwrite` flag.
  - The earliest valid start year of requests has been updated to 1950.
  - Usage of `--prelimbe` now raises a deprecation warning. It will be deprecated in a future release, as all the back extension years are now included in the main products.
+ - The documentation has been fully overhauled, and now uses Markdown files & MkDocs.
 
 **Dev changes:**
 
  - `cli.py` has been refactored to make the structure more clear. Seperate argument builders are now in their own modules.
- - The documentation has been overhauled, and now uses Markdown files & MkDocs.
 
 ## 1.3.2 - 2021-12-13
 **Changed:**
