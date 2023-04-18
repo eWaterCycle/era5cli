@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## 1.4.0 - 2021-12-13
+## 1.4.0 - 2023-04-18
 **Added:**
 
  - Add validator for `era5cli.txt` keys. This should provide better feedback to users and reduce user error ([#138](https://github.com/eWaterCycle/era5cli/pull/138)).
