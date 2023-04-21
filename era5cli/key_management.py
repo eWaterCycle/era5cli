@@ -5,7 +5,7 @@ import cdsapi
 from requests.exceptions import ConnectionError  # pylint: disable=redefined-builtin
 
 
-ERA5CLI_CONFIG_PATH = Path.home() / ".config" / "era5cli" / "keys.txt"
+ERA5CLI_CONFIG_PATH = Path.home() / ".config" / "era5cli" / "cds_key.txt"
 CDSAPI_CONFIG_PATH = Path.home() / ".cdsapirc"
 DEFAULT_CDS_URL = "https://cds.climate.copernicus.eu/api/v2"
 
@@ -141,7 +141,7 @@ def valid_cdsapi_config() -> bool:
                     "these for era5cli? [Y/n]"
                 )
                 if userinput in ["Y", "y", "Yes", "yes"]:
-                    write_era5cli_config(
+                    set_config(
                         url, uid=fullkey.split(":")[0], key=fullkey.split(":")[1]
                     )
                     return True

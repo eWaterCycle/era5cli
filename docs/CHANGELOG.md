@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Changed:**
 
- - Change CDS keys from cdsapi default `.cdsapirc` file to `.config/era5cli/keys.txt` file ([#138](https://github.com/eWaterCycle/era5cli/pull/138)).
+ - Change CDS keys from cdsapi default `.cdsapirc` file to `.config/era5cli/cds_key.txt` file ([#138](https://github.com/eWaterCycle/era5cli/pull/138)).
    - This will avoid conflict with e.g. ADS keys
    - The user can configure the keys using `era5cli config`, no need to create a file in the right location.
  - When a request would encounter a Request Too Large error in the CDS API, they are warned, and given a suggestion to use `--splitmonths` ([#138](https://github.com/eWaterCycle/era5cli/pull/138)).

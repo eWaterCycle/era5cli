@@ -48,7 +48,7 @@ era5cli config --uid ID_NUMBER --key "KEY"
 
 *Where ID_NUMBER is your user ID (e.g. 123456) and "KEY" is your API key, inside double quotes (e.g. "4s215sgs-2dfa-6h34-62h2-1615ad163414").*
 
-After running this command your ID and key are validated and stored inside your home folder, under `.config/era5cli/keys.txt`.
+After running this command your ID and key are validated and stored inside your home folder, under `.config/era5cli/cds_key.txt`.
 
 !!! note
     If you already have a `.cdsapirc` file for the CDS api (or older version of era5cli), you will be asked if you want to copy these keys upon making an `era5cli` request.

@@ -212,9 +212,10 @@ def assert_outputfiles_not_exist(outputfiles: List[str]) -> None:
     """Check if files already exist, and prompt the user if they do."""
     if any(Path(file).exists() for file in outputfiles):
         answer = input(
-            "\n  Some filenames already exists in this folder."
+            "\n  Some file(s) that will be downloaded already exist in this folder."
             "\n  Do you want to overwrite them? (Y/N)"
             "\n  Tip: to skip this flag, use `--overwrite`."
+            "\n"
         )
         if answer.lower() in ["n", "no", "nope"]:
             raise FileExistsError(
