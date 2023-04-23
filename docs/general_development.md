@@ -119,14 +119,14 @@ The release title is the tag and the release date together (e.g.: v1.0.0 (2019-0
 
 ??? note "Release candidates"
     When releasing a release candidate on Github, tick the pre-release box, and amend the version tag with `-rc` and the candidate number.
-    Ensure the release candidate version is accurate in `CITATION.cff` and `era5cli/__version__.py`. 
+    Ensure the release candidate version is accurate in `CITATION.cff` and `era5cli/__version__.py`.
     If the version number in these files is not updated, Zenodo release workflows will fail.
 
     Publishing a new release in github triggers the github Action workflow that builds and publishes the package to test.PyPI or PyPI.
     Versions with "rc" (release candidate) in their version tag will only be published to test.PyPI.
-    Other version tags will trigger a PyPI release. 
+    Other version tags will trigger a PyPI release.
     Inspect `.github/workflows/publish-to-pypi.yml` for more information.
-    
+
     Confirm a release candidate on test.PyPI with:
     ```
     pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ era5cli
@@ -149,3 +149,10 @@ After making the release, you should check that:
 ??? note "Adding contributors to the Research Software Directory (RSD)"
     If any contributors have been added, or the description of the software has changed, this can be edited (by eScience Center employees) via the [RSD admin interface](https://www.research-software.nl/admin/).
     More information about this process (e.g. how to add a new contributor or new affiliation) can be found in the [RSD documentation](https://github.com/research-software-directory/research-software-directory/blob/master/docs/entering-data.md) or in [this blogpost](https://blog.esciencecenter.nl/the-research-software-directory-and-how-it-promotes-software-citation-4bd2137a6b8).
+
+??? note "Maintaining the conda-forge release"
+    The new release on pypi will trigger the [conda-forge feedstock](https://github.com/conda-forge/era5cli-feedstock) to be automatically updated.
+
+    If nothing changed to the built configuration, the automatic pull request should pass all tests, and can be merged by one of the maintainers.
+
+    If the built changed, you can fork the feedstock repository to your own account, re-generate the `recipes/meta.yml` file (for example with [Grayskull](https://github.com/conda/grayskull)), and create a pull request to the feedstock.
