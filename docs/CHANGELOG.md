@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  - When a request would encounter a Request Too Large error in the CDS API, they are warned, and given a suggestion to use `--splitmonths` ([#138](https://github.com/eWaterCycle/era5cli/pull/138)).
  - If a user makes a request without `--splitmonths` they are warned that the behavior will change in the future, and that they have to choose between `--splitmonths False` and `--splitmonths True`
  - When a file already exists and would be overwritten, the user is prompted for confirmation. This should prevent accidental overwriting of files. This check can be skipped with the `--overwrite` flag ([#143](https://github.com/eWaterCycle/era5cli/pull/143)).
- - The earliest valid start year of requests has been updated to 1950 ([#146](https://github.com/eWaterCycle/era5cli/pull/146)).
+ - The earliest valid start year of ERA5 requests has been updated to 1940 (for ERA5-land it is still 1950) ([#146](https://github.com/eWaterCycle/era5cli/pull/146)).
  - Usage of `--prelimbe` now raises a deprecation warning. It will be deprecated in a future release, as all the back extension years are now included in the main products ([#147](https://github.com/eWaterCycle/era5cli/pull/147)).
  - The documentation has been fully overhauled, and now uses Markdown files & MkDocs ([#142](https://github.com/eWaterCycle/era5cli/pull/142), [#144](https://github.com/eWaterCycle/era5cli/pull/144)).
 
