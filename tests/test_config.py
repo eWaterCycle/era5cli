@@ -71,7 +71,8 @@ class TestConfigCdsrc:
         mp2 = patch("era5cli.key_management.attempt_cds_login", return_value=True)
         mp3 = patch("era5cli.key_management.ERA5CLI_CONFIG_PATH", empty_path_era5)
         mp4 = patch("era5cli.key_management.CDSAPI_CONFIG_PATH", valid_path_cds)
-        with mp1, mp2, mp3, mp4:
+        mp5 = patch("sys.stdin.isatty", return_value=True)
+        with mp1, mp2, mp3, mp4, mp5:
             key_management.check_era5cli_config()
             with open(empty_path_era5, "r", encoding="utf-8") as f:
                 assert f.readlines() == ["url: a\n", "uid: 123\n", "key: abc-def\n"]

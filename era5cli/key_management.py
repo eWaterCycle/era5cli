@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 from typing import Tuple
 import cdsapi
@@ -135,7 +136,7 @@ def valid_cdsapi_config() -> bool:
     if CDSAPI_CONFIG_PATH.exists():
         url, fullkey = load_cdsapi_config()
         try:
-            if attempt_cds_login(url, fullkey):
+            if sys.stdin.isatty() and attempt_cds_login(url, fullkey):
                 userinput = input(
                     "Valid CDS keys found in the .cdsapirc file. Do you want to use "
                     "these for era5cli? [Y/n]"

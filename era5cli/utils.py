@@ -1,8 +1,8 @@
 """Utility functions."""
 
 import datetime
-import sys
 import shutil
+import sys
 import textwrap
 from pathlib import Path
 from typing import List
@@ -222,7 +222,8 @@ def assert_outputfiles_not_exist(outputfiles: List[str]) -> None:
             if answer.lower() in ["n", "no", "nope"]:
                 raise FileExistsError(
                     "\n  One or more files already exist in this folder."
-                    "\n  Please remove them, or change to a different folder to continue"
+                    "\n  Please remove them, or change to a different folder"
+                    "\n  to continue."
                 )
         else:
             raise FileExistsError(
