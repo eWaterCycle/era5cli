@@ -59,7 +59,8 @@ class TestConfigCdsrc:
         mp2 = patch("era5cli.key_management.attempt_cds_login", return_value=True)
         mp3 = patch("era5cli.key_management.ERA5CLI_CONFIG_PATH", empty_path_era5)
         mp4 = patch("era5cli.key_management.CDSAPI_CONFIG_PATH", valid_path_cds)
-        with mp1, mp2, mp3, mp4:
+        mp5 = patch("sys.stdin.isatty", return_value=True)
+        with mp1, mp2, mp3, mp4, mp5:
             with pytest.raises(
                 key_management.InvalidLoginError, match="No valid CDS login found"
             ):
@@ -85,7 +86,8 @@ class TestConfigCdsrc:
         )
         mp2 = patch("era5cli.key_management.ERA5CLI_CONFIG_PATH", empty_path_era5)
         mp3 = patch("era5cli.key_management.CDSAPI_CONFIG_PATH", valid_path_cds)
-        with mp1, mp2, mp3:
+        mp4 = patch("sys.stdin.isatty", return_value=True)
+        with mp1, mp2, mp3, mp4:
             with pytest.raises(
                 key_management.InvalidLoginError, match="No valid CDS login found"
             ):
