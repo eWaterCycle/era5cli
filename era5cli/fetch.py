@@ -3,6 +3,7 @@
 import itertools
 import logging
 import os
+import sys
 import cdsapi
 from pathos.threading import ThreadPool as Pool
 import era5cli.inputref as ref
@@ -545,7 +546,12 @@ class Fetch:
                 "please do not kill this process in the meantime.",
                 os.linesep,
             )
-            connection = cdsapi.Client(url=self.url, key=self.key, verify=True)
+            connection = cdsapi.Client(
+                url=self.url,
+                key=self.key,
+                verify=True,
+                progress=sys.stdin.isatty(),  # only show progress in interactive sesh.
+            )
             print("".join(queueing_message))  # print queueing message
             connection.retrieve(name, request, outputfile)
             era5cli.utils.append_history(name, request, outputfile)
