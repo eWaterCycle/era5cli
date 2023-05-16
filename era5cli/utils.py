@@ -216,7 +216,7 @@ def assert_outputfiles_not_exist(outputfiles: List[str]) -> None:
         if sys.stdin.isatty():  # only ask for input if the user can reply.
             answer = input(
                 "\n  Some file(s) that will be downloaded already exist in this folder."
-                "\n  To skip this flag, use `--overwrite`."
+                "\n  To always overwrite use `--overwrite` flag."
                 "\n  Do you want to overwrite any existing files? (Y/N)"
             )
         if answer.lower() not in ["y", "yes", "yup", "ja"]:
