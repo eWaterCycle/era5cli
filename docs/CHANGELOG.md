@@ -14,8 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 **Added:**
 
  - Add validator for user's CDS keys. This should provide better feedback to users and reduce user error ([#138](https://github.com/eWaterCycle/era5cli/pull/138)).
- - Added `--splitmonths` argument for `era5cli hourly`. This allows users to avoid a Request Too Large error ([#138](https://github.com/eWaterCycle/era5cli/pull/138)).
- - When a request would encounter a Request Too Large error in the CDS API, they are warned, and given a suggestion to use the new `--splitmonths` argument ([#138](https://github.com/eWaterCycle/era5cli/pull/138)).
+ - Added `--splitmonths` argument for `era5cli hourly`. This allows users to avoid a Request Too Large error ([#139](https://github.com/eWaterCycle/era5cli/pull/139)).
+ - When a request would encounter a Request Too Large error in the CDS API, they are warned, and given a suggestion to use the new `--splitmonths` argument ([#139](https://github.com/eWaterCycle/era5cli/pull/139)).
  - Added -`-dashed-varname` argument, to produce file names where the variable name is separated using dashes. For example: `soil-type` vs. `soil_type`. For the ongoing discussion, see [#53](https://github.com/eWaterCycle/era5cli/issues/53).
 
 **Changed:**
@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  - Change CDS keys from cdsapi default `.cdsapirc` file to `.config/era5cli/cds_key.txt` file ([#138](https://github.com/eWaterCycle/era5cli/pull/138)).
    - This will avoid conflict with e.g. ADS keys
    - The user can configure the keys using `era5cli config`, no need to create a file in the right location.
- - When a request would encounter a Request Too Large error in the CDS API, they are warned, and given a suggestion to use `--splitmonths` ([#138](https://github.com/eWaterCycle/era5cli/pull/138)).
+ - When a request would encounter a Request Too Large error in the CDS API, they are warned, and given a suggestion to use `--splitmonths` ([#139](https://github.com/eWaterCycle/era5cli/pull/139)).
  - If a user makes a request without `--splitmonths` they are warned that the behavior will change in the future, and that they have to choose between `--splitmonths False` and `--splitmonths True`
  - When a file already exists and would be overwritten, the user is prompted for confirmation. This should prevent accidental overwriting of files. This check can be skipped with the `--overwrite` flag ([#143](https://github.com/eWaterCycle/era5cli/pull/143)).
  - The earliest valid start year of ERA5 requests has been updated to 1940 (for ERA5-land it is still 1950) ([#146](https://github.com/eWaterCycle/era5cli/pull/146)).
