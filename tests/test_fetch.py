@@ -660,12 +660,19 @@ def test_file_exists():
     with mock.patch.object(pathlib.Path, "exists", return_value=True):
         era5 = initialize()
 
-        with mock.patch("builtins.input", return_value="Y"):
+        mp_yes = mock.patch("builtins.input", return_value="Y")
+        mp_no = mock.patch("builtins.input", return_value="N")
+        mp_atty = mock.patch("sys.stdin.isatty", return_value=True)
+        with mp_yes, mp_atty:
             era5.fetch(dryrun=True)
 
-        with mock.patch("builtins.input", return_value="N"):
+        with mp_no, mp_atty:
             with pytest.raises(FileExistsError):
                 era5.fetch(dryrun=True)
+
+        # Last one should have isatty->False.
+        with pytest.raises(FileExistsError):
+            era5.fetch(dryrun=True)
 
 
 def test_overwrite():

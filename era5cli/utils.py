@@ -2,6 +2,7 @@
 
 import datetime
 import shutil
+import sys
 import textwrap
 from pathlib import Path
 from typing import List
@@ -211,14 +212,17 @@ def strtobool(value: str) -> bool:
 def assert_outputfiles_not_exist(outputfiles: List[str]) -> None:
     """Check if files already exist, and prompt the user if they do."""
     if any(Path(file).exists() for file in outputfiles):
-        answer = input(
-            "\n  Some file(s) that will be downloaded already exist in this folder."
-            "\n  Do you want to overwrite them? (Y/N)"
-            "\n  Tip: to skip this flag, use `--overwrite`."
-            "\n"
-        )
-        if answer.lower() in ["n", "no", "nope"]:
+        answer = "no"  # default answer for non-interactive sessions
+        if sys.stdin.isatty():  # only ask for input if the user can reply.
+            answer = input(
+                "\n  Some file(s) that will be downloaded already exist in this folder."
+                "\n  To always overwrite use `--overwrite` flag."
+                "\n  Do you want to overwrite any existing files? (Y/N)"
+            )
+        if answer.lower() not in ["y", "yes", "yup", "ja"]:
             raise FileExistsError(
                 "\n  One or more files already exist in this folder."
-                "\n  Please remove them, or change to a different folder to continue"
+                "\n  Please remove them, change to a different folder, or use the"
+                "\n  --overwrite flag to always overwrite existing files."
+                "\n"
             )

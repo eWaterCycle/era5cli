@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+**Changed:**
+ 
+ - Before asking for a user input, a check is made if the code is running in an interactive terminal or not. If not (e.g. if era5cli is called through a different script and stdin is not available), the input request is skipped.
+
+
 ## 1.4.0 - 2023-04-21
 **Added:**
 
