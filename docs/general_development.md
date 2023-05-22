@@ -153,6 +153,6 @@ After making the release, you should check that:
 ??? note "Maintaining the conda-forge release"
     The new release on pypi will trigger the [conda-forge feedstock](https://github.com/conda-forge/era5cli-feedstock) to be automatically updated.
 
-    If nothing changed to the built configuration, the automatic pull request should pass all tests, and can be merged by one of the maintainers.
+    If nothing changed to the build configuration, the automatic pull request should pass all tests, and can be merged by one of the maintainers.
 
-    If the built changed, you can fork the feedstock repository to your own account, re-generate the `recipes/meta.yml` file (for example with [Grayskull](https://github.com/conda/grayskull)), and create a pull request to the feedstock.
+    If the build changed, you can fork the feedstock repository to your own account, re-generate the `recipes/meta.yml` file (for example with [Grayskull](https://github.com/conda/grayskull)), and create a pull request to the feedstock.
