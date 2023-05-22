@@ -150,9 +150,9 @@ After making the release, you should check that:
     If any contributors have been added, or the description of the software has changed, this can be edited (by eScience Center employees) via the [RSD admin interface](https://www.research-software.nl/admin/).
     More information about this process (e.g. how to add a new contributor or new affiliation) can be found in the [RSD documentation](https://github.com/research-software-directory/research-software-directory/blob/master/docs/entering-data.md) or in [this blogpost](https://blog.esciencecenter.nl/the-research-software-directory-and-how-it-promotes-software-citation-4bd2137a6b8).
 
-??? note "Maintaining the conda-forge release"
-    The new release on pypi will trigger the [conda-forge feedstock](https://github.com/conda-forge/era5cli-feedstock) to be automatically updated.
+### Maintaining the conda-forge release
+The new release on pypi will trigger the [conda-forge feedstock](https://github.com/conda-forge/era5cli-feedstock) to be automatically updated.
 
-    If nothing changed to the build configuration, the automatic pull request should pass all tests, and can be merged by one of the maintainers.
+If nothing changed to the build configuration, the automatic pull request should pass all tests, and can be merged by one of the maintainers.
 
-    If the build changed, you can fork the feedstock repository to your own account, re-generate the `recipes/meta.yml` file (for example with [Grayskull](https://github.com/conda/grayskull)), and create a pull request to the feedstock.
+If the build changed, you can fork the feedstock repository to your own account, re-generate the `recipes/meta.yml` file (for example with [Grayskull](https://github.com/conda/grayskull)), and create a pull request to the feedstock.
