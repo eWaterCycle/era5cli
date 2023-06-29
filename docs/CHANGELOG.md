@@ -6,13 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+
+
+## 1.4.1 - 2023-06-29
+**Fixed:**
+
+ - Fix a bug that prevented the creation of the configuration file, if the "~/.config" folder did not exist yet ([#153](https://github.com/eWaterCycle/era5cli/pull/154)).
+
 **Added:**
 
-- The developer documentation now contains instructions on how to maintain the conda-forge feedstock for era5cli.
+- The developer documentation now contains instructions on how to maintain the conda-forge feedstock for era5cli ([#150](https://github.com/eWaterCycle/era5cli/pull/154)).
 
 **Changed:**
  
- - Before asking for a user input, a check is made if the code is running in an interactive terminal or not. If not (e.g. if era5cli is called through a different script and stdin is not available), the input request is skipped.
+ - Before asking for a user input, a check is made if the code is running in an interactive terminal or not. If not (e.g. if era5cli is called through a different script and stdin is not available), the input request is skipped ([#152](https://github.com/eWaterCycle/era5cli/pull/154)).
 
 
 ## 1.4.0 - 2023-04-21
