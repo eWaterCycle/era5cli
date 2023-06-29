@@ -6,12 +6,13 @@ from era5cli import key_management
 
 @pytest.fixture(scope="function")
 def empty_path_era5(tmp_path_factory):
-    return tmp_path_factory.mktemp(".config") / "era5cli.txt"
+    return tmp_path_factory.mktemp("usrhome") / ".config" / "era5cli" / "cds_keys.txt"
 
 
 @pytest.fixture(scope="function")
 def valid_path_era5(tmp_path_factory):
-    fn = tmp_path_factory.mktemp(".config") / "era5cli.txt"
+    fn = tmp_path_factory.mktemp(".config") / "era5cli" / "cds_keys.txt"
+    fn.parent.mkdir(parents=True)
     with open(fn, mode="w", encoding="utf-8") as f:
         f.write("url: b\nuid: 123\nkey: abc-def\n")
     return fn
@@ -31,7 +32,11 @@ def valid_path_cds(tmp_path_factory):
 
 
 class TestEra5CliConfig:
-    """Test the functionality when the /.config/era5cli.txt file exists."""
+    """Test the functionality for writing and loading the config file."""
+    def test_set_config(self, empty_path_era5):
+        with patch("era5cli.key_management.ERA5CLI_CONFIG_PATH", empty_path_era5):
+            key_management.write_era5cli_config(url="b", uid="123", key="abc-def")
+            assert key_management.load_era5cli_config() == ("b", "123:abc-def")
 
     def test_load_era5cli_config(self, valid_path_era5):
         with patch("era5cli.key_management.ERA5CLI_CONFIG_PATH", valid_path_era5):

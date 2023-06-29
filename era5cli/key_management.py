@@ -160,7 +160,7 @@ def load_era5cli_config() -> Tuple[str, str]:
 
 
 def write_era5cli_config(url: str, uid: str, key: str):
-    ERA5CLI_CONFIG_PATH.parent.mkdir(exist_ok=True)
+    ERA5CLI_CONFIG_PATH.parent.mkdir(exist_ok=True, parents=True)
     with open(ERA5CLI_CONFIG_PATH, mode="w", encoding="utf-8") as f:
         f.write(f"url: {url}\n")
         f.write(f"uid: {uid}\n")
