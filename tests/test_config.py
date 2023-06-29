@@ -33,6 +33,7 @@ def valid_path_cds(tmp_path_factory):
 
 class TestEra5CliConfig:
     """Test the functionality for writing and loading the config file."""
+
     def test_set_config(self, empty_path_era5):
         with patch("era5cli.key_management.ERA5CLI_CONFIG_PATH", empty_path_era5):
             key_management.write_era5cli_config(url="b", uid="123", key="abc-def")
