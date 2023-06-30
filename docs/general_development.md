@@ -80,6 +80,17 @@ hatch run format
 
 This will apply the `black` and `isort` formatting, and then check the code style.
 
+??? tip "Using pre-commit"
+    For pre-commit users, a pre-commit configuration has been added. This hook will execute the `hatch run format` command. 
+
+    After installing pre-commit in your python environment (`pip install pre-commit`), you can do
+    ```
+    pre-commit install
+    ```
+    to set up the git hook scripts.
+
+    For more information, see the [pre-commit website](https://pre-commit.com/).
+
 ## Generating the documentation
 
 To view the documentation locally, simply run the following command:
