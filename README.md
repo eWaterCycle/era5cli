@@ -6,7 +6,7 @@
 [![fair-software.eu](https://img.shields.io/badge/fair--software.eu-%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8B-yellow)](https://fair-software.eu)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3252665.svg)](https://doi.org/10.5281/zenodo.3252665)
 
-[![Documentation Status](https://readthedocs.org/projects/era5cli/badge/?version=stable)](https://lilio.readthedocs.io/en/stable/?badge=stable)
+[![Documentation Status](https://readthedocs.org/projects/era5cli/badge/?version=stable)](https://era5cli.readthedocs.io/en/stable/?badge=stable)
 [![build](https://github.com/eWaterCycle/era5cli/actions/workflows/test_and_build.yml/badge.svg)](https://github.com/eWaterCycle/era5cli/actions/workflows/test_and_build.yml)
 [![Test Coverage](https://codecov.io/gh/eWaterCycle/era5cli/branch/main/graph/badge.svg?token=qeZXgGASBK)](https://codecov.io/gh/eWaterCycle/era5cli)
 [![PyPI](https://badge.fury.io/py/era5cli.svg)](https://badge.fury.io/py/era5cli)
