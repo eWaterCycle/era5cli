@@ -7,11 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 1.4.2 - 2023-12-12
+
+**Fixed:**
+
+ - Fixed a typo in the error message when an invalid area was given ([#160](https://github.com/eWaterCycle/era5cli/pull/160)).
+ - Fixed pressing Enter not working for the default input in the "*Valid CDS keys found in the .cdsapirc file. Do you want to use these for era5cli? [Y/n]*" prompt ([#160](https://github.com/eWaterCycle/era5cli/pull/160)).
+
+**Added:**
+ 
+ - era5cli is now available for Python 3.11 ([#160](https://github.com/eWaterCycle/era5cli/pull/160)).
+
+**Removed:**
+
+- Support for Python 3.7 has been removed. It's [end-of-life](https://devguide.python.org/versions/#unsupported-versions) was 2023-06-27 ([#160](https://github.com/eWaterCycle/era5cli/pull/160)).
+
 
 ## 1.4.1 - 2023-06-30
 **Fixed:**
 
- - Fix a bug that prevented the creation of the configuration file, if the "~/.config" folder did not exist yet ([#153](https://github.com/eWaterCycle/era5cli/pull/154)).
+ - Fix a bug that prevented the creation of the configuration file, if the "~/.config" folder did not exist yet ([#154](https://github.com/eWaterCycle/era5cli/pull/154)).
 
 **Added:**
 
