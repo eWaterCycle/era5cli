@@ -26,4 +26,4 @@ __author__ = (
     "Bart Schilperoort",
 )
 __email__ = "ewatercycle@esciencecenter.nl"
-__version__ = "1.4.1"
+__version__ = "1.4.2"
