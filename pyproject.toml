@@ -70,7 +70,7 @@ era5cli="era5cli.cli:main"
 [project.optional-dependencies]
 dev = [
   "hatch",
-  "bump2version",
+  "bump-my-version",
   "flake8",
   "flake8-pyproject",
   "black",
