@@ -141,7 +141,7 @@ def valid_cdsapi_config() -> bool:
                     "Valid CDS keys found in the .cdsapirc file. Do you want to use "
                     "these for era5cli? [Y/n]"
                 )
-                if userinput in ["Y", "y", "Yes", "yes"]:
+                if userinput.lower() in ["y", "yes", ""]:
                     set_config(
                         url, uid=fullkey.split(":")[0], key=fullkey.split(":")[1]
                     )
