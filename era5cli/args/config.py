@@ -10,7 +10,6 @@ def add_config_args(subparsers: argparse._SubParsersAction) -> None:
 
     Adds the 'config' parser with the following arguments:
         --show
-        --uid
         --key
         --url
 
@@ -27,7 +26,7 @@ def add_config_args(subparsers: argparse._SubParsersAction) -> None:
             This will create a config file in your home directory, in folder named
             ".config". The CDS URL, your UID and the CDS keys will be stored here.
 
-            To find your key and UID, go to https://cds.climate.copernicus.eu/ and
+            To find your key, go to https://beta-cds.climate.copernicus.eu/ and
             login with your email and password. Then go to your user profile (top
             right).
 
@@ -50,16 +49,6 @@ def add_config_args(subparsers: argparse._SubParsersAction) -> None:
         help=textwrap.dedent(
             """
             Print the stored keys to the screen.
-            """
-        ),
-    )
-
-    config.add_argument(
-        "--uid",
-        type=str,
-        help=textwrap.dedent(
-            """
-            Your CDS User ID, e.g.: 123456
             """
         ),
     )
@@ -101,27 +90,15 @@ def run_config(args):
 
     Args:
         args: Arguments collected by argparse
-
-    Returns:
-        True
     """
-    if args.show and any((args.uid, args.key)):
+    if args.show and args.key is not None:
         raise InputError("Either call `show` or set the key. Not both.")
-    if not args.show and (args.uid is None or args.key is None):
-        raise InputError("Both the UID and the key are required inputs.")
+    if not args.show and args.key is None:
+        raise InputError("Your CDS API key is a required input.")
     if args.show:
-        url, fullkey = key_management.load_era5cli_config()
-        uid, key = fullkey.split(":")
+        url, key = key_management.load_era5cli_config()
         print(
-            "Contents of .config/era5cli.txt:\n"
-            f"    uid: {uid}\n"
-            f"    key: {key}\n"
-            f"    url: {url}\n"
+            "Contents of .config/era5cli.txt:\n" f"    url: {url}\n" f"    key: {key}\n"
         )
-        return True
-
-    return key_management.set_config(
-        url=args.url,
-        uid=args.uid,
-        key=args.key,
-    )
+    else:
+        key_management.set_config(args.url, args.key)
