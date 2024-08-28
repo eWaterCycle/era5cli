@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 2.0.0b1 - 2024-08-25
+
+**Fixed:**
+
+ - Added support for the beta-CDS
+
 ## 1.4.2 - 2023-12-12
 
 **Fixed:**

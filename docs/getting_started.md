@@ -43,10 +43,10 @@ After activating your account, **login** on the CDS website, go to your **profil
 To configure era5cli to use these keys, open up the environment you installed era5cli in, and do:
 
 ```sh
-era5cli config --uid ID_NUMBER --key "KEY"
+era5cli config --key "KEY"
 ```
 
-*Where ID_NUMBER is your user ID (e.g. 123456) and "KEY" is your API key, inside double quotes (e.g. "4s215sgs-2dfa-6h34-62h2-1615ad163414").*
+*Where "KEY" is your API key, inside double quotes (e.g. "4s215sgs-2dfa-6h34-62h2-1615ad163414").*
 
 After running this command your ID and key are validated and stored inside your home folder, under `.config/era5cli/cds_key.txt`.
 
