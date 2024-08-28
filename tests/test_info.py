@@ -1,4 +1,5 @@
 """Tests for era5cli Fetch class."""
+
 import pytest
 from era5cli import info
 

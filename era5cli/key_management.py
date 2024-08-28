@@ -27,7 +27,7 @@ def attempt_cds_login(url: str, key: str) -> True:
 
     Args:
         url: URL to the CDS API.
-        fullkey: Combination of your UID and key, separated with a colon.
+        key: Combination of your UID and key, separated with a colon.
 
     Raises:
         ConnectionError: If no connection to the CDS could be made.
@@ -173,13 +173,12 @@ def write_era5cli_config(url: str, key: str):
 def load_cdsapi_config() -> Tuple[str, str]:
     with open(CDSAPI_CONFIG_PATH, encoding="utf-8") as f:
         url = f.readline().replace("url:", "").strip()
-        key_line = f.readline()
-        if ":" in key_line or "api/v2" in url:
+        key = f.readline().replace("key:", "").strip()
+        if ":" in key or "api/v2" in url:
             msg = (
                 "Your CDS API configuration file contains a UID entry/incorrect URL.\n"
                 "Please look at the new CDS website, and reconfigure your key:\n"
                 "    https://cds-beta.climate.copernicus.eu/"
             )
             raise InvalidLoginError(msg)
-        fullkey = f.readline().replace("key:", "").strip()
-    return url, fullkey
+    return url, key

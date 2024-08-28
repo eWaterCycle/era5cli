@@ -316,8 +316,6 @@ def test_main_info(info):
 
 config_args = [
     "config",
-    "--uid",
-    "123456",
     "--key",
     "abc-def",
 ]
@@ -325,7 +323,6 @@ config_args = [
 
 def test_config_parse():
     args = cli._parse_args(config_args)
-    assert args.uid == "123456"
     assert args.key == "abc-def"
 
 
@@ -347,7 +344,7 @@ def test_config_invalid(mock_a, mock_b, capfd):
     args = cli._parse_args(config_args)
     cli._execute(args)
     out, _ = capfd.readouterr()
-    assert "Error: the UID and key are rejected" in out
+    assert "Error: the key is rejected by the CDS." in out
 
 
 class TestConfigControlFlow:
@@ -355,7 +352,7 @@ class TestConfigControlFlow:
 
     @mock.patch(
         "era5cli.key_management.load_era5cli_config",
-        return_value=("https://www.test.org/", "123:abc-def"),
+        return_value=("https://www.test.org/", "abc-def"),
     )
     def test_config_show(self, mock, capsys):
         args = cli._parse_args(["config", "--show"])
@@ -363,7 +360,6 @@ class TestConfigControlFlow:
 
         expected = (
             "Contents of .config/era5cli.txt:\n"
-            "    uid: 123\n"
             "    key: abc-def\n"
             "    url: https://www.test.org/\n"
         )
@@ -373,11 +369,7 @@ class TestConfigControlFlow:
     @pytest.mark.parametrize(
         "input_args",
         [
-            ["config", "--show", "--uid", "123"],
             ["config", "--show", "--key", "abc-def"],
-            ["config", "--show", "--uid", "123", "--key", "abc-def"],
-            ["config", "--key", "abc-def"],
-            ["config", "--uid", "123"],
         ],
     )
     def test_config_inputerror(self, input_args):

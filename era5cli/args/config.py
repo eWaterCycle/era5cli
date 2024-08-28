@@ -76,6 +76,18 @@ def add_config_args(subparsers: argparse._SubParsersAction) -> None:
         ),
     )
 
+    config.add_argument(
+        "--uid",
+        type=str,
+        required=False,
+        default="",
+        help=textwrap.dedent(
+            """
+            DO NOT USE: deprecated due to changes in the CDS API"
+            """
+        ),
+    )
+
 
 class InputError(Exception):
     "Raised when a user inputs an invalid combination of arguments."
@@ -91,6 +103,13 @@ def run_config(args):
     Args:
         args: Arguments collected by argparse
     """
+    if len(args.uid) > 0:
+        msg = (
+            "The `uid` argument is deprecated.\n"
+            "The new CDS API does not use UIDs anymore."
+        )
+        raise InputError(msg)
+
     if args.show and args.key is not None:
         raise InputError("Either call `show` or set the key. Not both.")
     if not args.show and args.key is None:
@@ -98,7 +117,7 @@ def run_config(args):
     if args.show:
         url, key = key_management.load_era5cli_config()
         print(
-            "Contents of .config/era5cli.txt:\n" f"    url: {url}\n" f"    key: {key}\n"
+            "Contents of .config/era5cli.txt:\n" f"    key: {key}\n" f"    url: {url}\n"
         )
     else:
         key_management.set_config(args.url, args.key)
