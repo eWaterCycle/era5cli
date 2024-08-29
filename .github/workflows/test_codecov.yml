@@ -29,3 +29,4 @@ jobs:
         env_vars: python-version
         fail_ci_if_error: true
         verbose: true
+        use_oidc: true
