@@ -55,6 +55,12 @@ class TestEra5CliConfig:
         with mp1, mp2:
             key_management.check_era5cli_config()
 
+    def test_old_config(self, empty_path_era5):
+        with patch("era5cli.key_management.ERA5CLI_CONFIG_PATH", empty_path_era5):
+            key_management.write_era5cli_config(url="b", key="uid:abc-def")
+            with pytest.raises(key_management.InvalidLoginError, match="Old config"):
+                key_management.load_era5cli_config()
+
 
 class TestConfigCdsrc:
     """Test the cases where a .cdsapirc file exists.

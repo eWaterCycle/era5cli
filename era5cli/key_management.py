@@ -118,7 +118,7 @@ def valid_cdsapi_config() -> bool:
 def load_era5cli_config() -> Tuple[str, str]:
     with open(ERA5CLI_CONFIG_PATH, encoding="utf8") as f:
         contents = "".join(f.readlines())
-        if "uid" in contents:
+        if "uid:" in contents:
             msg = (
                 "Old config detected. In the new CDS API only a key is required.\n"
                 "Please look at the new CDS website, and reconfigure your login in "
