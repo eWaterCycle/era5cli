@@ -20,13 +20,12 @@ era5cli hourly \
     --variables 2m_temperature 2m_dewpoint_temperature \
     --startyear 2000 \
     --endyear 2020 \
-    --splitmonths True \
     --area 53.6 3.3 50.7 7.5
 ```
 
 This request asks for *hourly* data of the ERA5-*Land* dataset, more specifically the *2m_temperature* and *2m_dewpoint_temperature* variables.
 
-Additionally, data from the year *2000* up to (and including) *2020* is requested, with the final files being *split up by months*.
+Additionally, data from the year *2000* up to (and including) *2020* is requested.
 Lastly, an *area* is extracted from the dataset (in this case only the Netherlands).
 
 ### Using the info command

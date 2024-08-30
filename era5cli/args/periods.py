@@ -1,5 +1,4 @@
 import argparse
-import logging
 import textwrap
 from era5cli import utils
 
@@ -73,15 +72,13 @@ def add_period_args(subparsers, common):
     splitmonths.add_argument(
         "--splitmonths",
         type=lambda x: bool(utils.strtobool(x)),  # type=bool doesn't work.
-        default=None,  # To be set to True in the future
+        default=True,
         help=textwrap.dedent(
             """
-            When downloading hourly data, use:
-            `--splitmonths True` to split requests and files
-            by month, and add the month to the filename.
-
-            Defaults to `False`, but will default to `True` in
-            a future release.
+            By default when downloading hourly data requests are split
+            by months.
+            To suppress this behavior, use: `--splitmonths False` to have yearly
+            files.
             """
         ),
     )
@@ -175,17 +172,7 @@ def set_period_args(args):
             hours = args.synoptic
     elif args.command == "hourly":
         synoptic = None
-        if args.splitmonths is None:
-            splitmonths = False
-            logging.warning(
-                "\n  The argument --splitmonths was not used. However, in a future "
-                "\n  version this flag will default to `True`. To avoid this, either"
-                "\n  use `--splitmonths True` and update your workflow accordingly,"
-                "\n  or set --splitmonths to False."
-            )
-        else:
-            splitmonths: bool = args.splitmonths
-
+        splitmonths: bool = args.splitmonths
         statistics: bool = args.statistics
         if statistics:
             assert args.ensemble, (

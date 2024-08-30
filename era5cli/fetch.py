@@ -11,6 +11,7 @@ import era5cli.utils
 from era5cli import key_management
 from era5cli._request_size import TooLargeRequestError
 from era5cli._request_size import request_too_large
+from era5cli.args.config import InputError
 
 
 class Fetch:
@@ -186,10 +187,7 @@ class Fetch:
         files, or the normal names."""
 
         if self.merge and self.splitmonths:
-            raise ValueError(
-                "\nThe commands '--merge' and '--splitmonths' are not compatible with"
-                "\neach other. Please pick one of the two."
-            )
+            self.splitmonths = False
 
         if self.prelimbe:
             logging.warning(
@@ -203,7 +201,6 @@ class Fetch:
         if "geopotential" in vars and pressurelevels == ["surface"]:
             vars.remove("geopotential")
         if any([var in ref.PLVARS for var in vars]):
-            print(pressurelevels)
             self._check_levels()
 
         if self.period == "hourly" and request_too_large(self):
@@ -471,13 +468,11 @@ class Fetch:
         if self.land:
             name += "-land"
         elif variable == "orography":
-            variable = "geopotential"
-            name += "-single-levels"
-            logging.warning(
+            msg = (
                 "\n  The variable 'orography' has been deprecated by CDS. Use"
                 "\n  `--variables geopotential --levels surface` going forward."
-                "\n  The current query has been changed accordingly."
             )
+            raise InputError(msg)
         elif self.pressure_levels == ["surface"]:
             name += "-single-levels"
         elif variable in ref.PLVARS:

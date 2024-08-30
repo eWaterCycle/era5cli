@@ -49,7 +49,7 @@ def initialize(
     hours=list(range(24)),
     prelimbe=False,
     land=False,
-    splitmonths=False,
+    splitmonths=True,
     overwrite=False,
 ):
     with mock.patch(
@@ -136,9 +136,6 @@ def test_init(mockpatch):
         initialize(
             land=True, variables=["skin_temperature"], ensemble=False, splitmonths=False
         )
-
-    with pytest.raises(ValueError, match="are not compatible"):
-        initialize(merge=True, splitmonths=True)
 
 
 @mock.patch("cdsapi.Client", autospec=True)
@@ -289,9 +286,9 @@ _years = [2007, 2008, 2009]
     "variables, years, merge, ensemble, splitmonths, expected",
     [
         (_vars, _years, False, False, False, 2 * 3),
-        (_vars, _years, True, False, False, 2),  # Test merge
-        (_vars, _years, False, True, False, 2 * 3),  # Current default
-        (_vars, _years, False, True, True, 2 * 3 * 12),  # Future default
+        (_vars, _years, True, False, False, 2),  # test merge
+        (_vars, _years, False, True, False, 2 * 3),  # old default
+        (_vars, _years, False, True, True, 2 * 3 * 12),  # future default
         (_vars, _years[:1], False, False, False, 2 * 1),
         (_vars[:1], _years, False, False, False, 1 * 3),
     ],
@@ -487,12 +484,6 @@ def test_build_name():
     name = era5._build_name("snow_cover")[0]
     assert name == "reanalysis-era5-land-monthly-means"
 
-    # Test to interpret deprecated orography variable
-    era5 = initialize()
-    name, variable = era5._build_name("orography")
-    assert name == "reanalysis-era5-single-levels"
-    assert variable == "geopotential"
-
     era5 = initialize()
     name = era5._build_name("geopotential")[0]
     assert name == "reanalysis-era5-pressure-levels"
@@ -506,7 +497,12 @@ def test_build_name():
 def test_build_request():
     """Test _build_request function of Fetch class."""
     # hourly data
-    era5 = initialize(period="hourly", variables=["total_precipitation"], years=[2008])
+    era5 = initialize(
+        period="hourly",
+        variables=["total_precipitation"],
+        years=[2008],
+        splitmonths=False,
+    )
     (name, request) = era5._build_request("total_precipitation", [2008])
     assert name == "reanalysis-era5-single-levels"
     req = {
@@ -572,11 +568,6 @@ def test_build_request():
     # requesting 3d variable with pressurelevels=None should give a ValueError
     with pytest.raises(ValueError):
         era5 = initialize(variables=["temperature"], pressurelevels=None)
-
-    # requesting data from orography should call geopotential
-    era5 = initialize()
-    (name, request) = era5._build_request("orography", [2008])
-    assert request["variable"] == "geopotential"
 
 
 def test_incompatible_options():
