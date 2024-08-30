@@ -13,19 +13,15 @@ Datasets used
 Single levels (hourly) variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 * reanalysis-era5-single-levels
-* reanalysis-era5-single-levels-preliminary-back-extension
 
 Single levels (monthly) variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 * reanalysis-era5-single-levels-monthly-means
-* reanalysis-era5-single-levels-monthly-means-preliminary-back-extension
 
 Pressure levels variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 * reanalysis-era5-pressure-levels
 * reanalysis-era5-pressure-levels-monthly-means
-* reanalysis-era5-pressure-levels-preliminary-back-extension
-* reanalysis-era5-pressure-levels-monthly-means-preliminary-back-extension
 
 ERA5-land variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

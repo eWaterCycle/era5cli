@@ -20,7 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Removed:**
 
- - Removed the deprecated `orography` variable. Use `geopotential` instead.
+ - the deprecated `orography` variable. Use `geopotential` instead.
+ - the deprecated `--prelimbe` argument. This one has not been required anymore, as the back-extension is part of the normal dataset now.
 
 **Dev changes:**
 

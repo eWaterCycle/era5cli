@@ -79,15 +79,11 @@ class Fetch:
             or make the request to start downloading the data.
             `dryrun = True` will print the request to stdout. By default,
             the data will be downloaded.
-        prelimbe: bool
-            Whether to download the preliminary back extension (1950-1978).
-            Note that in this case, `years` must be between 1950 and
-            1978. `prelimbe = True` is incompatible with `land = True`.
         land: bool
             Whether to download data from the ERA5-Land dataset.
             Note that the ERA5-Land dataset starts in 1981.
             `land = True` is incompatible with the use of
-            `prelimbe = True` and `ensemble = True`.
+            `ensemble = True`.
         overwrite: bool
             Whether to overwrite existing files or not.
             Setting `overwrite = True` will make
@@ -118,7 +114,6 @@ class Fetch:
         splitmonths=False,
         merge=False,
         threads=None,
-        prelimbe=False,
         land=False,
         overwrite=False,
         dashed_vars=False,
@@ -174,9 +169,6 @@ class Fetch:
         """bool: Whether to get monthly averaged by hour of day
         (synoptic=True) or monthly means of daily means
         (synoptic=False)."""
-        self.prelimbe = prelimbe
-        """bool: Whether to select from the ERA5 preliminary back
-        extension which supports years from 1950 to 1978"""
         self.land = land
         """bool: Whether to download from the ERA5-Land
         dataset."""
@@ -188,14 +180,6 @@ class Fetch:
 
         if self.merge and self.splitmonths:
             self.splitmonths = False
-
-        if self.prelimbe:
-            logging.warning(
-                "\n  The years of the ERA5 preliminary back extension (1950 - 1978) are"
-                "\n  now included in the main ERA5 products. The `--prelimbe` argument"
-                "\n  will be deprecated in a future release."
-                "\n  Please update your workflow accordingly."
-            )
 
         vars = list(self.variables)  # Use list() to avoid copying by reference
         if "geopotential" in vars and pressurelevels == ["surface"]:
@@ -368,18 +352,6 @@ class Fetch:
         if self.synoptic:
             producttype += "_by_hour_of_day"
 
-        if not self.prelimbe:
-            return producttype
-
-        # Prelimbe has deviating product types for monthly data
-        if self.ensemble:
-            producttype = "members-"
-        else:
-            producttype = "reanalysis-"
-        if self.synoptic:
-            producttype += "synoptic-monthly-means"
-        else:
-            producttype += "monthly-means-of-daily-means"
         return producttype
 
     def _check_levels(self):
@@ -485,13 +457,6 @@ class Fetch:
         if self.period == "monthly":
             name += "-monthly-means"
 
-        if self.prelimbe:
-            if self.land:
-                raise ValueError(
-                    "Back extension not available for ERA5-Land. "
-                    "ERA5-Land data is available from 1950 on."
-                )
-            name += "-preliminary-back-extension"
         return name, variable
 
     def _build_request(self, variable, years, months=None):
