@@ -24,7 +24,6 @@ def add_common_args(argument_parser: ArgumentParser) -> None:
         --threads,
         --ensemble,
         --dryrun,
-        --prelimbe,
         --land,
         --area,
         --overwrite
@@ -189,23 +188,6 @@ def add_common_args(argument_parser: ArgumentParser) -> None:
     )
 
     argument_parser.add_argument(
-        "--prelimbe",
-        action="store_true",
-        default=False,
-        help=textwrap.dedent(
-            """
-            Whether to download the preliminary back extension
-            (1950-1978). Note that when `--prelimbe` is used,
-            `--startyear` and `--endyear` should be set
-            between 1950 and 1978. Please, be aware that
-            ERA5 data is available from 1940.
-            `--prelimbe` is incompatible with `--land`
-
-            """
-        ),
-    )
-
-    argument_parser.add_argument(
         "--land",
         action="store_true",
         default=False,
@@ -215,7 +197,7 @@ def add_common_args(argument_parser: ArgumentParser) -> None:
             dataset. Note that the ERA5-Land dataset starts in
             1950.
             `--land` is incompatible with the use of
-            `--prelimbe` and `--ensemble`
+            `--ensemble`
 
             """
         ),
@@ -287,9 +269,7 @@ def construct_year_list(args):
 
     # check whether correct years have been entered
     for year in (args.startyear, endyear):
-        if args.prelimbe:
-            assert 1950 <= year <= 1978, "year should be between 1950 and 1978"
-        elif args.land:
+        if args.land:
             assert (
                 1950 <= year <= datetime.now().year
             ), "for ERA5-Land, year should be between 1950 and present"

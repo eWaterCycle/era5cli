@@ -47,9 +47,8 @@ def initialize(
     months=list(range(1, 13)),
     days=list(range(1, 32)),
     hours=list(range(24)),
-    prelimbe=False,
     land=False,
-    splitmonths=False,
+    splitmonths=True,
     overwrite=False,
 ):
     with mock.patch(
@@ -73,7 +72,6 @@ def initialize(
             pressurelevels=pressurelevels,
             merge=merge,
             threads=threads,
-            prelimbe=prelimbe,
             land=land,
             splitmonths=splitmonths,
             overwrite=overwrite,
@@ -100,7 +98,6 @@ def test_init(mockpatch):
         pressurelevels="surface",
         merge=False,
         threads=2,
-        prelimbe=False,
     )
 
     assert era5.months == ALL_MONTHS
@@ -117,7 +114,6 @@ def test_init(mockpatch):
     assert era5.pressure_levels == "surface"
     assert not era5.merge
     assert era5.threads == 2
-    assert not era5.prelimbe
     assert not era5.land
 
     # initializing hourly variable with days=None should result in ValueError
@@ -136,9 +132,6 @@ def test_init(mockpatch):
         initialize(
             land=True, variables=["skin_temperature"], ensemble=False, splitmonths=False
         )
-
-    with pytest.raises(ValueError, match="are not compatible"):
-        initialize(merge=True, splitmonths=True)
 
 
 @mock.patch("cdsapi.Client", autospec=True)
@@ -289,9 +282,9 @@ _years = [2007, 2008, 2009]
     "variables, years, merge, ensemble, splitmonths, expected",
     [
         (_vars, _years, False, False, False, 2 * 3),
-        (_vars, _years, True, False, False, 2),  # Test merge
-        (_vars, _years, False, True, False, 2 * 3),  # Current default
-        (_vars, _years, False, True, True, 2 * 3 * 12),  # Future default
+        (_vars, _years, True, False, False, 2),  # test merge
+        (_vars, _years, False, True, False, 2 * 3),  # old default
+        (_vars, _years, False, True, True, 2 * 3 * 12),  # future default
         (_vars, _years[:1], False, False, False, 2 * 1),
         (_vars[:1], _years, False, False, False, 1 * 3),
     ],
@@ -348,26 +341,9 @@ def test_product_type():
     producttype = era5._product_type()
     assert producttype == "monthly_averaged_ensemble_members"
 
-    # Preliminary back extension monthly data have different names
-    era5.prelimbe = True
-    producttype = era5._product_type()
-    assert producttype == "members-monthly-means-of-daily-means"
-
-    era5.synoptic = True
-    producttype = era5._product_type()
-    assert producttype == "members-synoptic-monthly-means"
-
-    era5.ensemble = False
-    producttype = era5._product_type()
-    assert producttype == "reanalysis-synoptic-monthly-means"
-
-    era5.synoptic = False
-    producttype = era5._product_type()
-    assert producttype == "reanalysis-monthly-means-of-daily-means"
-
     # ERA5 land has more limited options
     era5.land = True
-    era5.prelimbe = False
+    era5.ensemble = False
     producttype = era5._product_type()
     assert producttype == "monthly_averaged_reanalysis"
 
@@ -455,27 +431,8 @@ def test_build_name():
     name = era5._build_name("total_precipitation")[0]
     assert name == "reanalysis-era5-single-levels-monthly-means"
 
-    # Test names for back extension
-    era5.prelimbe = True
-    name = era5._build_name("temperature")[0]
-    assert name == (
-        "reanalysis-era5-pressure-levels-monthly-means" "-preliminary-back-extension"
-    )
-
-    name = era5._build_name("total_precipitation")[0]
-    assert name == (
-        "reanalysis-era5-single-levels-monthly-means" "-preliminary-back-extension"
-    )
-
-    era5.period = "hourly"
-    name = era5._build_name("temperature")[0]
-    assert name == "reanalysis-era5-pressure-levels-preliminary-back-extension"
-
-    name = era5._build_name("total_precipitation")[0]
-    assert name == "reanalysis-era5-single-levels-preliminary-back-extension"
-
     # Tests for era5 land
-    era5.prelimbe = False
+    era5.period = "hourly"
     with pytest.raises(ValueError):
         era5._build_name("snow_cover")
 
@@ -486,12 +443,6 @@ def test_build_name():
     era5.period = "monthly"
     name = era5._build_name("snow_cover")[0]
     assert name == "reanalysis-era5-land-monthly-means"
-
-    # Test to interpret deprecated orography variable
-    era5 = initialize()
-    name, variable = era5._build_name("orography")
-    assert name == "reanalysis-era5-single-levels"
-    assert variable == "geopotential"
 
     era5 = initialize()
     name = era5._build_name("geopotential")[0]
@@ -506,7 +457,12 @@ def test_build_name():
 def test_build_request():
     """Test _build_request function of Fetch class."""
     # hourly data
-    era5 = initialize(period="hourly", variables=["total_precipitation"], years=[2008])
+    era5 = initialize(
+        period="hourly",
+        variables=["total_precipitation"],
+        years=[2008],
+        splitmonths=False,
+    )
     (name, request) = era5._build_request("total_precipitation", [2008])
     assert name == "reanalysis-era5-single-levels"
     req = {
@@ -534,24 +490,6 @@ def test_build_request():
     }
     assert request == req
 
-    # preliminary back extension
-    era5 = initialize(
-        period="monthly", variables=["total_precipitation"], years=[1970], prelimbe=True
-    )
-    (name, request) = era5._build_request("total_precipitation", [1970])
-    assert name == (
-        "reanalysis-era5-single-levels-monthly" "-means-preliminary-back-extension"
-    )
-    req = {
-        "variable": "total_precipitation",
-        "year": [1970],
-        "product_type": "members-monthly-means-of-daily-means",
-        "month": ALL_MONTHS,
-        "time": ALL_HOURS,
-        "format": "netcdf",
-    }
-    assert request == req
-
     # land
     era5 = initialize(
         period="monthly", variables=["snow_cover"], hours=[0], land=True, ensemble=False
@@ -573,18 +511,9 @@ def test_build_request():
     with pytest.raises(ValueError):
         era5 = initialize(variables=["temperature"], pressurelevels=None)
 
-    # requesting data from orography should call geopotential
-    era5 = initialize()
-    (name, request) = era5._build_request("orography", [2008])
-    assert request["variable"] == "geopotential"
-
 
 def test_incompatible_options():
     """Test that invalid combinations of arguments don't silently pass."""
-    era5 = initialize(land=True, prelimbe=True)
-    with pytest.raises(ValueError):
-        era5._build_request("total_precipitation", [2008])
-
     era5 = initialize(land=False)
     with pytest.raises(ValueError):
         era5._build_request("snow_cover", [2008])

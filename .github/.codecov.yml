@@ -1,19 +1,15 @@
-#
-# This codecov.yml is the default configuration for
-# all repositories on Codecov. You may adjust the settings
-# below in your own codecov.yml in your repository.
-#
+comment:
+  behavior: default
+  layout: header, diff
 coverage:
   precision: 2
+  range:
+  - 70.0
+  - 100.0
   round: down
-  range: 70...100
   status:
-    # Learn more at https://codecov.io/docs#yaml_default_commit_status
-    project: true
-    patch: true
     changes: false
+    patch: true
+    project: true
 ignore:
-  - "tests"
-comment:
-  layout: header, diff
-  behavior: default  # update if exists else create new
+- ^tests.*

@@ -67,7 +67,6 @@ def _execute(input_args: argparse.Namespace) -> True:
         threads=input_args.threads,
         splitmonths=splitmonths,
         merge=input_args.merge,
-        prelimbe=input_args.prelimbe,
         land=input_args.land,
         overwrite=input_args.overwrite,
         dashed_vars=input_args.dashed_varname,

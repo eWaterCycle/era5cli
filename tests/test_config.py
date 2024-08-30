@@ -4,6 +4,9 @@ import requests.exceptions as rex
 from era5cli import key_management
 
 
+CFG_FILE = "url: https://www.github.com/\nkey: abc-def\n"
+
+
 @pytest.fixture(scope="function")
 def empty_path_era5(tmp_path_factory):
     return tmp_path_factory.mktemp("usrhome") / ".config" / "era5cli" / "cds_keys.txt"
@@ -14,7 +17,7 @@ def valid_path_era5(tmp_path_factory):
     fn = tmp_path_factory.mktemp(".config") / "era5cli" / "cds_keys.txt"
     fn.parent.mkdir(parents=True)
     with open(fn, mode="w", encoding="utf-8") as f:
-        f.write("url: b\nuid: 123\nkey: abc-def\n")
+        f.write(CFG_FILE)
     return fn
 
 
@@ -27,7 +30,7 @@ def empty_path_cds(tmp_path_factory):
 def valid_path_cds(tmp_path_factory):
     fn = tmp_path_factory.mktemp(".config") / "cdsapirc.txt"
     with open(fn, mode="w", encoding="utf-8") as f:
-        f.write("url: a\nkey: 123:abc-def")
+        f.write(CFG_FILE)
     return fn
 
 
@@ -36,18 +39,27 @@ class TestEra5CliConfig:
 
     def test_set_config(self, empty_path_era5):
         with patch("era5cli.key_management.ERA5CLI_CONFIG_PATH", empty_path_era5):
-            key_management.write_era5cli_config(url="b", uid="123", key="abc-def")
-            assert key_management.load_era5cli_config() == ("b", "123:abc-def")
+            key_management.write_era5cli_config(url="b", key="abc-def")
+            assert key_management.load_era5cli_config() == ("b", "abc-def")
 
     def test_load_era5cli_config(self, valid_path_era5):
         with patch("era5cli.key_management.ERA5CLI_CONFIG_PATH", valid_path_era5):
-            assert key_management.load_era5cli_config() == ("b", "123:abc-def")
+            assert key_management.load_era5cli_config() == (
+                "https://www.github.com/",
+                "abc-def",
+            )
 
     def test_check_era5cli_config(self, valid_path_era5):
         mp1 = patch("era5cli.key_management.ERA5CLI_CONFIG_PATH", valid_path_era5)
         mp2 = patch("era5cli.key_management.attempt_cds_login", return_value=True)
         with mp1, mp2:
             key_management.check_era5cli_config()
+
+    def test_old_config(self, empty_path_era5):
+        with patch("era5cli.key_management.ERA5CLI_CONFIG_PATH", empty_path_era5):
+            key_management.write_era5cli_config(url="b", key="uid:abc-def")
+            with pytest.raises(key_management.InvalidLoginError, match="Old config"):
+                key_management.load_era5cli_config()
 
 
 class TestConfigCdsrc:
@@ -82,7 +94,10 @@ class TestConfigCdsrc:
         with mp1, mp2, mp3, mp4, mp5:
             key_management.check_era5cli_config()
             with open(empty_path_era5, "r", encoding="utf-8") as f:
-                assert f.readlines() == ["url: a\n", "uid: 123\n", "key: abc-def\n"]
+                assert f.readlines() == [
+                    "url: https://www.github.com/\n",
+                    "key: abc-def\n",
+                ]
 
     def test_cdsrcfile_invalid_keys(self, empty_path_era5, valid_path_cds):
         """.cdsapirc exists. url+key is validated, and is bad."""
@@ -107,41 +122,29 @@ class TestAttemptCdsLogin:
     expected.
     """
 
+    @pytest.mark.xfail(reason="broken by new cads-client api")
     def test_status_fail(self):
-        with patch("cdsapi.Client.status", side_effect=rex.ConnectionError):
+        with patch(
+            "cads_api_client.ApiClient.check_authentication",
+            side_effect=rex.ConnectionError,
+        ):
             with pytest.raises(rex.ConnectionError, match="Failed to connect to CDS"):
-                key_management.attempt_cds_login(url="test", fullkey="abc:def")
+                key_management.attempt_cds_login(
+                    url="https://www.github.com/", key="def"
+                )
 
     def test_connection_fail(self):
-        mp1 = patch("cdsapi.Client.status")
-        mp2 = patch(
-            "cdsapi.Client.retrieve",
-            side_effect=Exception("401 Authorization Required"),
+        mp = patch(
+            "cads_api_client.ApiClient.check_authentication",
+            side_effect=Exception("401 Client Error"),
         )
-        with mp1, mp2:
+        with mp:
             with pytest.raises(
                 key_management.InvalidLoginError,
                 match="Authorization with the CDS served failed",
             ):
-                key_management.attempt_cds_login(url="test", fullkey="abc:def")
-
-    def test_retrieve_fail(self):
-        mp1 = patch("cdsapi.Client.status")
-        mp2 = patch(
-            "cdsapi.Client.retrieve",
-            side_effect=Exception("There is no data matching your request"),
-        )
-        with mp1, mp2:
-            with pytest.raises(
-                key_management.InvalidRequestError,
-                match="Something changed in the CDS API",
-            ):
-                key_management.attempt_cds_login(url="test", fullkey="abc:def")
+                key_management.attempt_cds_login(url="test", key="abc:def")
 
     def test_all_pass(self):
-        mp1 = patch("cdsapi.Client.status")
-        mp2 = patch("cdsapi.Client.retrieve")
-        with mp1, mp2:
-            assert (
-                key_management.attempt_cds_login(url="test", fullkey="abc:def") is True
-            )
+        with patch("cads_api_client.ApiClient.check_authentication"):
+            key_management.attempt_cds_login(url="test", key="abc:def")

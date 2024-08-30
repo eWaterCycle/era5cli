@@ -13,19 +13,15 @@ Datasets used
 Single levels (hourly) variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 * reanalysis-era5-single-levels
-* reanalysis-era5-single-levels-preliminary-back-extension
 
 Single levels (monthly) variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 * reanalysis-era5-single-levels-monthly-means
-* reanalysis-era5-single-levels-monthly-means-preliminary-back-extension
 
 Pressure levels variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 * reanalysis-era5-pressure-levels
 * reanalysis-era5-pressure-levels-monthly-means
-* reanalysis-era5-pressure-levels-preliminary-back-extension
-* reanalysis-era5-pressure-levels-monthly-means-preliminary-back-extension
 
 ERA5-land variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -251,7 +247,6 @@ SLVARS = [
     "northward_turbulent_surface_stress",
     "ocean_surface_stress_equivalent_10m_neutral_wind_direction",
     "ocean_surface_stress_equivalent_10m_neutral_wind_speed",
-    "orography",  # deprecated
     "peak_wave_period",
     "period_corresponding_to_maximum_individual_wave_height",
     "potential_evaporation",
