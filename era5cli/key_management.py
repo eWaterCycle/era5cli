@@ -2,7 +2,7 @@ import os
 import sys
 from pathlib import Path
 from typing import Tuple
-import cdsapi
+import cads_api_client
 from requests.exceptions import ConnectionError  # pylint: disable=redefined-builtin
 
 
@@ -10,8 +10,7 @@ ERA5CLI_CONFIG_PATH = Path.home() / ".config" / "era5cli" / "cds_key.txt"
 CDSAPI_CONFIG_PATH = Path.home() / ".cdsapirc"
 DEFAULT_CDS_URL = "https://cds-beta.climate.copernicus.eu/api"
 
-AUTH_ERR_MSG = "401 Authorization Required"
-NO_DATA_ERR_MSG = "There is no data matching your request"
+AUTH_ERR_MSG = "401 Client Error"
 
 
 class InvalidRequestError(Exception):
@@ -34,34 +33,10 @@ def attempt_cds_login(url: str, key: str) -> True:
         InvalidLoginError: If an invalid authetication was provided to the CDS.
         InvalidRequestError: If the test request failed, likely due to changes in the
             CDS API's variable naming.
-
-    Returns:
-        True if a connection was made succesfully.
     """
-    connection = cdsapi.Client(
-        url=url,
-        key=key,
-        verify=True,
-        quiet=True,  # Supress output to the console from the test retrieve.
-    )
-
+    client = cads_api_client.ApiClient(key, url)
     try:
-        # Check the URL (broken in 0.7.0...)
-        # connection.status()
-
-        # Checks if the authentication works, without downloading data
-        connection.retrieve(  # pragma: no cover
-            "reanalysis-era5-single-levels",
-            {
-                "variable": "2t",
-                "product_type": "reanalysis",
-                "date": "2012-12-01",
-                "time": "14:00",
-                "format": "netcdf",
-            },
-        )
-        return True
-
+        client.check_authentication()
     except ConnectionError as err:
         raise ConnectionError(
             f"{os.linesep}Failed to connect to CDS. Please check your internet "
@@ -78,11 +53,6 @@ def attempt_cds_login(url: str, key: str) -> True:
                 f"{os.linesep}Please check your era5cli configuration file: "
                 f"{ERA5CLI_CONFIG_PATH.resolve()}{os.linesep}"
                 "Or redefine your configuration with 'era5cli config'"
-            ) from err
-        if NO_DATA_ERR_MSG in str(err):
-            raise InvalidRequestError(
-                f"{os.linesep}Something changed in the CDS API. Please raise an issue "
-                "on https://www.github.com/eWaterCycle/era5cli"
             ) from err
         raise err  # pragma: no cover
 

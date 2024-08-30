@@ -118,40 +118,27 @@ class TestAttemptCdsLogin:
 
     @pytest.mark.xfail(reason="broken by new cads-client api")
     def test_status_fail(self):
-        with patch("cdsapi.Client.status", side_effect=rex.ConnectionError):
+        with patch(
+            "cads_api_client.ApiClient.check_authentication",
+            side_effect=rex.ConnectionError,
+        ):
             with pytest.raises(rex.ConnectionError, match="Failed to connect to CDS"):
                 key_management.attempt_cds_login(
                     url="https://www.github.com/", key="def"
                 )
 
     def test_connection_fail(self):
-        mp1 = patch("cdsapi.Client.status")
-        mp2 = patch(
-            "cdsapi.Client.retrieve",
-            side_effect=Exception("401 Authorization Required"),
+        mp = patch(
+            "cads_api_client.ApiClient.check_authentication",
+            side_effect=Exception("401 Client Error"),
         )
-        with mp1, mp2:
+        with mp:
             with pytest.raises(
                 key_management.InvalidLoginError,
                 match="Authorization with the CDS served failed",
             ):
                 key_management.attempt_cds_login(url="test", key="abc:def")
 
-    def test_retrieve_fail(self):
-        mp1 = patch("cdsapi.Client.status")
-        mp2 = patch(
-            "cdsapi.Client.retrieve",
-            side_effect=Exception("There is no data matching your request"),
-        )
-        with mp1, mp2:
-            with pytest.raises(
-                key_management.InvalidRequestError,
-                match="Something changed in the CDS API",
-            ):
-                key_management.attempt_cds_login(url="test", key="abc:def")
-
     def test_all_pass(self):
-        mp1 = patch("cdsapi.Client.status")
-        mp2 = patch("cdsapi.Client.retrieve")
-        with mp1, mp2:
-            assert key_management.attempt_cds_login(url="test", key="abc:def") is True
+        with patch("cads_api_client.ApiClient.check_authentication"):
+            key_management.attempt_cds_login(url="test", key="abc:def")
