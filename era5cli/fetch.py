@@ -11,7 +11,6 @@ import era5cli.utils
 from era5cli import key_management
 from era5cli._request_size import TooLargeRequestError
 from era5cli._request_size import request_too_large
-from era5cli.args.config import InputError
 
 
 class Fetch:
@@ -439,12 +438,6 @@ class Fetch:
 
         if self.land:
             name += "-land"
-        elif variable == "orography":
-            msg = (
-                "\n  The variable 'orography' has been deprecated by CDS. Use"
-                "\n  `--variables geopotential --levels surface` going forward."
-            )
-            raise InputError(msg)
         elif self.pressure_levels == ["surface"]:
             name += "-single-levels"
         elif variable in ref.PLVARS:
