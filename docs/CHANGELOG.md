@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 2.0.0b2 - 2024-09-20
+
+**Fixed:**
+ - Pinned the version number of `cads-api-client` as its interface is unstable.
+
+
 ## 2.0.0b1 - 2024-08-30
 
 **Changed:**
