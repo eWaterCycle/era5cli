@@ -58,7 +58,7 @@ classifiers = [
 ]
 dependencies = [
   "cdsapi>=0.7.1",
-  "cads-api-client>=1.3",
+  "cads-api-client==1.3.0",  # Pin because API is unstable: github.com/ecmwf-projects/cads-api-client/issues/81
   "pathos",
   "PTable",
   "netCDF4"

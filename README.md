@@ -9,7 +9,7 @@
 > 
 > To continue using era5cli, you will need to re-register at ECMWF and get a new API key,
 > and transition to the era5cli v2 beta. This can be installed with:
-> `pip install era5cli==2.0.0b1` 
+> `pip install era5cli==2.0.0b2` 
 
 > [!WARNING]
 > netCDF files from the new Climate Data Store Beta are not formatted the same as the
