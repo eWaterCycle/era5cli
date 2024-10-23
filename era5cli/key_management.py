@@ -34,7 +34,7 @@ def attempt_cds_login(url: str, key: str) -> True:
         InvalidRequestError: If the test request failed, likely due to changes in the
             CDS API's variable naming.
     """
-    client = cads_api_client.ApiClient(key, url)
+    client = cads_api_client.ApiClient(key=key, url=url)
     try:
         client.check_authentication()
     except ConnectionError as err:

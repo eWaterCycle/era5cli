@@ -1,22 +1,3 @@
-<img align="right" width="150" alt="Logo" src="docs/assets/era5cli_logo_colors_border.png">
-
-> [!IMPORTANT]
-> The old Climate Data Store (CDS) will be shut down on 3 September 2024.
-> All era5cli versions up to v1.4.2 will no longer work.
->
-> For more information see: https://forum.ecmwf.int/t/the-new-climate-data-store-beta-cds-beta-is-now-live/3315
->
-> 
-> To continue using era5cli, you will need to re-register at ECMWF and get a new API key,
-> and transition to the era5cli v2 beta. This can be installed with:
-> `pip install era5cli==2.0.0b2` 
-
-> [!WARNING]
-> netCDF files from the new Climate Data Store Beta are not formatted the same as the
-> old CDS. Some variables might be missing.
-> See the open issue [here](https://github.com/eWaterCycle/era5cli/issues/165), as well as the [ECMWF discussion forum](https://forum.ecmwf.int/).
-
-
 [![github license badge](https://img.shields.io/github/license/eWaterCycle/era5cli)](https://github.com/eWaterCycle/era5cli)
 [![rsd badge](https://img.shields.io/badge/RSD-era5cli-blue)](https://research-software-directory.org/software/era5cli)
 [![fair-software.eu](https://img.shields.io/badge/fair--software.eu-%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8B-yellow)](https://fair-software.eu)
@@ -27,6 +8,22 @@
 [![Test Coverage](https://codecov.io/gh/eWaterCycle/era5cli/branch/main/graph/badge.svg?token=qeZXgGASBK)](https://codecov.io/gh/eWaterCycle/era5cli)
 [![PyPI](https://badge.fury.io/py/era5cli.svg)](https://badge.fury.io/py/era5cli)
 
+<img align="right" width="150" alt="Logo" src="docs/assets/era5cli_logo_colors_border.png">
+
+> [!IMPORTANT]
+> The old Climate Data Store (CDS) has been shut down. All era5cli versions up to v1.4.2 will no longer work.
+> 
+> For more information see:
+> https://forum.ecmwf.int/t/the-new-climate-data-store-beta-cds-beta-is-now-live/3315
+> 
+> To continue using era5cli, you will need to re-register at ECMWF and get a new API key,
+> and transition to the era5cli v2 beta. This can be installed with:
+> `pip install era5cli==2.0.0` 
+
+> [!WARNING]
+> netCDF files from the new Climate Data Store Beta are not formatted the same as the
+> old CDS. Some variables might be missing.
+> See the open issue [here](https://github.com/eWaterCycle/era5cli/issues/165), as well as the [ECMWF discussion forum](https://forum.ecmwf.int/).  
 
 A command line interface to download ERA5 data from the [Copernicus Climate Data Store](<https://climate.copernicus.eu/>).
 
