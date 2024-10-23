@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changes since v1.4.2:
 
+**Added:**
+
+ - support for Python 3.12.
+
 **Changed:**
 
  - The `splitmonths` argument now defaults to `True` for hourly requests. To not split requests by year, add `--splitmonths False`.
@@ -24,6 +28,7 @@ Changes since v1.4.2:
 
  - the deprecated `orography` variable. Use `geopotential` instead.
  - the deprecated `--prelimbe` argument. This one has not been required anymore, as the back-extension is part of the normal dataset now.
+ - support for Python 3.8.
 
 **Dev changes:**
 
