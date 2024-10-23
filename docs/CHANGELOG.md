@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+# 2.0.0 - 2024-10-23
+
+Changes since v1.4.2:
+
+**Changed:**
+
+ - The `splitmonths` argument now defaults to `True` for hourly requests. To not split requests by year, add `--splitmonths False`.
+
+**Fixed:**
+
+ - Added support for the new climate data store.
+ - For authentication, the new `cads-api-client` is used, instead of a dummy request. This should avoid the dummy requests appearing in the user's queue.
+
+**Removed:**
+
+ - the deprecated `orography` variable. Use `geopotential` instead.
+ - the deprecated `--prelimbe` argument. This one has not been required anymore, as the back-extension is part of the normal dataset now.
+
+**Dev changes:**
+
+ - The pre-commit hook has been removed. Pre-commit does not play well with hatch: it would need to be installed system-wide. No hatch-specific hooks are available.
+
+
+
 ## 2.0.0b2 - 2024-09-20
 
 **Fixed:**
