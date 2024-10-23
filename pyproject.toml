@@ -58,6 +58,7 @@ classifiers = [
 ]
 dependencies = [
   "cads-api-client>=1.4.6",
+  "cdsapi",
   "pathos",
   "PTable",
   "netCDF4"
