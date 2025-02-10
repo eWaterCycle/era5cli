@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+# 2.0.0 - 2025-02-12
+
+Changes since v1.4.2:
+
+**Added:**
+
+ - support for Python 3.12, 3.13.
+
+**Changed:**
+
+ - The `splitmonths` argument now defaults to `True` for hourly requests. To not split requests by year, add `--splitmonths False`.
+ - The 'cads-api-client' used in the 2.0 beta versions is already deprecated, the backend now uses the 'cdsapi' again, which uses ["datapi"](https://github.com/ecmwf-projects/datapi).
+
+**Fixed:**
+
+ - Added support for the new climate data store.
+
+**Removed:**
+
+ - the deprecated `orography` variable. Use `geopotential` instead.
+ - the deprecated `--prelimbe` argument. This one has not been required anymore, as the back-extension is part of the normal dataset now.
+ - support for Python 3.8.
+
+**Dev changes:**
+
+ - The pre-commit hook has been removed. Pre-commit does not play well with hatch: it would need to be installed system-wide. No hatch-specific hooks are available.
+
+
+
 ## 2.0.0b2 - 2024-09-20
 
 **Fixed:**
