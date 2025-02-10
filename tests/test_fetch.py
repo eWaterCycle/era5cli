@@ -134,7 +134,7 @@ def test_init(mockpatch):
         )
 
 
-@mock.patch("cads_api_client.legacy_api_client.LegacyApiClient", autospec=True)
+@mock.patch("cdsapi.Client", autospec=True)
 @mock.patch("era5cli.utils.append_history", autospec=True)
 def test_fetch_nodryrun(cds, era5cli_utilsappend_history):
     """Test fetch function of Fetch class."""

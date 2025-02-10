@@ -14,10 +14,10 @@
 > The old Climate Data Store (CDS) has been shut down. All era5cli versions up to v1.4.2 will no longer work.
 > 
 > For more information see:
-> https://forum.ecmwf.int/t/the-new-climate-data-store-beta-cds-beta-is-now-live/3315
+> https://forum.ecmwf.int/t/goodbye-legacy-climate-data-store-hello-new-climate-data-store-cds/6380/14
 > 
 > To continue using era5cli, you will need to re-register at ECMWF and get a new API key,
-> and transition to the era5cli v2 beta. This can be installed with:
+> and transition to era5cli version 2. This can be installed with:
 > `pip install era5cli==2.0.0` 
 
 > [!WARNING]

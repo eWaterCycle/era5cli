@@ -4,7 +4,7 @@ import itertools
 import logging
 import os
 import sys
-from cads_api_client import legacy_api_client
+import cdsapi
 from pathos.threading import ThreadPool as Pool
 import era5cli.inputref as ref
 import era5cli.utils
@@ -499,7 +499,7 @@ class Fetch:
                 "please do not kill this process in the meantime.",
                 os.linesep,
             )
-            connection = legacy_api_client.LegacyApiClient(
+            connection = cdsapi.Client(
                 url=self.url,
                 key=self.key,
                 verify=True,

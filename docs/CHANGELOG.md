@@ -7,22 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-# 2.0.0 - 2024-10-23
+# 2.0.0 - 2025-02-12
 
 Changes since v1.4.2:
 
 **Added:**
 
- - support for Python 3.12.
+ - support for Python 3.12, 3.13.
 
 **Changed:**
 
  - The `splitmonths` argument now defaults to `True` for hourly requests. To not split requests by year, add `--splitmonths False`.
+ - The 'cads-api-client' used in the 2.0 beta versions is already deprecated, the backend now uses the 'cdsapi' again, which uses ["datapi"](https://github.com/ecmwf-projects/datapi).
 
 **Fixed:**
 
  - Added support for the new climate data store.
- - For authentication, the new `cads-api-client` is used, instead of a dummy request. This should avoid the dummy requests appearing in the user's queue.
 
 **Removed:**
 

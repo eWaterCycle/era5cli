@@ -2,15 +2,16 @@ import os
 import sys
 from pathlib import Path
 from typing import Tuple
-import cads_api_client
+import cdsapi
 from requests.exceptions import ConnectionError  # pylint: disable=redefined-builtin
 
 
 ERA5CLI_CONFIG_PATH = Path.home() / ".config" / "era5cli" / "cds_key.txt"
 CDSAPI_CONFIG_PATH = Path.home() / ".cdsapirc"
-DEFAULT_CDS_URL = "https://cds-beta.climate.copernicus.eu/api"
+DEFAULT_CDS_URL = "https://cds.climate.copernicus.eu/api"
 
-AUTH_ERR_MSG = "401 Client Error"
+AUTH_ERR_MSG = "401"
+NO_DATA_ERR_MSG = "There is no data matching your request"
 
 
 class InvalidRequestError(Exception):
@@ -34,9 +35,23 @@ def attempt_cds_login(url: str, key: str) -> True:
         InvalidRequestError: If the test request failed, likely due to changes in the
             CDS API's variable naming.
     """
-    client = cads_api_client.ApiClient(key=key, url=url)
+    client = cdsapi.Client(key=key, url=url, verify=True)
     try:
-        client.check_authentication()
+        # Check the URL
+        client.status()  # pragma: no cover
+
+        # Checks if the authentication works, without downloading data
+        client.retrieve(  # pragma: no cover
+            "reanalysis-era5-single-levels",
+            {
+                "variable": "2t",
+                "product_type": "reanalysis",
+                "date": "2012-12-01",
+                "time": "14:00",
+                "format": "netcdf",
+            },
+        )
+        return True
     except ConnectionError as err:
         raise ConnectionError(
             f"{os.linesep}Failed to connect to CDS. Please check your internet "
@@ -53,6 +68,11 @@ def attempt_cds_login(url: str, key: str) -> True:
                 f"{os.linesep}Please check your era5cli configuration file: "
                 f"{ERA5CLI_CONFIG_PATH.resolve()}{os.linesep}"
                 "Or redefine your configuration with 'era5cli config'"
+            ) from err
+        if NO_DATA_ERR_MSG in str(err):
+            raise InvalidRequestError(
+                f"{os.linesep}Something changed in the CDS API. Please raise an issue "
+                "on https://www.github.com/eWaterCycle/era5cli"
             ) from err
         raise err  # pragma: no cover
 
@@ -123,7 +143,7 @@ def load_era5cli_config() -> Tuple[str, str]:
                 "Old config detected. In the new CDS API only a key is required.\n"
                 "Please look at the new CDS website, and reconfigure your login in "
                 "era5cli\n"
-                "    https://cds-beta.climate.copernicus.eu/"
+                "    https://cds.climate.copernicus.eu/"
             )
             raise InvalidLoginError(msg)
 
@@ -148,7 +168,7 @@ def load_cdsapi_config() -> Tuple[str, str]:
             msg = (
                 "Your CDS API configuration file contains a UID entry/incorrect URL.\n"
                 "Please look at the new CDS website, and reconfigure your key:\n"
-                "    https://cds-beta.climate.copernicus.eu/"
+                "    https://cds.climate.copernicus.eu/"
             )
             raise InvalidLoginError(msg)
     return url, key
