@@ -145,7 +145,7 @@ def add_common_args(argument_parser: ArgumentParser) -> None:
         type=int,
         choices=range(1, 7),
         required=False,
-        default=None,
+        default=1,
         help=textwrap.dedent(
             """
             Number of parallel threads to use when
