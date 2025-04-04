@@ -70,6 +70,7 @@ def _execute(input_args: argparse.Namespace) -> True:
         land=input_args.land,
         overwrite=input_args.overwrite,
         dashed_vars=input_args.dashed_varname,
+        dryrun=input_args.dryrun,
     )
     era5.fetch(dryrun=input_args.dryrun)
     return True

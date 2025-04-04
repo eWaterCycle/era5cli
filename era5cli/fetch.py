@@ -116,9 +116,10 @@ class Fetch:
         land=False,
         overwrite=False,
         dashed_vars=False,
+        dryrun=False,
     ):
         """Initialization of Fetch class."""
-        self._get_login()  # Get login info from config file.
+        self._get_login(dryrun=dryrun)  # Get login info from config file.
 
         self.months = era5cli.utils._zpad_months(months)
         """list(str): List of zero-padded strings of months
@@ -194,7 +195,10 @@ class Fetch:
                 "\n  For more info see 'era5cli hourly --help'."
             )
 
-    def _get_login(self):
+    def _get_login(self, dryrun=False):
+        if dryrun:  # Don't check keys on dry run
+            return None
+
         # First check if the config exists, and guide the user if it does not.
         key_management.check_era5cli_config()
         # Only then load the keys (as they should be there now).
@@ -463,7 +467,6 @@ class Fetch:
             "year": years,
             "month": self.months if months is None else months,
             "time": self.hours,
-            "format": self.outputformat,
             "data_format": self.outputformat,
             "download_format": "unarchived" if self.outputformat.lower() == "netcdf" else "zip",
         }
@@ -489,7 +492,6 @@ class Fetch:
     def _getdata(self, variables: list, years: list, outputfile: str, months=None):
         """Fetch variables using cds api call."""
         name, request = self._build_request(variables, years, months)
-
         if self.dryrun:
             print(name, request, outputfile)
         else:
