@@ -468,7 +468,9 @@ class Fetch:
             "month": self.months if months is None else months,
             "time": self.hours,
             "data_format": self.outputformat,
-            "download_format": "unarchived" if self.outputformat.lower() == "netcdf" else "zip",
+            "download_format": (
+                "unarchived" if self.outputformat.lower() == "netcdf" else "zip"
+            ),
         }
 
         if "pressure-levels" in name:

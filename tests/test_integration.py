@@ -80,7 +80,8 @@ call_result = [
             reanalysis-era5-land-monthly-means {'variable': 'snow_cover',
             'year': 2008, 'month': ['01', '02', '03', '04', '05', '06', '07',
             '08', '09', '10', '11', '12'], 'time': ['00:00'], 'data_format': 'netcdf',
-            'download_format': 'unarchived', 'product_type': 'monthly_averaged_reanalysis'}
+            'download_format': 'unarchived',
+            'product_type': 'monthly_averaged_reanalysis'}
             era5-land_snow_cover_2008_monthly.nc"""
         ),
     },
