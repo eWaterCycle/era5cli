@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+# 2.0.1 - 2025-04-04
+
+Changes since v2.0.0:
+
+**Changed:**
+- Threads are set to 1 by default, as the new CDS is not faster if you use multiple threads.
+  
+**Fixed:**
+- The cdsapi changed how wants the request formatted for getting netCDF files, netCDF files weren't properly downloaded anymore.
+
 # 2.0.0 - 2025-02-12
 
 Changes since v1.4.2:
