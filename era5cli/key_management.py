@@ -48,7 +48,7 @@ def attempt_cds_login(url: str, key: str) -> True:
                 "product_type": "reanalysis",
                 "date": "2012-12-01",
                 "time": "14:00",
-                "format": "netcdf",
+                "data_format": "netcdf",
             },
         )
         return True

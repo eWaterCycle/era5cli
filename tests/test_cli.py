@@ -35,7 +35,7 @@ def test_parse_args():
     assert not args.merge
     assert args.startyear == 2008
     assert args.statistics
-    assert not args.threads
+    assert args.threads == 1
     assert args.variables == ["total_precipitation"]
     assert args.land
     assert not args.area

@@ -472,7 +472,8 @@ def test_build_request():
         "month": ALL_MONTHS,
         "day": ALL_DAYS,
         "time": ALL_HOURS,
-        "format": "netcdf",
+        "data_format": "netcdf",
+        "download_format": "unarchived",
     }
     assert request == req
 
@@ -486,7 +487,8 @@ def test_build_request():
         "product_type": "monthly_averaged_ensemble_members",
         "month": ALL_MONTHS,
         "time": ALL_HOURS,
-        "format": "netcdf",
+        "data_format": "netcdf",
+        "download_format": "unarchived",
     }
     assert request == req
 
@@ -503,7 +505,8 @@ def test_build_request():
         "product_type": "monthly_averaged_reanalysis",
         "month": ALL_MONTHS,
         "time": ["00:00"],
-        "format": "netcdf",
+        "data_format": "netcdf",
+        "download_format": "unarchived",
     }
     assert request == req
 
