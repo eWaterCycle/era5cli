@@ -486,15 +486,12 @@ class Fetch:
             "variable": variable,
             "year": years,
             "month": self.months if months is None else months,
-            # "time": self.hours,
+            **({} if self.period == "daily" else {"time": self.hours}),
             "data_format": self.outputformat,
             "download_format": (
                 "unarchived" if self.outputformat.lower() == "netcdf" else "zip"
             ),
         }
-
-        if self.period != "daily":
-            request["time"] = self.hours
 
         if "pressure-levels" in name:
             request["pressure_level"] = self.pressure_levels
