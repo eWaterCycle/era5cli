@@ -430,6 +430,14 @@ def test_check_variable():
     with pytest.raises(ValueError):
         era5._check_variable(missing_monthly_var)
 
+    era5.period = "daily"
+    era5.land = True
+    era5._check_variable("snow_cover")
+
+    # Non-land variable should fail for daily land
+    with pytest.raises(ValueError):
+        era5._check_variable("vertical_integral_of_mass_tendency")
+
 
 def test_build_name():
     """Test _build_name function of Fetch class."""
@@ -473,6 +481,10 @@ def test_build_name():
     era5 = initialize(period="daily", statistics="daily_mean", ensemble=False)
     name = era5._build_name("total_precipitation")[0]
     assert name == "derived-era5-single-levels-daily-statistics"
+
+    era5 = initialize(period="daily", statistics="daily_mean", land=True, ensemble=False)
+    name = era5._build_name("snow_cover")[0]
+    assert name == "derived-era5-land-daily-statistics"
 
 
 def test_build_request():
@@ -541,6 +553,21 @@ def test_build_request():
     assert name == "derived-era5-single-levels-daily-statistics"
     req = {
         "variable": "total_precipitation",
+        "year": [2008],
+        "month": ALL_MONTHS,
+        "day": ALL_DAYS,
+        "daily_statistic": "daily_mean",
+        "data_format": "netcdf",
+        "download_format": "unarchived",
+    }
+    assert request == req
+
+    era5 = initialize(period="daily", variables=["snow_cover"], years=[2008], statistics="daily_mean", land=True,
+                      ensemble=False)
+    (name, request) = era5._build_request("snow_cover", [2008])
+    assert name == "derived-era5-land-daily-statistics"
+    req = {
+        "variable": "snow_cover",
         "year": [2008],
         "month": ALL_MONTHS,
         "day": ALL_DAYS,

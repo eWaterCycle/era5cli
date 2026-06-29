@@ -374,6 +374,18 @@ class Fetch:
 
     def _check_variable(self, variable):
         """Check variable available and compatible with other inputs."""
+        if self.period == "daily":
+            if self.land:
+                if variable not in ref.ERA5_LAND_VARS:
+                    raise ValueError(
+                        f"Variable {variable} is not available in ERA5-Land daily statistics.\n"
+                        f"Choose from {ref.ERA5_LAND_VARS}"
+                    )
+            elif variable not in ref.SLVARS:
+                raise ValueError(
+                    f"Variable {variable} is not available for daily statistics data."
+                )
+            return
         # if land then the variable must be in era5 land
         if self.land:
             if variable not in ref.ERA5_LAND_VARS:
@@ -422,6 +434,8 @@ class Fetch:
         """Build up name of dataset to use"""
 
         if self.period == "daily":
+            if self.land:
+                return "derived-era5-land-daily-statistics", variable
             return "derived-era5-single-levels-daily-statistics", variable
 
         name = "reanalysis-era5"
