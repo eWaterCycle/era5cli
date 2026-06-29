@@ -133,6 +133,12 @@ def test_init(mockpatch):
             land=True, variables=["skin_temperature"], ensemble=False, splitmonths=False
         )
 
+    era5 = initialize(
+        period="daily", statistics="daily_mean", ensemble=False
+    )
+    assert era5.hours is None
+    assert era5.days == ALL_DAYS
+
 
 @mock.patch("cdsapi.Client", autospec=True)
 @mock.patch("era5cli.utils.append_history", autospec=True)
@@ -273,6 +279,11 @@ def test_define_outputfilename():
     fn = "era5-land_total_precipitation_2008-01_hourly_120E-180E_90S-0N.nc"
     assert fname == fn
 
+    era5 = initialize(period="daily", statistics="daily_mean", ensemble=False, splitmonths=True)
+    era5._extension()
+    fname = era5._define_outputfilename("total_precipitation", [2008], month="01")
+    assert fname == "era5_total_precipitation_2008-01_daily_statistics.nc"
+
 
 _vars = ["total_precipitation", "runoff"]
 _years = [2007, 2008, 2009]
@@ -313,6 +324,12 @@ def test_product_type():
     """Test _product_type function of Fetch class."""
     # Default hourly data
     era5 = initialize()
+
+    era5.period = "daily"
+    assert era5._product_type() is None
+
+    era5 = initialize()
+
     producttype = era5._product_type()
     assert producttype == "ensemble_members"
 
@@ -453,6 +470,10 @@ def test_build_name():
     name = era5._build_name("geopotential")[0]
     assert name == "reanalysis-era5-single-levels"
 
+    era5 = initialize(period="daily", statistics="daily_mean", ensemble=False)
+    name = era5._build_name("total_precipitation")[0]
+    assert name == "derived-era5-single-levels-daily-statistics"
+
 
 def test_build_request():
     """Test _build_request function of Fetch class."""
@@ -513,6 +534,21 @@ def test_build_request():
     # requesting 3d variable with pressurelevels=None should give a ValueError
     with pytest.raises(ValueError):
         era5 = initialize(variables=["temperature"], pressurelevels=None)
+
+    era5 = initialize(period="daily", variables=["total_precipitation"], years=[2008], statistics="daily_mean",
+                      ensemble=False)
+    (name, request) = era5._build_request("total_precipitation", [2008])
+    assert name == "derived-era5-single-levels-daily-statistics"
+    req = {
+        "variable": "total_precipitation",
+        "year": [2008],
+        "month": ALL_MONTHS,
+        "day": ALL_DAYS,
+        "daily_statistic": "daily_mean",
+        "data_format": "netcdf",
+        "download_format": "unarchived",
+    }
+    assert request == req
 
 
 def test_incompatible_options():

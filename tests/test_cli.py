@@ -40,6 +40,18 @@ def test_parse_args():
     assert args.land
     assert not args.area
 
+    argv = [
+        "daily",
+        "--startyear", "2008",
+        "--variables", "total_precipitation",
+        "--statistics", "daily_maximum",
+    ]
+    args = cli._parse_args(argv)
+    assert args.command == "daily"
+    assert args.statistics == "daily_maximum"
+    assert args.days == list(range(1, 32))
+    assert args.months == list(range(1, 13))
+
 
 def test_area_argument():
     """Test if area argument is parsed correctly."""
@@ -191,6 +203,16 @@ def test_period_args():
     with pytest.raises(AttributeError):
         assert era5cli.args.periods.set_period_args(args)
 
+    argv = [
+        "daily",
+        "--startyear", "2008",
+        "--variables", "total_precipitation",
+    ]
+    args = cli._parse_args(argv)
+    period_args = era5cli.args.periods.set_period_args(args)
+    # (synoptic, statistics, splitmonths, days, hours)
+    assert period_args == (None, "daily_mean", True, list(range(1, 32)), None)
+
 
 def test_level_arguments():
     """Test if levels are parsed correctly"""
@@ -281,6 +303,14 @@ def test_main_fetch(fetch):
     ]
     args = cli._parse_args(argv)
     cli._execute(args)
+
+    argv = [
+        "daily",
+        "--startyear", "2008",
+        "--variables", "total_precipitation",
+    ]
+    args = cli._parse_args(argv)
+    assert cli._execute(args)
 
 
 @mock.patch("era5cli.info.Info", autospec=True)
