@@ -7,7 +7,7 @@ def add_period_args(subparsers, common):
     """Add period related parsers and arguments.
 
     Adds the following parsers:
-        monthly, hourly.
+        monthly, daily, hourly.
 
     As well as the following arguments (for
     some of the previously mentioned parsers):
@@ -116,6 +116,41 @@ def add_period_args(subparsers, common):
         ),
     )
 
+    daily = subparsers.add_parser(
+        "daily",
+        parents=[common, mnth, day, splitmonths],
+        description="Execute the data fetch process for daily data.",
+        prog=textwrap.dedent(
+            """
+            Use `era5cli daily --help` for more information
+            
+            """
+        ),
+        help=textwrap.dedent(
+            """
+            Execute the data fetch process for daily data.
+            Use `era5cli daily --help` for more information
+
+            """
+        ),
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+
+    daily.add_argument(
+        "--statistics",
+        type=str,
+        default="daily_mean",
+        choices=["daily_mean", "daily_minimum", "daily_maximum", "daily_standard_deviation"],
+        help=textwrap.dedent(
+            """
+            When downloading daily data, provide
+            the `--statistics` argument to download statistics
+            (daily_mean and daily_minimum, daily_maximum, daily_standard_deviation)
+
+            """
+        ),
+    )
+
     monthly = subparsers.add_parser(
         "monthly",
         parents=[common, mnth],
@@ -170,6 +205,13 @@ def set_period_args(args):
         else:
             synoptic = True
             hours = args.synoptic
+    elif args.command == "daily":
+        synoptic = None
+        splitmonths: bool = args.splitmonths
+        statistics = args.statistics
+        days = args.days
+        hours = None
+
     elif args.command == "hourly":
         synoptic = None
         splitmonths: bool = args.splitmonths

@@ -131,8 +131,8 @@ class Fetch:
             """list(str): List of zero-padded strings of days
             (e.g. ['01', '02',..., '31'])."""
 
-        self.hours = era5cli.utils._format_hours(hours)
-        """list(str): List of xx:00 formatted time strings
+        self.hours = None if period == "daily" else era5cli.utils._format_hours(hours)
+        """None for daily data, list(str): List of xx:00 formatted time strings otherwise
         (e.g. ['00:00', '01:00', ..., '23:00'])."""
         self.pressure_levels = pressurelevels
         """list(any): List of pressure levels (integer), or the indication
@@ -355,6 +355,9 @@ class Fetch:
         if self.synoptic:
             producttype += "_by_hour_of_day"
 
+        if self.period == "daily":
+            return None
+
         return producttype
 
     def _check_levels(self):
@@ -418,6 +421,9 @@ class Fetch:
     def _build_name(self, variable):
         """Build up name of dataset to use"""
 
+        if self.period == "daily":
+            return "derived-era5-single-levels-daily-statistics", variable
+
         name = "reanalysis-era5"
 
         # report to user in case of ambiguous vars
@@ -466,12 +472,15 @@ class Fetch:
             "variable": variable,
             "year": years,
             "month": self.months if months is None else months,
-            "time": self.hours,
+            # "time": self.hours,
             "data_format": self.outputformat,
             "download_format": (
                 "unarchived" if self.outputformat.lower() == "netcdf" else "zip"
             ),
         }
+
+        if self.period != "daily":
+            request["time"] = self.hours
 
         if "pressure-levels" in name:
             request["pressure_level"] = self.pressure_levels
@@ -483,8 +492,11 @@ class Fetch:
         if product_type is not None:
             request["product_type"] = product_type
 
-        if self.period == "hourly":
+        if self.period in ("hourly", "daily"):
             request["day"] = self.days
+
+        if self.period == "daily":
+            request["daily_statistic"] = self.statistics
 
         return (name, request)
 
