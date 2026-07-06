@@ -141,12 +141,12 @@ def add_period_args(subparsers, common):
         type=str,
         default="daily_mean",
         choices=["daily_mean", "daily_minimum",
-                 "daily_maximum", "daily_standard_deviation"],
+                 "daily_maximum", "daily_sum"],
         help=textwrap.dedent(
             """
             When downloading daily data, provide
             the `--statistics` argument to download statistics
-            (daily_mean and daily_minimum, daily_maximum, daily_standard_deviation)
+            (daily_mean and daily_minimum, daily_maximum, daily_sum)
 
             """
         ),
