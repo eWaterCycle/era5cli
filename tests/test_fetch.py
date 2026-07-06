@@ -279,7 +279,8 @@ def test_define_outputfilename():
     fn = "era5-land_total_precipitation_2008-01_hourly_120E-180E_90S-0N.nc"
     assert fname == fn
 
-    era5 = initialize(period="daily", statistics="daily_mean", ensemble=False, splitmonths=True)
+    era5 = initialize(period="daily", statistics="daily_mean",
+                      ensemble=False, splitmonths=True)
     era5._extension()
     fname = era5._define_outputfilename("total_precipitation", [2008], month="01")
     assert fname == "era5_total_precipitation_2008-01_daily_statistics.nc"
@@ -482,7 +483,8 @@ def test_build_name():
     name = era5._build_name("total_precipitation")[0]
     assert name == "derived-era5-single-levels-daily-statistics"
 
-    era5 = initialize(period="daily", statistics="daily_mean", land=True, ensemble=False)
+    era5 = initialize(period="daily", statistics="daily_mean",
+                      land=True, ensemble=False)
     name = era5._build_name("snow_cover")[0]
     assert name == "derived-era5-land-daily-statistics"
 
@@ -547,7 +549,8 @@ def test_build_request():
     with pytest.raises(ValueError):
         era5 = initialize(variables=["temperature"], pressurelevels=None)
 
-    era5 = initialize(period="daily", variables=["total_precipitation"], years=[2008], statistics="daily_mean",
+    era5 = initialize(period="daily", variables=["total_precipitation"],
+                      years=[2008], statistics="daily_mean",
                       ensemble=False)
     (name, request) = era5._build_request("total_precipitation", [2008])
     assert name == "derived-era5-single-levels-daily-statistics"
@@ -562,7 +565,8 @@ def test_build_request():
     }
     assert request == req
 
-    era5 = initialize(period="daily", variables=["snow_cover"], years=[2008], statistics="daily_mean", land=True,
+    era5 = initialize(period="daily", variables=["snow_cover"],
+                      years=[2008], statistics="daily_mean", land=True,
                       ensemble=False)
     (name, request) = era5._build_request("snow_cover", [2008])
     assert name == "derived-era5-land-daily-statistics"

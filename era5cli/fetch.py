@@ -132,8 +132,10 @@ class Fetch:
             (e.g. ['01', '02',..., '31'])."""
 
         self.hours = None if period == "daily" else era5cli.utils._format_hours(hours)
-        """None for daily data, list(str): List of xx:00 formatted time strings otherwise
-        (e.g. ['00:00', '01:00', ..., '23:00'])."""
+        """
+        None for daily data, list(str): List of xx:00 formatted time strings otherwise
+        (e.g. ['00:00', '01:00', ..., '23:00']).
+        """
         self.pressure_levels = pressurelevels
         """list(any): List of pressure levels (integer), or the indication
         'surface', requesting data only from a single-level dataset."""
@@ -378,7 +380,8 @@ class Fetch:
             if self.land:
                 if variable not in ref.ERA5_LAND_VARS:
                     raise ValueError(
-                        f"Variable {variable} is not available in ERA5-Land daily statistics.\n"
+                        f"Variable {variable} is not available in ERA5-Land"
+                        f" daily statistics.\n"
                         f"Choose from {ref.ERA5_LAND_VARS}"
                     )
             elif variable not in ref.SLVARS:

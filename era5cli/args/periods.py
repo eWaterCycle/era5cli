@@ -130,7 +130,7 @@ def add_period_args(subparsers, common):
             """
             Execute the data fetch process for daily data.
             Use `era5cli daily --help` for more information
-
+            
             """
         ),
         formatter_class=argparse.RawTextHelpFormatter,
@@ -140,7 +140,8 @@ def add_period_args(subparsers, common):
         "--statistics",
         type=str,
         default="daily_mean",
-        choices=["daily_mean", "daily_minimum", "daily_maximum", "daily_standard_deviation"],
+        choices=["daily_mean", "daily_minimum",
+                 "daily_maximum", "daily_standard_deviation"],
         help=textwrap.dedent(
             """
             When downloading daily data, provide
