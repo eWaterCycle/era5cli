@@ -77,7 +77,6 @@ dev = [
   "black",
   "isort",
   "pytest",
-  "pytest-flake8",
   "pytest-cov",
 ]
 docs = [
