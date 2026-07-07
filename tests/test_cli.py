@@ -1,11 +1,12 @@
 """Tests for era5cli utility functions."""
 
 import unittest.mock as mock
+
 import pytest
+
 import era5cli.args
 import era5cli.inputref as ref
-from era5cli import cli
-from era5cli import key_management
+from era5cli import cli, key_management
 
 
 def test_parse_args():
@@ -382,11 +383,7 @@ class TestConfigControlFlow:
         args = cli._parse_args(["config", "--show"])
         cli._execute(args)
 
-        expected = (
-            "Contents of .config/era5cli.txt:\n"
-            "    key: abc-def\n"
-            "    url: https://www.test.org/\n"
-        )
+        expected = "Contents of .config/era5cli.txt:\n    key: abc-def\n    url: https://www.test.org/\n"
         out, _ = capsys.readouterr()
         assert expected in out
 

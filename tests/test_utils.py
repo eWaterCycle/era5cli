@@ -2,6 +2,7 @@
 
 import pytest
 from netCDF4 import Dataset
+
 import era5cli
 import era5cli.utils
 from era5cli.__version__ import __version__ as era5cliversion

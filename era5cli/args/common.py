@@ -2,6 +2,7 @@ import textwrap
 from argparse import ArgumentParser
 from datetime import datetime
 from typing import Union
+
 import era5cli.inputref as ref
 
 
@@ -242,13 +243,9 @@ def construct_year_list(args):
     # check whether correct years have been entered
     for year in (args.startyear, endyear):
         if args.land:
-            assert (
-                1950 <= year <= datetime.now().year
-            ), "for ERA5-Land, year should be between 1950 and present"
+            assert 1950 <= year <= datetime.now().year, "for ERA5-Land, year should be between 1950 and present"
         else:
-            assert (
-                1940 <= year <= datetime.now().year
-            ), "year should be between 1940 and present"
+            assert 1940 <= year <= datetime.now().year, "year should be between 1940 and present"
 
     assert endyear >= args.startyear, "endyear should be >= startyear or None"
 

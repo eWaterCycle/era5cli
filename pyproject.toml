@@ -72,10 +72,11 @@ era5cli="era5cli.cli:main"
 dev = [
   "hatch",
   "bump-my-version",
-  "flake8",
-  "flake8-pyproject",
-  "black",
-  "isort",
+  "ruff",
+#  "flake8",
+#  "flake8-pyproject",
+#  "black",
+#  "isort",
   "pytest",
   "pytest-cov",
 ]
@@ -92,12 +93,12 @@ testpaths = ["tests"]
 features = ["dev",]
 
 [tool.hatch.envs.default.scripts]
-lint = [
-  "flake8p .",  # flake8p ensures pyproject.toml is used for configuration
-  "black --check --diff .",
-  "isort --check-only --diff .",
-]
-format = ["isort .", "black .", "lint",]
+#lint = [
+#  "flake8p .",  # flake8p ensures pyproject.toml is used for configuration
+#  "black --check --diff .",
+#  "isort --check-only --diff .",
+#]
+#format = ["isort .", "black .", "lint",]
 test = ["pytest",]
 coverage = ["pytest --cov=era5cli --cov-report term --cov-report xml:cov.xml tests/"]
 
@@ -108,28 +109,28 @@ features = ["docs",]
 build = ["mkdocs build",]
 serve = ["mkdocs serve",]
 
-[tool.black]
-line-length = 88
-target-version = ['py39', 'py310', 'py311', 'py312', 'py313']
-include = '\.pyi?$'
+#[tool.black]
+#line-length = 88
+#target-version = ['py39', 'py310', 'py311', 'py312', 'py313']
+#include = '\.pyi?$'
+#
+#[tool.isort]
+#py_version=39
+#skip = [".gitignore"]
+#skip_glob = ["docs/*"]
+#force_single_line = true
+#lines_after_imports = 2
+#no_lines_before = ["FUTURE","STDLIB","THIRDPARTY","FIRSTPARTY","LOCALFOLDER"]
+#known_first_party = ["era5cli"]
+#src_paths = ["era5cli", "tests"]
+#line_length = 120
 
-[tool.isort]
-py_version=39
-skip = [".gitignore"]
-skip_glob = ["docs/*"]
-force_single_line = true
-lines_after_imports = 2
-no_lines_before = ["FUTURE","STDLIB","THIRDPARTY","FIRSTPARTY","LOCALFOLDER"]
-known_first_party = ["era5cli"]
-src_paths = ["era5cli", "tests"]
-line_length = 120
-
-[tool.flake8]
-max-line-length = 88
-ignore = [
-  "E203",  # Whitespace before ":". Not PEP8 compliant (https://github.com/psf/black/issues/315)
-  "W503",  # https://peps.python.org/pep-0008/#should-a-line-break-before-or-after-a-binary-operator
-]
+#[tool.flake8]
+#max-line-length = 88
+#ignore = [
+#  "E203",  # Whitespace before ":". Not PEP8 compliant (https://github.com/psf/black/issues/315)
+#  "W503",  # https://peps.python.org/pep-0008/#should-a-line-break-before-or-after-a-binary-operator
+#]
 
 [tool.coverage.report]
 exclude_lines = [
@@ -137,4 +138,23 @@ exclude_lines = [
   "@overload",
   "if TYPE_CHECKING:",
   "if typing.TYPE_CHECKING:"
+]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+known-first-party = ["rocrate_action_recorder"]
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "I",
+]
+ignore = [
+    "E501"
 ]

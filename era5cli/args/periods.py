@@ -1,5 +1,6 @@
 import argparse
 import textwrap
+
 from era5cli import utils
 
 
@@ -192,8 +193,7 @@ def set_period_args(args):
         statistics: bool = args.statistics
         if statistics:
             assert args.ensemble, (
-                "Statistics can only be computed over an ensemble, "
-                "add --ensemble or remove --statistics."
+                "Statistics can only be computed over an ensemble, add --ensemble or remove --statistics."
             )
         days = args.days
         hours = args.hours

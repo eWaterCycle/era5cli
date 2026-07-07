@@ -1,5 +1,6 @@
 import argparse
 import textwrap
+
 from era5cli import key_management
 
 
@@ -92,10 +93,7 @@ def run_config(args):
         args: Arguments collected by argparse
     """
     if len(args.uid) > 0:
-        msg = (
-            "The `uid` argument is deprecated.\n"
-            "The new CDS API does not use UIDs anymore."
-        )
+        msg = "The `uid` argument is deprecated.\nThe new CDS API does not use UIDs anymore."
         raise InputError(msg)
 
     if args.show and args.key is not None:

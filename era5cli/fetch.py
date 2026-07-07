@@ -4,13 +4,14 @@ import itertools
 import logging
 import os
 import sys
+
 import cdsapi
 from pathos.threading import ThreadPool as Pool
+
 import era5cli.inputref as ref
 import era5cli.utils
 from era5cli import key_management
-from era5cli._request_size import TooLargeRequestError
-from era5cli._request_size import request_too_large
+from era5cli._request_size import TooLargeRequestError, request_too_large
 
 
 class Fetch:
@@ -278,9 +279,7 @@ class Fetch:
 
     def _split_variable(self):
         """Split by variable."""
-        outputfiles = [
-            self._define_outputfilename(var, self.years) for var in self.variables
-        ]
+        outputfiles = [self._define_outputfilename(var, self.years) for var in self.variables]
         if not self.overwrite:
             era5cli.utils.assert_outputfiles_not_exist(outputfiles)
 
@@ -312,9 +311,7 @@ class Fetch:
         years = []
         months = []
 
-        for var, year, month in itertools.product(
-            self.variables, self.years, self.months
-        ):
+        for var, year, month in itertools.product(self.variables, self.years, self.months):
             outputfiles += [self._define_outputfilename(var, [year, year], month)]
             variables += [var]
             years += [year]
@@ -328,9 +325,7 @@ class Fetch:
 
     def _product_type(self):
         """Construct the product type name from the options."""
-        assert not (
-            self.land and self.ensemble
-        ), "ERA5-Land does not contain Ensemble statistics."
+        assert not (self.land and self.ensemble), "ERA5-Land does not contain Ensemble statistics."
 
         if self.period == "hourly" and self.ensemble and self.statistics:
             # The only configuration to return a list
@@ -365,13 +360,9 @@ class Fetch:
     def _check_levels(self):
         """Retrieve pressure level info for request"""
         if not self.pressure_levels:
-            raise ValueError(
-                "Requested 3D variable(s), but no pressure levels specified.Aborting."
-            )
+            raise ValueError("Requested 3D variable(s), but no pressure levels specified.Aborting.")
         if not all(level in ref.PLEVELS for level in self.pressure_levels):
-            raise ValueError(
-                f"Invalid pressure levels. Allowed values are: {ref.PLEVELS}"
-            )
+            raise ValueError(f"Invalid pressure levels. Allowed values are: {ref.PLEVELS}")
 
     def _check_variable(self, variable):
         """Check variable available and compatible with other inputs."""
@@ -384,25 +375,18 @@ class Fetch:
                         f"Choose from {ref.ERA5_LAND_VARS}"
                     )
             elif variable not in ref.SLVARS:
-                raise ValueError(
-                    f"Variable {variable} is not available for daily statistics data."
-                )
+                raise ValueError(f"Variable {variable} is not available for daily statistics data.")
             return
         # if land then the variable must be in era5 land
         if self.land:
             if variable not in ref.ERA5_LAND_VARS:
                 raise ValueError(
-                    f"Variable {variable} is not available in ERA5-Land.\n"
-                    f"Choose from {ref.ERA5_LAND_VARS}"
+                    f"Variable {variable} is not available in ERA5-Land.\nChoose from {ref.ERA5_LAND_VARS}"
                 )
         elif variable in ref.PLVARS + ref.SLVARS:
             if self.period == "monthly" and variable in ref.MISSING_MONTHLY_VARS:
-                header = (
-                    "There is no monthly data available for the following variables:\n"
-                )
-                raise ValueError(
-                    era5cli.utils.print_multicolumn(header, ref.MISSING_MONTHLY_VARS)
-                )
+                header = "There is no monthly data available for the following variables:\n"
+                raise ValueError(era5cli.utils.print_multicolumn(header, ref.MISSING_MONTHLY_VARS))
         else:
             raise ValueError(f"Invalid variable name: {variable}")
 
@@ -457,9 +441,7 @@ class Fetch:
                 instruction = instruction_surface
             else:
                 instruction = instruction_pressure
-            logging.warning(
-                f"The variable name '{variable}' is ambiguous. {instruction}"
-            )
+            logging.warning(f"The variable name '{variable}' is ambiguous. {instruction}")
 
         if self.land:
             name += "-land"
@@ -489,9 +471,7 @@ class Fetch:
             "month": self.months if months is None else months,
             **({} if self.period == "daily" else {"time": self.hours}),
             "data_format": self.outputformat,
-            "download_format": (
-                "unarchived" if self.outputformat.lower() == "netcdf" else "zip"
-            ),
+            "download_format": ("unarchived" if self.outputformat.lower() == "netcdf" else "zip"),
         }
 
         if "pressure-levels" in name:

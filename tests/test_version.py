@@ -1,6 +1,7 @@
 """Tests for era5cli __version__ available variales."""
 
 import pytest
+
 import era5cli.__version__ as era5cli
 
 

@@ -1,6 +1,8 @@
 from unittest.mock import patch
+
 import pytest
 import requests.exceptions as rex
+
 from era5cli import key_management
 
 CFG_FILE = "url: https://www.github.com/\nkey: abc-def\n"
@@ -78,9 +80,7 @@ class TestConfigCdsrc:
         mp4 = patch("era5cli.key_management.CDSAPI_CONFIG_PATH", valid_path_cds)
         mp5 = patch("sys.stdin.isatty", return_value=True)
         with mp1, mp2, mp3, mp4, mp5:
-            with pytest.raises(
-                key_management.InvalidLoginError, match="No valid CDS login found"
-            ):
+            with pytest.raises(key_management.InvalidLoginError, match="No valid CDS login found"):
                 key_management.check_era5cli_config()
 
     def test_cdsrcfile_user_says_yes(self, empty_path_era5, valid_path_cds):
@@ -108,9 +108,7 @@ class TestConfigCdsrc:
         mp3 = patch("era5cli.key_management.CDSAPI_CONFIG_PATH", valid_path_cds)
         mp4 = patch("sys.stdin.isatty", return_value=True)
         with mp1, mp2, mp3, mp4:
-            with pytest.raises(
-                key_management.InvalidLoginError, match="No valid CDS login found"
-            ):
+            with pytest.raises(key_management.InvalidLoginError, match="No valid CDS login found"):
                 key_management.check_era5cli_config()
 
 
@@ -137,9 +135,7 @@ class TestAttemptCdsLogin:
                 key_management.InvalidLoginError,
                 match="Authorization with the CDS served failed",
             ):
-                key_management.attempt_cds_login(
-                    url="https://www.github.com/", key="abc:def"
-                )
+                key_management.attempt_cds_login(url="https://www.github.com/", key="abc:def")
 
     def test_retrieve_fail(self):
         mp1 = patch("cdsapi.Client.status")
