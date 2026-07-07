@@ -44,9 +44,12 @@ def test_parse_args():
 def test_parse_daily_args():
     argv = [
         "daily",
-        "--startyear", "2008",
-        "--variables", "total_precipitation",
-        "--statistics", "daily_maximum",
+        "--startyear",
+        "2008",
+        "--variables",
+        "total_precipitation",
+        "--statistics",
+        "daily_maximum",
     ]
     args = cli._parse_args(argv)
     assert args.command == "daily"
@@ -209,8 +212,10 @@ def test_period_args():
 def test_period_daily_args():
     argv = [
         "daily",
-        "--startyear", "2008",
-        "--variables", "total_precipitation",
+        "--startyear",
+        "2008",
+        "--variables",
+        "total_precipitation",
     ]
     args = cli._parse_args(argv)
     period_args = era5cli.args.periods.set_period_args(args)
@@ -310,8 +315,10 @@ def test_main_fetch(fetch):
 
     argv = [
         "daily",
-        "--startyear", "2008",
-        "--variables", "total_precipitation",
+        "--startyear",
+        "2008",
+        "--variables",
+        "total_precipitation",
     ]
     args = cli._parse_args(argv)
     assert cli._execute(args)

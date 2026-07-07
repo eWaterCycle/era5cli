@@ -90,7 +90,7 @@ def set_config(
         )
         return True
     except InvalidLoginError:
-        print("Error: the key is rejected by the CDS. " "Please check and try again.")
+        print("Error: the key is rejected by the CDS. Please check and try again.")
     return False
 
 

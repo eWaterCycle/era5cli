@@ -116,8 +116,6 @@ def run_config(args):
         raise InputError("Your CDS API key is a required input.")
     if args.show:
         url, key = key_management.load_era5cli_config()
-        print(
-            "Contents of .config/era5cli.txt:\n" f"    key: {key}\n" f"    url: {url}\n"
-        )
+        print(f"Contents of .config/era5cli.txt:\n    key: {key}\n    url: {url}\n")
     else:
         key_management.set_config(args.url, args.key)

@@ -140,8 +140,7 @@ def add_period_args(subparsers, common):
         "--statistics",
         type=str,
         default="daily_mean",
-        choices=["daily_mean", "daily_minimum",
-                 "daily_maximum", "daily_sum"],
+        choices=["daily_mean", "daily_minimum", "daily_maximum", "daily_sum"],
         help=textwrap.dedent(
             """
             When downloading daily data, provide

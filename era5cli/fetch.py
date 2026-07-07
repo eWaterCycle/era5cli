@@ -328,9 +328,9 @@ class Fetch:
 
     def _product_type(self):
         """Construct the product type name from the options."""
-        assert not (
-            self.land and self.ensemble
-        ), "ERA5-Land does not contain Ensemble statistics."
+        assert not (self.land and self.ensemble), (
+            "ERA5-Land does not contain Ensemble statistics."
+        )
 
         if self.period == "hourly" and self.ensemble and self.statistics:
             # The only configuration to return a list
@@ -366,8 +366,7 @@ class Fetch:
         """Retrieve pressure level info for request"""
         if not self.pressure_levels:
             raise ValueError(
-                "Requested 3D variable(s), but no pressure levels specified."
-                "Aborting."
+                "Requested 3D variable(s), but no pressure levels specified.Aborting."
             )
         if not all(level in ref.PLEVELS for level in self.pressure_levels):
             raise ValueError(
@@ -399,8 +398,7 @@ class Fetch:
         elif variable in ref.PLVARS + ref.SLVARS:
             if self.period == "monthly" and variable in ref.MISSING_MONTHLY_VARS:
                 header = (
-                    "There is no monthly data available for the "
-                    "following variables:\n"
+                    "There is no monthly data available for the following variables:\n"
                 )
                 raise ValueError(
                     era5cli.utils.print_multicolumn(header, ref.MISSING_MONTHLY_VARS)
