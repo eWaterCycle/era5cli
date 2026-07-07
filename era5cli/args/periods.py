@@ -123,14 +123,14 @@ def add_period_args(subparsers, common):
         prog=textwrap.dedent(
             """
             Use `era5cli daily --help` for more information
-            
+
             """
         ),
         help=textwrap.dedent(
             """
             Execute the data fetch process for daily data.
             Use `era5cli daily --help` for more information
-            
+
             """
         ),
         formatter_class=argparse.RawTextHelpFormatter,

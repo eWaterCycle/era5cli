@@ -40,6 +40,7 @@ def test_parse_args():
     assert args.land
     assert not args.area
 
+
 def test_parse_daily_args():
     argv = [
         "daily",
@@ -203,6 +204,7 @@ def test_period_args():
     args = cli._parse_args(argv)
     with pytest.raises(AttributeError):
         assert era5cli.args.periods.set_period_args(args)
+
 
 def test_period_daily_args():
     argv = [
