@@ -421,6 +421,21 @@ def test_check_variable():
         era5._check_variable("vertical_integral_of_mass_tendency")
 
 
+def test_check_variable_daily_slvars():
+    """Non-SLVARS variable should fail for daily, non-land requests."""
+    era5 = initialize()
+    era5.period = "daily"
+    era5.land = False
+    with pytest.raises(ValueError):
+        era5._check_variable("divergence")  # PLVARS-only, not in SLVARS
+
+
+def test_exit_is_noop():
+    """_exit is an unused no-op stub; confirm it does nothing and doesn't raise."""
+    era5 = initialize()
+    assert era5._exit() is None
+
+
 def test_build_name():
     """Test _build_name function of Fetch class."""
     era5 = initialize()

@@ -35,6 +35,22 @@ def valid_path_cds(tmp_path_factory):
     return fn
 
 
+@pytest.fixture(scope="function")
+def uid_key_path_cds(tmp_path_factory):
+    fn = tmp_path_factory.mktemp(".config") / "cdsapirc.txt"
+    with open(fn, mode="w", encoding="utf-8") as f:
+        f.write("url: https://www.github.com/\nkey: uid:abc-def\n")
+    return fn
+
+
+@pytest.fixture(scope="function")
+def old_url_path_cds(tmp_path_factory):
+    fn = tmp_path_factory.mktemp(".config") / "cdsapirc.txt"
+    with open(fn, mode="w", encoding="utf-8") as f:
+        f.write("url: https://www.github.com/api/v2\nkey: abc-def\n")
+    return fn
+
+
 class TestEra5CliConfig:
     """Test the functionality for writing and loading the config file."""
 
@@ -155,3 +171,17 @@ class TestAttemptCdsLogin:
         mp2 = patch("cdsapi.Client.retrieve")
         with mp1, mp2:
             assert key_management.attempt_cds_login(url="test", key="abc:def") is True
+
+
+class TestLoadCdsapiConfig:
+    """Test key_management.load_cdsapi_config directly."""
+
+    def test_uid_style_key_rejected(self, uid_key_path_cds):
+        with patch("era5cli.key_management.CDSAPI_CONFIG_PATH", uid_key_path_cds):
+            with pytest.raises(key_management.InvalidLoginError):
+                key_management.load_cdsapi_config()
+
+    def test_old_api_url_rejected(self, old_url_path_cds):
+        with patch("era5cli.key_management.CDSAPI_CONFIG_PATH", old_url_path_cds):
+            with pytest.raises(key_management.InvalidLoginError):
+                key_management.load_cdsapi_config()

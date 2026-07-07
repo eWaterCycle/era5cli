@@ -391,6 +391,8 @@ class TestConfigControlFlow:
         "input_args",
         [
             ["config", "--show", "--key", "abc-def"],
+            ["config", "--uid", "x", "--key", "abc-def"],
+            ["config"],
         ],
     )
     def test_config_inputerror(self, input_args):
