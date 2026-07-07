@@ -177,11 +177,9 @@ def _append_netcdf_history(ncfile: str, appendtxt: str):
     # open netCDF file rw and append to history
     ncfile = Dataset(ncfile, "r+")
     try:
-        ncfile.history = textwrap.dedent(
-            f"""\
+        ncfile.history = textwrap.dedent(f"""\
             {appendtxt}
-            {ncfile.history}"""
-        )
+            {ncfile.history}""")
     except AttributeError:
         ncfile.history = appendtxt
     ncfile.close()

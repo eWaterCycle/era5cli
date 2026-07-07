@@ -238,7 +238,7 @@ class Fetch:
             raise ValueError(f"Unknown outputformat: {self.outputformat}")
 
     def _process_areaname(self):
-        (lat_max, lon_min, lat_min, lon_max) = [round(c) for c in self.area]
+        lat_max, lon_min, lat_min, lon_max = [round(c) for c in self.area]
 
         def lon(x):
             return f"{x}E" if x >= 0 else f"{abs(x)}W"
@@ -328,9 +328,9 @@ class Fetch:
 
     def _product_type(self):
         """Construct the product type name from the options."""
-        assert not (self.land and self.ensemble), (
-            "ERA5-Land does not contain Ensemble statistics."
-        )
+        assert not (
+            self.land and self.ensemble
+        ), "ERA5-Land does not contain Ensemble statistics."
 
         if self.period == "hourly" and self.ensemble and self.statistics:
             # The only configuration to return a list
@@ -408,7 +408,7 @@ class Fetch:
 
     def _check_area(self):
         """Confirm that area parameters are correct."""
-        (lat_max, lon_min, lat_min, lon_max) = self.area
+        lat_max, lon_min, lat_min, lon_max = self.area
         if not (
             -90 <= lat_max <= 90
             and -90 <= lat_min <= 90

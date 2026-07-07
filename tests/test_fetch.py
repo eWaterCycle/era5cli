@@ -6,7 +6,6 @@ import pytest
 from era5cli import _request_size
 from era5cli import fetch
 
-
 # fmt: off
 ALL_HOURS = [
     "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00",
@@ -498,7 +497,7 @@ def test_build_request():
         years=[2008],
         splitmonths=False,
     )
-    (name, request) = era5._build_request("total_precipitation", [2008])
+    name, request = era5._build_request("total_precipitation", [2008])
     assert name == "reanalysis-era5-single-levels"
     req = {
         "variable": "total_precipitation",
@@ -514,7 +513,7 @@ def test_build_request():
 
     # monthly data
     era5 = initialize(period="monthly", variables=["total_precipitation"], years=[2008])
-    (name, request) = era5._build_request("total_precipitation", [2008])
+    name, request = era5._build_request("total_precipitation", [2008])
     assert name == "reanalysis-era5-single-levels-monthly-means"
     req = {
         "variable": "total_precipitation",
@@ -532,7 +531,7 @@ def test_build_request():
         period="monthly", variables=["snow_cover"], hours=[0], land=True, ensemble=False
     )
 
-    (name, request) = era5._build_request("snow_cover", [2008])
+    name, request = era5._build_request("snow_cover", [2008])
     assert name == ("reanalysis-era5-land-monthly-means")
     req = {
         "variable": "snow_cover",
@@ -556,7 +555,7 @@ def test_build_request():
         statistics="daily_mean",
         ensemble=False,
     )
-    (name, request) = era5._build_request("total_precipitation", [2008])
+    name, request = era5._build_request("total_precipitation", [2008])
     assert name == "derived-era5-single-levels-daily-statistics"
     req = {
         "variable": "total_precipitation",
@@ -577,7 +576,7 @@ def test_build_request():
         land=True,
         ensemble=False,
     )
-    (name, request) = era5._build_request("snow_cover", [2008])
+    name, request = era5._build_request("snow_cover", [2008])
     assert name == "derived-era5-land-daily-statistics"
     req = {
         "variable": "snow_cover",
@@ -615,13 +614,13 @@ def test_area():
     assert era5.area is None
 
     era5 = initialize(area=[90, -180, -90, 180])
-    (name, request) = era5._build_request("total_precipitation", [2008])
+    name, request = era5._build_request("total_precipitation", [2008])
     assert era5.area == [90, -180, -90, 180]
     assert request["area"] == [90, -180, -90, 180]
 
     # Decimals are rounded down
     era5 = initialize(area=[89.9999, -179.90, -90.0000, 179.012])
-    (name, request) = era5._build_request("total_precipitation", [2008])
+    name, request = era5._build_request("total_precipitation", [2008])
     assert request["area"] == [90.0, -179.90, -90.0, 179.01]
 
     # lat_max may not be lower than lat_min
@@ -631,7 +630,7 @@ def test_area():
 
     # lon_min higher than lon_max should be ok
     era5 = initialize(area=[90, 120, -90, -120])
-    (name, request) = era5._build_request("total_precipitation", [2008])
+    name, request = era5._build_request("total_precipitation", [2008])
     assert request["area"] == [90.0, 120.0, -90.0, -120.0]
 
     # lat_max may not equal lat_min

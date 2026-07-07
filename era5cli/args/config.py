@@ -19,8 +19,7 @@ def add_config_args(subparsers: argparse._SubParsersAction) -> None:
     config = subparsers.add_parser(
         "config",
         description="",
-        prog=textwrap.dedent(
-            """
+        prog=textwrap.dedent("""
             Configure the CDS login info for era5cli.
 
             This will create a config file in your home directory, in folder named
@@ -31,14 +30,11 @@ def add_config_args(subparsers: argparse._SubParsersAction) -> None:
             right).
 
             Use `era5cli config --help` for more information.
-            """
-        ),
-        help=textwrap.dedent(
-            """
+            """),
+        help=textwrap.dedent("""
             Configure the CDS login info for era5cli.
 
-            """
-        ),
+            """),
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
@@ -46,21 +42,17 @@ def add_config_args(subparsers: argparse._SubParsersAction) -> None:
         "--show",
         action="store_true",
         default=False,
-        help=textwrap.dedent(
-            """
+        help=textwrap.dedent("""
             Print the stored keys to the screen.
-            """
-        ),
+            """),
     )
 
     config.add_argument(
         "--key",
         type=str,
-        help=textwrap.dedent(
-            """
+        help=textwrap.dedent("""
             Your CDS key, e.g.: "4s215sgs-2dfa-6h34-62h2-1615ad163414"
-            """
-        ),
+            """),
     )
 
     config.add_argument(
@@ -68,12 +60,10 @@ def add_config_args(subparsers: argparse._SubParsersAction) -> None:
         type=str,
         required=False,
         default=key_management.DEFAULT_CDS_URL,
-        help=textwrap.dedent(
-            f"""
+        help=textwrap.dedent(f"""
             (optional) URL to the CDS, by default:
                 {key_management.DEFAULT_CDS_URL}
-            """
-        ),
+            """),
     )
 
     config.add_argument(
@@ -81,11 +71,9 @@ def add_config_args(subparsers: argparse._SubParsersAction) -> None:
         type=str,
         required=False,
         default="",
-        help=textwrap.dedent(
-            """
+        help=textwrap.dedent("""
             DO NOT USE: deprecated due to changes in the CDS API"
-            """
-        ),
+            """),
     )
 
 
