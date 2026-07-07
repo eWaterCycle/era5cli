@@ -5,6 +5,7 @@ from typing import Tuple
 import cdsapi
 from requests.exceptions import ConnectionError  # pylint: disable=redefined-builtin
 
+
 ERA5CLI_CONFIG_PATH = Path.home() / ".config" / "era5cli" / "cds_key.txt"
 CDSAPI_CONFIG_PATH = Path.home() / ".cdsapirc"
 DEFAULT_CDS_URL = "https://cds.climate.copernicus.eu/api"

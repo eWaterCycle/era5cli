@@ -3,6 +3,7 @@
 from typing import TYPE_CHECKING
 from era5cli import inputref
 
+
 if TYPE_CHECKING:
     from era5cli.fetch import Fetch
 

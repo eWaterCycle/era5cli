@@ -3,6 +3,7 @@
 import pytest
 from era5cli import info
 
+
 INFO_PARAMS = [
     "levels",
     "2Dvars",

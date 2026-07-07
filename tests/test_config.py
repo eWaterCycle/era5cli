@@ -3,6 +3,7 @@ import pytest
 import requests.exceptions as rex
 from era5cli import key_management
 
+
 CFG_FILE = "url: https://www.github.com/\nkey: abc-def\n"
 
 
