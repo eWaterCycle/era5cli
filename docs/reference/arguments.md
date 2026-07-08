@@ -1,5 +1,5 @@
 
-All available arguments for the hourly and monthly requests are shown below. This can also be viewed by doing `era5cli hourly --help` and `era5cli monthly --help`.
+All available arguments for the hourly, daily and monthly requests are shown below. This can also be viewed by doing `era5cli hourly --help`, `era5cli daily --help` and `era5cli monthly --help`.
 
 Note that not all combinations of arguments are compatible, such as `--land` and `--ensemble`.
 

@@ -15,6 +15,18 @@ More information on the available data and options can be found on the following
  - [ERA5 hourly pressure levels preliminary back extension download page](https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels-preliminary-back-extension).
  - [ERA5-Land hourly download page](https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-land).
 
+## Daily
+
+With the `daily` argument you can fetch daily ERA5 data.
+All available arguments in `era5cli` can be seen using `era5cli daily --help`, or by going to the [reference](reference/arguments.md).
+
+More information on the available data and options can be found on the following pages:
+
+- [ERA5 single levels daily statistics download page](https://cds.climate.copernicus.eu/datasets/derived-era5-single-levels-daily-statistics?tab=overview)
+- [ERA5 daily pressure levels download page](https://cds.climate.copernicus.eu/datasets/derived-era5-pressure-levels-daily-statistics?tab=overview)
+- [ERA5-Land daily download page](https://cds.climate.copernicus.eu/datasets/derived-era5-land-daily-statistics?tab=overview)
+
+
 ## Monthly
 
 With the `monthly` argument you can fetch monthly-means of ERA5 data.
