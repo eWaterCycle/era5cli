@@ -1,6 +1,6 @@
-There are two types of data requests, hourly and monthly. Hourly requests generally have 24 hours of data available for each day, except in the case of forecase ensembles which are available every three hours (i.e. 8 per day).
+There are two types of data requests, hourly, daily and monthly. Hourly requests generally have 24 hours of data available for each day, except in the case of forecase ensembles which are available every three hours (i.e. 8 per day).
 
-Hourly and monthly requests mostly have the same variables available, except some of the variables that are only in the hourly datasets. Exceptions on the single level data can be found in table 8 of [ERA5 parameter listings](https://confluence.ecmwf.int/display/CKB/ERA5%3A+data+documentation#ERA5:datadocumentation-Table8).
+Hourly, daily and monthly requests mostly have the same variables available, except some of the variables that are only in the hourly datasets. Exceptions on the single level data can be found in table 8 of [ERA5 parameter listings](https://confluence.ecmwf.int/display/CKB/ERA5%3A+data+documentation#ERA5:datadocumentation-Table8).
 
 ## Hourly
 
