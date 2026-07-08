@@ -1,11 +1,12 @@
 """Tests for era5cli utility functions."""
 
 import unittest.mock as mock
+
 import pytest
+
 import era5cli.args
 import era5cli.inputref as ref
-from era5cli import cli
-from era5cli import key_management
+from era5cli import cli, key_management
 
 
 def test_parse_args():
@@ -39,6 +40,23 @@ def test_parse_args():
     assert args.variables == ["total_precipitation"]
     assert args.land
     assert not args.area
+
+
+def test_parse_daily_args():
+    argv = [
+        "daily",
+        "--startyear",
+        "2008",
+        "--variables",
+        "total_precipitation",
+        "--statistics",
+        "daily_maximum",
+    ]
+    args = cli._parse_args(argv)
+    assert args.command == "daily"
+    assert args.statistics == "daily_maximum"
+    assert args.days == list(range(1, 32))
+    assert args.months == list(range(1, 13))
 
 
 def test_area_argument():
@@ -192,6 +210,20 @@ def test_period_args():
         assert era5cli.args.periods.set_period_args(args)
 
 
+def test_period_daily_args():
+    argv = [
+        "daily",
+        "--startyear",
+        "2008",
+        "--variables",
+        "total_precipitation",
+    ]
+    args = cli._parse_args(argv)
+    period_args = era5cli.args.periods.set_period_args(args)
+    # (synoptic, statistics, splitmonths, days, hours)
+    assert period_args == (None, "daily_mean", True, list(range(1, 32)), None)
+
+
 def test_level_arguments():
     """Test if levels are parsed correctly"""
     argv = [
@@ -282,6 +314,16 @@ def test_main_fetch(fetch):
     args = cli._parse_args(argv)
     cli._execute(args)
 
+    argv = [
+        "daily",
+        "--startyear",
+        "2008",
+        "--variables",
+        "total_precipitation",
+    ]
+    args = cli._parse_args(argv)
+    assert cli._execute(args)
+
 
 @mock.patch("era5cli.info.Info", autospec=True)
 def test_main_info(info):
@@ -341,11 +383,7 @@ class TestConfigControlFlow:
         args = cli._parse_args(["config", "--show"])
         cli._execute(args)
 
-        expected = (
-            "Contents of .config/era5cli.txt:\n"
-            "    key: abc-def\n"
-            "    url: https://www.test.org/\n"
-        )
+        expected = "Contents of .config/era5cli.txt:\n    key: abc-def\n    url: https://www.test.org/\n"
         out, _ = capsys.readouterr()
         assert expected in out
 
@@ -353,6 +391,8 @@ class TestConfigControlFlow:
         "input_args",
         [
             ["config", "--show", "--key", "abc-def"],
+            ["config", "--uid", "x", "--key", "abc-def"],
+            ["config"],
         ],
     )
     def test_config_inputerror(self, input_args):

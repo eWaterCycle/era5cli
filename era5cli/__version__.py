@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Author information."""
 
-
 # This information is located in its own file so that it can be loaded
 # without importing the main package when its dependencies are not installed.
 # See: https://packaging.python.org/guides/single-sourcing-package-version
@@ -24,6 +23,7 @@ __author__ = (
     "Stefan Verhoeven",
     "Elizaveta Malinina",
     "Bart Schilperoort",
+    "Mark Melotto",
 )
 __email__ = "ewatercycle@esciencecenter.nl"
-__version__ = "2.0.1"
+__version__ = "2.1.0"

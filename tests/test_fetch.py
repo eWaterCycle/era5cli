@@ -2,10 +2,10 @@
 
 import pathlib
 import unittest.mock as mock
-import pytest
-from era5cli import _request_size
-from era5cli import fetch
 
+import pytest
+
+from era5cli import _request_size, fetch
 
 # fmt: off
 ALL_HOURS = [
@@ -26,9 +26,7 @@ ALL_MONTHS = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", 
 
 @pytest.fixture(scope="module", autouse=True)
 def my_thing_mock():
-    with mock.patch(
-        "era5cli.fetch.key_management.check_era5cli_config", autospec=True
-    ) as _fixture:
+    with mock.patch("era5cli.fetch.key_management.check_era5cli_config", autospec=True) as _fixture:
         yield _fixture
 
 
@@ -78,9 +76,7 @@ def initialize(
         )
 
 
-@mock.patch(
-    "era5cli.fetch.key_management.load_era5cli_config", return_value=("url", "key:uid")
-)
+@mock.patch("era5cli.fetch.key_management.load_era5cli_config", return_value=("url", "key:uid"))
 def test_init(mockpatch):
     """Test init function of Fetch class."""
     era5 = fetch.Fetch(
@@ -118,20 +114,18 @@ def test_init(mockpatch):
 
     # initializing hourly variable with days=None should result in ValueError
     with pytest.raises(TypeError):
-        era5 = initialize(
-            variables=["temperature"], period="hourly", days=None, pressurelevels=[1]
-        )
+        era5 = initialize(variables=["temperature"], period="hourly", days=None, pressurelevels=[1])
 
     # initializing monthly variable with days=None returns fetch.Fetch object
-    era5 = initialize(
-        variables=["temperature"], period="monthly", days=None, pressurelevels=[1]
-    )
+    era5 = initialize(variables=["temperature"], period="monthly", days=None, pressurelevels=[1])
     assert isinstance(era5, fetch.Fetch)
 
     with pytest.raises(_request_size.TooLargeRequestError):
-        initialize(
-            land=True, variables=["skin_temperature"], ensemble=False, splitmonths=False
-        )
+        initialize(land=True, variables=["skin_temperature"], ensemble=False, splitmonths=False)
+
+    era5 = initialize(period="daily", statistics="daily_mean", ensemble=False)
+    assert era5.hours is None
+    assert era5.days == ALL_DAYS
 
 
 @mock.patch("cdsapi.Client", autospec=True)
@@ -147,9 +141,7 @@ def test_fetch_nodryrun(cds, era5cli_utilsappend_history):
     era5 = initialize(outputformat="grib", merge=True, threads=None)
     assert era5.fetch() is None
 
-    era5 = initialize(
-        outputformat="grib", merge=True, threads=None, ensemble=True, statistics=True
-    )
+    era5 = initialize(outputformat="grib", merge=True, threads=None, ensemble=True, statistics=True)
     assert era5.fetch() is None
 
     era5 = initialize(
@@ -182,9 +174,7 @@ def test_fetch_nodryrun(cds, era5cli_utilsappend_history):
         )
 
     # invalid variable name should raise ValueError
-    era5 = initialize(
-        outputformat="grib", merge=True, threads=None, variables=["unknown"]
-    )
+    era5 = initialize(outputformat="grib", merge=True, threads=None, variables=["unknown"])
     with pytest.raises(ValueError):
         assert era5.fetch()
 
@@ -273,6 +263,11 @@ def test_define_outputfilename():
     fn = "era5-land_total_precipitation_2008-01_hourly_120E-180E_90S-0N.nc"
     assert fname == fn
 
+    era5 = initialize(period="daily", statistics="daily_mean", ensemble=False, splitmonths=True)
+    era5._extension()
+    fname = era5._define_outputfilename("total_precipitation", [2008], month="01")
+    assert fname == "era5_total_precipitation_2008-01_daily_statistics.nc"
+
 
 _vars = ["total_precipitation", "runoff"]
 _years = [2007, 2008, 2009]
@@ -289,9 +284,7 @@ _years = [2007, 2008, 2009]
         (_vars[:1], _years, False, False, False, 1 * 3),
     ],
 )
-def test_number_outputfiles(
-    capsys, variables, years, merge, ensemble, splitmonths, expected
-):
+def test_number_outputfiles(capsys, variables, years, merge, ensemble, splitmonths, expected):
     """Test function for the number of outputs."""
     # two variables and three years
     era5 = initialize(
@@ -313,6 +306,12 @@ def test_product_type():
     """Test _product_type function of Fetch class."""
     # Default hourly data
     era5 = initialize()
+
+    era5.period = "daily"
+    assert era5._product_type() is None
+
+    era5 = initialize()
+
     producttype = era5._product_type()
     assert producttype == "ensemble_members"
 
@@ -413,6 +412,29 @@ def test_check_variable():
     with pytest.raises(ValueError):
         era5._check_variable(missing_monthly_var)
 
+    era5.period = "daily"
+    era5.land = True
+    era5._check_variable("snow_cover")
+
+    # Non-land variable should fail for daily land
+    with pytest.raises(ValueError):
+        era5._check_variable("vertical_integral_of_mass_tendency")
+
+
+def test_check_variable_daily_slvars():
+    """Non-SLVARS variable should fail for daily, non-land requests."""
+    era5 = initialize()
+    era5.period = "daily"
+    era5.land = False
+    with pytest.raises(ValueError):
+        era5._check_variable("divergence")  # PLVARS-only, not in SLVARS
+
+
+def test_exit_is_noop():
+    """_exit is an unused no-op stub; confirm it does nothing and doesn't raise."""
+    era5 = initialize()
+    assert era5._exit() is None
+
 
 def test_build_name():
     """Test _build_name function of Fetch class."""
@@ -453,6 +475,14 @@ def test_build_name():
     name = era5._build_name("geopotential")[0]
     assert name == "reanalysis-era5-single-levels"
 
+    era5 = initialize(period="daily", statistics="daily_mean", ensemble=False)
+    name = era5._build_name("total_precipitation")[0]
+    assert name == "derived-era5-single-levels-daily-statistics"
+
+    era5 = initialize(period="daily", statistics="daily_mean", land=True, ensemble=False)
+    name = era5._build_name("snow_cover")[0]
+    assert name == "derived-era5-land-daily-statistics"
+
 
 def test_build_request():
     """Test _build_request function of Fetch class."""
@@ -463,7 +493,7 @@ def test_build_request():
         years=[2008],
         splitmonths=False,
     )
-    (name, request) = era5._build_request("total_precipitation", [2008])
+    name, request = era5._build_request("total_precipitation", [2008])
     assert name == "reanalysis-era5-single-levels"
     req = {
         "variable": "total_precipitation",
@@ -479,7 +509,7 @@ def test_build_request():
 
     # monthly data
     era5 = initialize(period="monthly", variables=["total_precipitation"], years=[2008])
-    (name, request) = era5._build_request("total_precipitation", [2008])
+    name, request = era5._build_request("total_precipitation", [2008])
     assert name == "reanalysis-era5-single-levels-monthly-means"
     req = {
         "variable": "total_precipitation",
@@ -493,11 +523,9 @@ def test_build_request():
     assert request == req
 
     # land
-    era5 = initialize(
-        period="monthly", variables=["snow_cover"], hours=[0], land=True, ensemble=False
-    )
+    era5 = initialize(period="monthly", variables=["snow_cover"], hours=[0], land=True, ensemble=False)
 
-    (name, request) = era5._build_request("snow_cover", [2008])
+    name, request = era5._build_request("snow_cover", [2008])
     assert name == ("reanalysis-era5-land-monthly-means")
     req = {
         "variable": "snow_cover",
@@ -513,6 +541,47 @@ def test_build_request():
     # requesting 3d variable with pressurelevels=None should give a ValueError
     with pytest.raises(ValueError):
         era5 = initialize(variables=["temperature"], pressurelevels=None)
+
+    era5 = initialize(
+        period="daily",
+        variables=["total_precipitation"],
+        years=[2008],
+        statistics="daily_mean",
+        ensemble=False,
+    )
+    name, request = era5._build_request("total_precipitation", [2008])
+    assert name == "derived-era5-single-levels-daily-statistics"
+    req = {
+        "variable": "total_precipitation",
+        "year": [2008],
+        "month": ALL_MONTHS,
+        "day": ALL_DAYS,
+        "daily_statistic": "daily_mean",
+        "data_format": "netcdf",
+        "download_format": "unarchived",
+    }
+    assert request == req
+
+    era5 = initialize(
+        period="daily",
+        variables=["snow_cover"],
+        years=[2008],
+        statistics="daily_mean",
+        land=True,
+        ensemble=False,
+    )
+    name, request = era5._build_request("snow_cover", [2008])
+    assert name == "derived-era5-land-daily-statistics"
+    req = {
+        "variable": "snow_cover",
+        "year": [2008],
+        "month": ALL_MONTHS,
+        "day": ALL_DAYS,
+        "daily_statistic": "daily_mean",
+        "data_format": "netcdf",
+        "download_format": "unarchived",
+    }
+    assert request == req
 
 
 def test_incompatible_options():
@@ -539,13 +608,13 @@ def test_area():
     assert era5.area is None
 
     era5 = initialize(area=[90, -180, -90, 180])
-    (name, request) = era5._build_request("total_precipitation", [2008])
+    name, request = era5._build_request("total_precipitation", [2008])
     assert era5.area == [90, -180, -90, 180]
     assert request["area"] == [90, -180, -90, 180]
 
     # Decimals are rounded down
     era5 = initialize(area=[89.9999, -179.90, -90.0000, 179.012])
-    (name, request) = era5._build_request("total_precipitation", [2008])
+    name, request = era5._build_request("total_precipitation", [2008])
     assert request["area"] == [90.0, -179.90, -90.0, 179.01]
 
     # lat_max may not be lower than lat_min
@@ -555,7 +624,7 @@ def test_area():
 
     # lon_min higher than lon_max should be ok
     era5 = initialize(area=[90, 120, -90, -120])
-    (name, request) = era5._build_request("total_precipitation", [2008])
+    name, request = era5._build_request("total_precipitation", [2008])
     assert request["area"] == [90.0, 120.0, -90.0, -120.0]
 
     # lat_max may not equal lat_min

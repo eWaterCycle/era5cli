@@ -1,8 +1,8 @@
 """Module to compute the size of the CDS request."""
 
 from typing import TYPE_CHECKING
-from era5cli import inputref
 
+from era5cli import inputref
 
 if TYPE_CHECKING:
     from era5cli.fetch import Fetch

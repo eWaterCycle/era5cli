@@ -3,15 +3,15 @@
 import logging
 from textwrap import dedent
 from unittest import mock
+
 import pytest
+
 from era5cli.cli import main
 
 
 @pytest.fixture(scope="module", autouse=True)
 def my_thing_mock():
-    with mock.patch(
-        "era5cli.fetch.key_management.check_era5cli_config", autospec=True
-    ) as _fixture:
+    with mock.patch("era5cli.fetch.key_management.check_era5cli_config", autospec=True) as _fixture:
         yield _fixture
 
 
@@ -19,13 +19,10 @@ def my_thing_mock():
 call_result = [
     {
         # geopotential needs '--levels surface' to be correctly interpreted
-        "call": dedent(
-            """\
+        "call": dedent("""\
             era5cli hourly --variables geopotential --startyear 2008 --dryrun
-             --splitmonths False --levels surface"""
-        ),
-        "result": dedent(
-            """\
+             --splitmonths False --levels surface"""),
+        "result": dedent("""\
             reanalysis-era5-single-levels {'variable': 'geopotential', 'year':
             2008, 'month': ['01', '02', '03', '04', '05', '06', '07', '08',
             '09', '10', '11', '12'], 'time': ['00:00', '01:00', '02:00',
@@ -37,20 +34,16 @@ call_result = [
             '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12',
             '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23',
             '24', '25', '26', '27', '28', '29', '30', '31']}
-            era5_geopotential_2008_hourly.nc"""
-        ),
+            era5_geopotential_2008_hourly.nc"""),
         "warn": "Getting variable from surface level data.",
     },
     {
         # without --levels surface, geopotential calls pressure level data
         # Note: only request a single month to avoid TooLargeRequest
-        "call": dedent(
-            """\
+        "call": dedent("""\
             era5cli hourly --variables geopotential --startyear 2008 --months 01
-            --dryrun"""
-        ),
-        "result": dedent(
-            """\
+            --dryrun"""),
+        "result": dedent("""\
             reanalysis-era5-pressure-levels {'variable': 'geopotential',
             'year': 2008, 'month': '01', 'time': ['00:00', '01:00', '02:00',
             '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00',
@@ -64,26 +57,21 @@ call_result = [
             '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14',
             '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25',
             '26', '27', '28', '29', '30', '31']}
-            era5_geopotential_2008-01_hourly.nc"""
-        ),
+            era5_geopotential_2008-01_hourly.nc"""),
         "warn": "Getting variable from pressure level data.",
     },
     {
         # era5-Land is combined with monthly means
-        "call": dedent(
-            """\
+        "call": dedent("""\
             era5cli monthly --variables snow_cover --startyear 2008 --land
-            --dryrun"""
-        ),
-        "result": dedent(
-            """\
+            --dryrun"""),
+        "result": dedent("""\
             reanalysis-era5-land-monthly-means {'variable': 'snow_cover',
             'year': 2008, 'month': ['01', '02', '03', '04', '05', '06', '07',
             '08', '09', '10', '11', '12'], 'time': ['00:00'], 'data_format': 'netcdf',
             'download_format': 'unarchived',
             'product_type': 'monthly_averaged_reanalysis'}
-            era5-land_snow_cover_2008_monthly.nc"""
-        ),
+            era5-land_snow_cover_2008_monthly.nc"""),
     },
 ]
 

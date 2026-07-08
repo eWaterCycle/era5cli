@@ -3,6 +3,7 @@
 
 import argparse
 import sys
+
 import era5cli.fetch as efetch
 from era5cli import args
 
@@ -45,9 +46,7 @@ def _execute(input_args: argparse.Namespace) -> True:
 
     # the fetching subroutines
     years = args.common.construct_year_list(input_args)
-    synoptic, statistics, splitmonths, days, hours = args.periods.set_period_args(
-        input_args
-    )
+    synoptic, statistics, splitmonths, days, hours = args.periods.set_period_args(input_args)
 
     # try to build and send download request
     era5 = efetch.Fetch(

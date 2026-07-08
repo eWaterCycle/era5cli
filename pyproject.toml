@@ -13,7 +13,7 @@ name = "era5cli"
 description = "A command line interface to download ERA5 data from the Copernicus Climate Data Store. https://climate.copernicus.eu/.."
 readme = "README.md"
 license = { text = "Apache Software License" }
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 authors = [
     {name = "Ronald van Haren"},
     {name = "Jaro Camphuijsen"},
@@ -31,7 +31,8 @@ authors = [
     {name = "Stef Smeets"},
     {name = "Stefan Verhoeven"},
     {name = "Elizaveta Malinina"},
-    {name = "Bart Schilperoort", email = "b.schilperoort@esciencecenter.nl" }
+    {name = "Bart Schilperoort", email = "b.schilperoort@esciencecenter.nl" },
+    {name = "Mark Melotto"}
 ]
 keywords = [
   "ERA-5",
@@ -51,7 +52,6 @@ classifiers = [
   "Operating System :: POSIX",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
@@ -72,12 +72,8 @@ era5cli="era5cli.cli:main"
 dev = [
   "hatch",
   "bump-my-version",
-  "flake8",
-  "flake8-pyproject",
-  "black",
-  "isort",
+  "ruff",
   "pytest",
-  "pytest-flake8",
   "pytest-cov",
 ]
 docs = [
@@ -94,11 +90,13 @@ features = ["dev",]
 
 [tool.hatch.envs.default.scripts]
 lint = [
-  "flake8p .",  # flake8p ensures pyproject.toml is used for configuration
-  "black --check --diff .",
-  "isort --check-only --diff .",
+    "ruff check .",
+    "ruff format --check --diff .",
 ]
-format = ["isort .", "black .", "lint",]
+format = [
+    "ruff check --fix .",
+    "ruff format .",
+]
 test = ["pytest",]
 coverage = ["pytest --cov=era5cli --cov-report term --cov-report xml:cov.xml tests/"]
 
@@ -109,33 +107,29 @@ features = ["docs",]
 build = ["mkdocs build",]
 serve = ["mkdocs serve",]
 
-[tool.black]
-line-length = 88
-target-version = ['py39', 'py310', 'py311', 'py312', 'py313']
-include = '\.pyi?$'
-
-[tool.isort]
-py_version=39
-skip = [".gitignore"]
-skip_glob = ["docs/*"]
-force_single_line = true
-lines_after_imports = 2
-no_lines_before = ["FUTURE","STDLIB","THIRDPARTY","FIRSTPARTY","LOCALFOLDER"]
-known_first_party = ["era5cli"]
-src_paths = ["era5cli", "tests"]
-line_length = 120
-
-[tool.flake8]
-max-line-length = 88
-ignore = [
-  "E203",  # Whitespace before ":". Not PEP8 compliant (https://github.com/psf/black/issues/315)
-  "W503",  # https://peps.python.org/pep-0008/#should-a-line-break-before-or-after-a-binary-operator
-]
-
 [tool.coverage.report]
 exclude_lines = [
   "pragma: no cover",
   "@overload",
   "if TYPE_CHECKING:",
   "if typing.TYPE_CHECKING:"
+]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+known-first-party = ["era5cli"]
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "I",
+]
+ignore = [
+    "E501"
 ]

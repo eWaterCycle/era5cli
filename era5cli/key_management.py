@@ -2,9 +2,9 @@ import os
 import sys
 from pathlib import Path
 from typing import Tuple
+
 import cdsapi
 from requests.exceptions import ConnectionError  # pylint: disable=redefined-builtin
-
 
 ERA5CLI_CONFIG_PATH = Path.home() / ".config" / "era5cli" / "cds_key.txt"
 CDSAPI_CONFIG_PATH = Path.home() / ".cdsapirc"
@@ -85,12 +85,10 @@ def set_config(
     try:
         attempt_cds_login(url, key)
         write_era5cli_config(url, key)
-        print(
-            f"Keys succesfully validated and stored in {ERA5CLI_CONFIG_PATH.resolve()}"
-        )
+        print(f"Keys succesfully validated and stored in {ERA5CLI_CONFIG_PATH.resolve()}")
         return True
     except InvalidLoginError:
-        print("Error: the key is rejected by the CDS. " "Please check and try again.")
+        print("Error: the key is rejected by the CDS. Please check and try again.")
     return False
 
 
@@ -107,10 +105,7 @@ def check_era5cli_config() -> None:
     else:
         print("era5cli configuration file not found. Looking for CDSAPI key.")
         if not valid_cdsapi_config():
-            raise InvalidLoginError(
-                "No valid CDS login found. Please configure your CDS login using: "
-                "'era5cli config'"
-            )
+            raise InvalidLoginError("No valid CDS login found. Please configure your CDS login using: 'era5cli config'")
 
 
 def valid_cdsapi_config() -> bool:
@@ -124,8 +119,7 @@ def valid_cdsapi_config() -> bool:
         try:
             if sys.stdin.isatty() and attempt_cds_login(url, key):
                 userinput = input(
-                    "Valid CDS keys found in the .cdsapirc file. Do you want to use "
-                    "these for era5cli? [Y/n]"
+                    "Valid CDS keys found in the .cdsapirc file. Do you want to use these for era5cli? [Y/n]"
                 )
                 if userinput.lower() in ["y", "yes", ""]:
                     set_config(url, key)

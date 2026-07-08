@@ -66,19 +66,17 @@ hatch run coverage
 This runs tests and prints the results to the command line, as well as storing the result in a `coverage.xml` file (for analysis by, e.g. CodeCov or SonarCloud).
 
 ## Running formatters and linters
-For linting and code style we use `flake8`, `black` and `isort`. All tools can simply be run by doing:
+For linting and code style we use `ruff`. Which can simply be run by doing:
 
 ```sh
-hatch run lint
+ruff check
 ```
-
-To easily comply with `black` and `isort`, you can also run:
 
 ```sh
 hatch run format
 ```
 
-This will apply the `black` and `isort` formatting, and then check the code style.
+This will apply the `ruff` formatting, and then check the code style.
 
 ## Generating the documentation
 

@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+# 2.1.0 - 2026-08-07
+
+Changes since v2.0.1:
+
+**Changed:**
+- Removed `isort`, `black` & `flake8` in favor of `ruff`.
+
+**Added:**
+- Support for ERA5 & ERA5-Land daily data.
+
+**Removed:**
+- Support for Python 3.9
+
 # 2.0.1 - 2025-04-04
 
 Changes since v2.0.0:

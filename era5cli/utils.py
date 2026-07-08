@@ -6,8 +6,10 @@ import sys
 import textwrap
 from pathlib import Path
 from typing import List
+
 import prettytable
 from netCDF4 import Dataset
+
 import era5cli
 from era5cli.__version__ import __version__ as era5cliversion
 
@@ -155,9 +157,7 @@ def append_history(name, request, fname):
     fname: str
         Filename.
     """
-    dtime = datetime.datetime.now(tz=datetime.timezone.utc).strftime(
-        "%Y-%m-%d %H:%M:%S %Z"
-    )
+    dtime = datetime.datetime.now(tz=datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
     appendtxt = f"{dtime} by {era5cli.__name__} {era5cliversion}: {name} {request}"
     extension = Path(fname).suffix
     if extension == ".nc":
@@ -177,11 +177,9 @@ def _append_netcdf_history(ncfile: str, appendtxt: str):
     # open netCDF file rw and append to history
     ncfile = Dataset(ncfile, "r+")
     try:
-        ncfile.history = textwrap.dedent(
-            f"""\
+        ncfile.history = textwrap.dedent(f"""\
             {appendtxt}
-            {ncfile.history}"""
-        )
+            {ncfile.history}""")
     except AttributeError:
         ncfile.history = appendtxt
     ncfile.close()
@@ -203,10 +201,7 @@ def strtobool(value: str) -> bool:
         return True
     if value.lower() in falses:
         return False
-    raise ValueError(
-        "Could not convert string to boolean. Valid inputs are:"
-        f"{trues} and {falses} (case insensitive)."
-    )
+    raise ValueError(f"Could not convert string to boolean. Valid inputs are:{trues} and {falses} (case insensitive).")
 
 
 def assert_outputfiles_not_exist(outputfiles: List[str]) -> None:

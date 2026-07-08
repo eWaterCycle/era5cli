@@ -1,8 +1,10 @@
-import mkdocs_gen_files
-from era5cli import inputref
-import era5cli.cli
 import subprocess
-from typing import List, Generator
+from typing import Generator, List
+
+import mkdocs_gen_files
+
+import era5cli.cli
+from era5cli import inputref
 
 
 def divide_chunks(biglist: List, n: int) -> Generator[List, None, None]:
@@ -71,9 +73,7 @@ with mkdocs_gen_files.open(filename, "a") as f:  # Only append to file (!)
     subparsers = ["Hourly", "Monthly"]
 
     for subp in subparsers:
-        with subprocess.Popen(
-            ["era5cli", subp.lower(), "--help"], stdout=subprocess.PIPE
-        ) as process:
+        with subprocess.Popen(["era5cli", subp.lower(), "--help"], stdout=subprocess.PIPE) as process:
             stdout, stderr = process.communicate()
         helpstr = stdout.decode("utf-8")
         helpstr = helpstr[helpstr.index("option") :]
