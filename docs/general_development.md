@@ -73,7 +73,7 @@ ruff check
 ```
 
 ```sh
-ruff format
+hatch run format
 ```
 
 This will apply the `ruff` formatting, and then check the code style.
